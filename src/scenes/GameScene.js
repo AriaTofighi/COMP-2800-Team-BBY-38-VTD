@@ -9,5 +9,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     create() {
+        // Begin writing game objects/logic here
+        
     }
 }

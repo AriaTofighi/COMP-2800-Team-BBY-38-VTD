@@ -40,7 +40,37 @@ export class LoadScene extends Phaser.Scene {
 
         });
         percTxt.setOrigin();
-        
+
+        // Display loading items text
+        let loadItemTxt = this.add.text(width / 2, height / 2 + 60, "Loading asset: " + "fileName", {
+            color: "white",
+            fontFamily: "Courier"
+
+        });
+        loadItemTxt.setOrigin();
+
+        // Listen for load percentage progress and adjust text
+        this.load.on('progress', function (value) {
+            console.log(value);
+            percTxt.setText(Math.round(value * 100) + "%");
+            loadBar.clear();
+            loadBar.fillStyle(0xffffff, 1);
+            loadBar.fillRect(width / 2 - 190, height / 2 - 3, 380 * value, 26);
+        });
+
+        // Listens for an asset being loaded and updates text
+        this.load.on('fileprogress', function (file) {
+            loadItemTxt.setText('Loading asset: ' + file.key);
+        });
+
+        // Listens for asset loading to be complete and clears bar
+        this.load.on('complete', function () {
+            loadItemTxt.destroy();
+            loadingTxt.destroy();
+            percTxt.destroy();
+            loadBar.destroy();
+            loadBox.destroy();
+        });
 
         // Add logo
         this.add.image(logo);
@@ -51,9 +81,13 @@ export class LoadScene extends Phaser.Scene {
         this.load.image('tile', tile);
         this.load.image('tower1', tower1);
 
+        // Uncomment to test loading visuals
+        // for (let i = 0; i < 10000; i ++) {
+        //     this.load.image('bullet' + i, bullet);
+        // }
     }
 
     create() {   
-        // this.scene.start('Game');
+        this.scene.start('Game');
     }
 }
