@@ -6,15 +6,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     preload() {
-    }
-
-    create() {
-        // Begin writing game objects/logic here
-        // this.add.image(200, 100, 'carrier');
-        // this.add.image(300, 100, 'tile');
-        // this.add.image(400, 100, 'tower1');
-
-        // 1s represent grid cells that are path tiles you cannot place towers on
+        // Ones represent grid cells that are path tiles you cannot place towers on
         this.gridCells = [
             [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -36,10 +28,19 @@ export class GameScene extends Phaser.Scene {
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         ];
+    }
+
+    create() {
+        // Begin writing game objects/logic here
+        // this.add.image(200, 100, 'carrier');
+        // this.add.image(300, 100, 'tile');
+        // this.add.image(400, 100, 'tower1');
+
         // Create grid variables and grid
         let width = this.sys.canvas.width;
         let height = this.sys.canvas.width; 
         let cellWidth = 32;
+        let halfCell = 16; // used to move objects to center of cells
         const colCount = width / cellWidth; // 25 cols, use cellWidth * 24 for last col
         const rowCount = height / cellWidth; // 19 rows, use cellWidth * 18 for last row
         let grid = this.add.grid(0, 0, cellWidth * colCount , cellWidth * rowCount, 32, 32, 0x222222, 1, 0x000000, 0);
@@ -48,24 +49,29 @@ export class GameScene extends Phaser.Scene {
         // Create and draw path
         let graphics = this.add.graphics();
         graphics.lineStyle(1, 0xFFFFFF);
-        let path = this.add.path(cellWidth * 3, 0);
-        path.lineTo(cellWidth * 3, cellWidth * 10);
-        path.lineTo(cellWidth * 24, cellWidth * 10);
+        let path = this.add.path(cellWidth * 3 + halfCell, 0 + halfCell );
+        path.lineTo(cellWidth * 3 + halfCell, cellWidth * 10 + halfCell);
+        path.lineTo(cellWidth * 24 + halfCell, cellWidth * 10 + halfCell);
         path.draw(graphics);
 
         // Create cursor grid cell hover image and draw
         this.createTile();
 
         // Create carrier that follows path
-        this.carrier = this.add.follower(path, cellWidth * 3, 0, 'carrier');
+        this.carrier = this.add.follower(path, cellWidth * 3 + 16, 0 + 16, 'carrier');
         this.carrier.setDisplaySize(32, 32);
-        this.carrier.setOrigin(0, 0);
-        this.carrier.startFollow(10000);
+        this.carrier.setRotation(1.5708);
+        this.carrier.startFollow({
+            rotateToPath: true,
+            duration: 5000,
+            yoyo: true, // switches directions when end of path is reached
+            repeat: -1, // infinite
+        });
 
         // Create and draw bullet
-        let bullet = this.add.image(cellWidth * 24, cellWidth * 18, 'bullet');
-        bullet.setDisplaySize(32, 32);
-        bullet.setOrigin(0, 0);
+        // let bullet = this.add.image(cellWidth * 24, cellWidth * 18, 'bullet');
+        // bullet.setDisplaySize(32, 32);
+        // bullet.setOrigin(0, 0);
 
     }
 

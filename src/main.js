@@ -12,9 +12,7 @@ let config = {
         parent: 'body',
         mode: Phaser.Scale.FIT,
     },
-    roundPixels: true,
-    pixelArt: true
-
+    roundPixels: true
 };
 
 let game = new Phaser.Game(config);
