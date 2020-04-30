@@ -78,12 +78,11 @@ export class GameScene extends Phaser.Scene {
         // bullet.setOrigin(0, 0);
 
         // Create and draw a circle to test overlap/collision
-        let circle1 = this.add.circle(cellWidth*4 + halfCell, cellHeight*4 + halfCell, 40, 0xff0000, 0.5);
+        this.circle1 = this.add.circle(cellWidth*4 + halfCell, cellHeight*4 + halfCell, 40, 0xff0000, 0.5);
         let circle2 = this.add.circle(cellWidth*7 + halfCell, cellHeight*9 + halfCell, 40, 0xff0000, 0.5);
-        this.physics.world.enable(circle1);
-        this.physics.world.overlap(this.carrier, circle1, function (carrier, circle1) {
-            console.log("HIHIHIHI");
-        });
+        this.physics.world.enable(this.circle1);
+
+
 
         // Calling the funcion to make the tower button
         this.createTowerIcon();
@@ -97,10 +96,10 @@ export class GameScene extends Phaser.Scene {
 
         this.input.on('pointermove', function (pointer) {
             console.log(pointer);
-            let j = Math.floor(pointer.y / 32); // row index
-            let i = Math.floor(pointer.x / 32); // col index
-            this.tile.setPosition(i * 32, j * 32);
-            if (this.isPathTile(j, i)) {
+            let i = Math.floor(pointer.y / 32); // row index
+            let j = Math.floor(pointer.x / 32); // col index
+            this.tile.setPosition(j * 32, i * 32);
+            if (this.isPathTile(i, j)) {
                 this.tile.alpha = 0;
             } else {
                 this.tile.alpha = 1;
@@ -109,8 +108,8 @@ export class GameScene extends Phaser.Scene {
         }.bind(this));
     }
 
-    isPathTile(j, i) {
-        return this.gridCells[j][i] === 1;
+    isPathTile(i, j) {
+        return this.gridCells[i][j] === 1;
     }
 
     // making the tower button
@@ -125,6 +124,12 @@ export class GameScene extends Phaser.Scene {
     // The tower one click handler
     tower1EventHandler() {
         // what the clicking on the tower button does!
+    }
+
+    update() {
+        this.physics.overlap(this.carrier, this.circle1, function() {
+            console.log("Circle1 hit.");
+        });
     }
 
 }
