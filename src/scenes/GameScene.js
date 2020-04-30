@@ -75,6 +75,7 @@ export class GameScene extends Phaser.Scene {
         // bullet.setDisplaySize(32, 32);
         // bullet.setOrigin(0, 0);
 
+        this.createTowerIcon();
     }
 
     createTile() {
@@ -99,6 +100,13 @@ export class GameScene extends Phaser.Scene {
 
     isPathTile(j, i) {
         return this.gridCells[j][i] === 1;
+    }
+
+    createTowerIcon () {
+        const tower = this.add.image(0, 0, 'tower1');
+        tower.setDisplaySize(32, 32);
+        tower.setOrigin(0, 0);
+        tower.setPosition(768, 256);
     }
 
 }
