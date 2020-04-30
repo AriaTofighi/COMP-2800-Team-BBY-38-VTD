@@ -29,7 +29,6 @@ export class LoadScene extends Phaser.Scene {
         let loadingTxt = this.add.text(width / 2, height / 2 - 50, "Loading...", {
             color: "white",
             fontFamily: "Courier"
-
         });
         loadingTxt.setOrigin();
 
@@ -82,7 +81,7 @@ export class LoadScene extends Phaser.Scene {
         this.load.image('tower1', tower1);
 
         // Uncomment to test loading visuals
-        // for (let i = 0; i < 10000; i ++) {
+        // for (let i = 0; i < 1000; i ++) {
         //     this.load.image('bullet' + i, bullet);
         // }
     }

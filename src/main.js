@@ -3,16 +3,18 @@ import {GameScene} from "./scenes/GameScene";
 import {BootScene} from "./scenes/BootScene";
 import {LoadScene} from "./scenes/LoadScene";
 
-// Phaser 
+// Phaser game config
 let config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: 800, // should be multiple of cell width
+    height: 608, // should be multiple of cell height
     scale: {
         parent: 'body',
         mode: Phaser.Scale.FIT,
     },
-    roundPixels: true
+    roundPixels: true,
+    pixelArt: true
+
 };
 
 let game = new Phaser.Game(config);
