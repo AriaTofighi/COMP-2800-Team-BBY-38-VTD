@@ -42,7 +42,7 @@ export class GameScene extends Phaser.Scene {
 
         // Create grid variables
         let width = this.sys.canvas.width;
-        let height = this.sys.canvas.width; 
+        let height = this.sys.canvas.height; 
         let cellWidth = 32;
         let cellHeight = 32;
         let halfCell = 16; // used to move objects to center of cells
