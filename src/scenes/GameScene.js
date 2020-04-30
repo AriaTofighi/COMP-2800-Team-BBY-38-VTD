@@ -1,6 +1,10 @@
 import { Grid } from "matter";
 
+let health = 100;
+let healthText = "Health: ";
+
 export class GameScene extends Phaser.Scene {
+
     constructor() {
         super('Game');
     }
@@ -64,6 +68,7 @@ export class GameScene extends Phaser.Scene {
         this.carrier = this.add.follower(path, cellWidth * 3 + 16, 0 + 16, 'carrier');
         this.carrier.setDisplaySize(32, 32);
         this.physics.world.enable(this.carrier);
+        this.carrier.body.setCircle(16, 16, 16);
         this.carrier.setRotation(1.5708);
         this.carrier.startFollow({
             rotateToPath: true,
@@ -79,10 +84,15 @@ export class GameScene extends Phaser.Scene {
 
         // Create and draw a circle to test overlap/collision
         this.circle1 = this.add.circle(cellWidth*4 + halfCell, cellHeight*4 + halfCell, 40, 0xff0000, 0.5);
-        let circle2 = this.add.circle(cellWidth*7 + halfCell, cellHeight*9 + halfCell, 40, 0xff0000, 0.5);
+        this.circle2 = this.add.circle(cellWidth*7 + halfCell, cellHeight*9 + halfCell, 40, 0xff0000, 0.5);
+
         this.physics.world.enable(this.circle1);
+        this.circle1.body.setCircle(40);
+        this.physics.world.enable(this.circle2);
+        this.circle2.body.setCircle(40);
 
-
+        // Create health text
+        healthText = this.add.text(500, 10, "Health: 100");
 
         // Calling the funcion to make the tower button
         this.createTowerIcon();
@@ -129,6 +139,14 @@ export class GameScene extends Phaser.Scene {
     update() {
         this.physics.overlap(this.carrier, this.circle1, function() {
             console.log("Circle1 hit.");
+            health = health - 0.1;
+            healthText.setText("Health: " + health.toFixed(0));
+        });
+
+        this.physics.overlap(this.carrier, this.circle2, function() {
+            console.log("Circle2 hit.");
+            health = health - 0.1;
+            healthText.setText("Health: " + health.toFixed(0));
         });
     }
 
