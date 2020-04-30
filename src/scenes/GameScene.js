@@ -38,7 +38,7 @@ export class GameScene extends Phaser.Scene {
 
         // Create grid variables
         let width = this.sys.canvas.width;
-        let height = this.sys.canvas.width; 
+        let height = this.sys.canvas.height; 
         let cellWidth = 32;
         let cellHeight = 32;
         let halfCell = 16; // used to move objects to center of cells
@@ -72,6 +72,51 @@ export class GameScene extends Phaser.Scene {
             repeat: -1, // infinite
         });
 
+        //Create sidebar
+        let sidebar = this.add.container(width, height/2 - 200);
+        let sidebox = this.add.graphics();
+        sidebar.add(sidebox);
+        sidebox.fillStyle(0xff0000);
+        sidebox.fillRect(0, 0, 100, 400);
+
+        //Create first tower in menu.
+        let menuTower1 = this.add.image(54, 64, 'tower1');
+        menuTower1.setInteractive().on('pointerdown', () => {
+            descText.setText("Description: Soap Tower");
+            costText.setText("Cost: 100");
+        });
+        sidebar.add(menuTower1);
+
+        //Create menu toggle button
+        let menuButton = this.add.rectangle(width-20, height-20, 40, 40, 0x00ff00);
+        let menuShowing = false;
+        menuButton.setInteractive();
+        menuButton.on('pointerdown', () => {
+            if(!menuShowing){
+                this.tweens.add({
+                    targets: sidebar,
+                    x: width - 100,
+                    duration: 200
+                });
+                menuShowing = true;
+            } else {
+                this.tweens.add({
+                    targets: sidebar,
+                    x: width + 100,
+                    duration: 200
+                });
+                menuShowing = false;
+            }
+        });
+
+        //Create description area.
+        let infoContainer = this.add.container(width-250, 0);
+        let descText = this.add.text(0, 0, '');
+        let costText = this.add.text(0, descText.getBottomCenter().y + 10, '');
+        infoContainer.add(descText);
+        infoContainer.add(costText);
+        
+
         // Create and draw bullet
         // let bullet = this.add.image(cellWidth * 24, cellWidth * 18, 'bullet');
         // bullet.setDisplaySize(32, 32);
@@ -94,7 +139,7 @@ export class GameScene extends Phaser.Scene {
         this.tile.alpha = 0;
 
         this.input.on('pointermove', function (pointer) {
-            console.log(pointer);
+            //console.log(pointer);
             let j = Math.floor(pointer.y / 32); // row index
             let i = Math.floor(pointer.x / 32); // col index
             this.tile.setPosition(i * 32, j * 32);
