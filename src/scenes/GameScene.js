@@ -40,6 +40,7 @@ export class GameScene extends Phaser.Scene {
         let width = this.sys.canvas.width;
         let height = this.sys.canvas.width; 
         let cellWidth = 32;
+        let cellHeight = 32;
         let halfCell = 16; // used to move objects to center of cells
         const colCount = width / cellWidth; // 25 cols, use cellWidth * 24 for last col
         const rowCount = height / cellWidth; // 19 rows, use cellWidth * 18 for last row
@@ -62,6 +63,7 @@ export class GameScene extends Phaser.Scene {
         // Create carrier that follows path
         this.carrier = this.add.follower(path, cellWidth * 3 + 16, 0 + 16, 'carrier');
         this.carrier.setDisplaySize(32, 32);
+        this.physics.world.enable(this.carrier);
         this.carrier.setRotation(1.5708);
         this.carrier.startFollow({
             rotateToPath: true,
@@ -75,6 +77,14 @@ export class GameScene extends Phaser.Scene {
         // bullet.setDisplaySize(32, 32);
         // bullet.setOrigin(0, 0);
 
+        // Create and draw a circle to test overlap/collision
+        let circle1 = this.add.circle(cellWidth*4 + halfCell, cellHeight*4 + halfCell, 40, 0xff0000, 0.5);
+        let circle2 = this.add.circle(cellWidth*7 + halfCell, cellHeight*9 + halfCell, 40, 0xff0000, 0.5);
+        this.physics.world.enable(circle1);
+        this.physics.world.overlap(this.carrier, circle1, function (carrier, circle1) {
+            console.log("HIHIHIHI");
+        });
+        
     }
 
     createTile() {

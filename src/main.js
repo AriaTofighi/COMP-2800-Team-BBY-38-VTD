@@ -12,7 +12,11 @@ let config = {
         parent: 'body',
         mode: Phaser.Scale.FIT,
     },
-    roundPixels: true
+    roundPixels: true,
+    physics: {
+        default: 'arcade',
+        arcade: {debug: true}
+    }
 };
 
 let game = new Phaser.Game(config);
