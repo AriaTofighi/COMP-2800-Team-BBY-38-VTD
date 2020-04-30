@@ -84,7 +84,9 @@ export class GameScene extends Phaser.Scene {
         this.physics.world.overlap(this.carrier, circle1, function (carrier, circle1) {
             console.log("HIHIHIHI");
         });
-        
+
+        // Calling the funcion to make the tower button
+        this.createTowerIcon();
     }
 
     createTile() {
@@ -109,6 +111,20 @@ export class GameScene extends Phaser.Scene {
 
     isPathTile(j, i) {
         return this.gridCells[j][i] === 1;
+    }
+
+    // making the tower button
+    createTowerIcon () {
+        const tower1 = this.add.image(768, 160, 'tower1');
+        tower1.setDisplayOrigin(0, 0);
+        tower1.setDisplaySize(32, 32);
+        tower1.setInteractive();
+        tower1.on('pointerdown', this.tower1EventHandler);
+    }
+
+    // The tower one click handler
+    tower1EventHandler() {
+        // what the clicking on the tower button does!
     }
 
 }
