@@ -36,14 +36,16 @@ export class GameScene extends Phaser.Scene {
         // this.add.image(300, 100, 'tile');
         // this.add.image(400, 100, 'tower1');
 
-        // Create grid variables and grid
+        // Create grid variables
         let width = this.sys.canvas.width;
         let height = this.sys.canvas.width; 
         let cellWidth = 32;
         let halfCell = 16; // used to move objects to center of cells
         const colCount = width / cellWidth; // 25 cols, use cellWidth * 24 for last col
         const rowCount = height / cellWidth; // 19 rows, use cellWidth * 18 for last row
-        let grid = this.add.grid(0, 0, cellWidth * colCount , cellWidth * rowCount, 32, 32, 0x222222, 1, 0x000000, 0);
+        
+        // Create and draw grid
+        let grid = this.add.grid(0, 0, cellWidth * colCount , cellWidth * rowCount, cellWidth, cellWidth, 0x000000, 0, 0x222222, 1);
         grid.setOrigin(0, 0);
         
         // Create and draw path
