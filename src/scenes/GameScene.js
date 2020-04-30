@@ -137,14 +137,23 @@ export class GameScene extends Phaser.Scene {
     }
 
     update() {
+        let carrierCopy = this.carrier;
         this.physics.overlap(this.carrier, this.circle1, function() {
             console.log("Circle1 hit.");
-            health = health - 0.1;
+            if (health - 0.1 < 0) {
+                carrierCopy.alpha = 0;
+                return;
+            }
+            health = health - 5;
             healthText.setText("Health: " + health.toFixed(0));
         });
 
         this.physics.overlap(this.carrier, this.circle2, function() {
             console.log("Circle2 hit.");
+            if (health - 0.1 < 0) {
+                carrierCopy.alpha = 0;
+                return;
+            }
             health = health - 0.1;
             healthText.setText("Health: " + health.toFixed(0));
         });
