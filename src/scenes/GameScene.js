@@ -52,6 +52,7 @@ export class GameScene extends Phaser.Scene {
         
         // Create and draw grid
         let grid = this.add.grid(0, 0, cellWidth * colCount , cellWidth * rowCount, cellWidth, cellWidth, 0x000000, 0, 0x222222, 0);
+        grid.setDepth(1);
         grid.setOrigin(0, 0);
         
         //Create background image.
@@ -83,7 +84,7 @@ export class GameScene extends Phaser.Scene {
         let path = this.add.path(cellWidth * 3 + halfCell, 0 + halfCell);
         path.lineTo(cellWidth * 3 + halfCell, cellWidth * 10 + halfCell);
         path.lineTo(cellWidth * 24 + halfCell, cellWidth * 10 + halfCell);
-        path.draw(graphics);
+        // path.draw(graphics);
 
         // Create carrier that follows path
         this.carrier = this.add.follower(path, cellWidth * 3 + 16, 0 + 16, 'carrier');
@@ -167,8 +168,10 @@ export class GameScene extends Phaser.Scene {
         // bullet.setOrigin(0, 0);
 
         // Create and draw a circle to test overlap/collision
-        this.circle1 = this.add.circle(cellWidth * 4 + halfCell, cellHeight * 4 + halfCell, 40, 0xff0000, 0.5);
-        this.circle2 = this.add.circle(cellWidth * 7 + halfCell, cellHeight * 9 + halfCell, 40, 0xff0000, 0.5);
+        this.circle1 = this.add.circle(cellWidth * 4 + halfCell, cellHeight * 4 + halfCell, 40, 0x008080 , 0.2);
+        this.circle1.setStrokeStyle(2, 0x046307, 0.8);
+        this.circle2 = this.add.circle(cellWidth * 7 + halfCell, cellHeight * 9 + halfCell, 40, 0x008080 , 0.2);
+        this.circle2.setStrokeStyle(2, 0x046307, 0.8);
 
         this.physics.world.enable(this.circle1);
         this.circle1.body.setCircle(40);
@@ -177,12 +180,15 @@ export class GameScene extends Phaser.Scene {
 
         // Removes debug outline of physics body
         this.circle1.body.debugShowBody = false;
+        this.circle2.body.debugShowBody = false;
+        this.carrier.body.debugShowBody = false;
+
 
         // Create resource information text
         this.health = 100;
         this.healthText = this.add.text(width / 2, 10, "Health: " + this.health);
         this.money = 100;
-        this.moneyText = this.add.text(width / 2, healthText.getBottomCenter().y + 10, 'Money: ' + this.money);
+        this.moneyText = this.add.text(width / 2, this.healthText.getBottomCenter().y + 10, 'Money: ' + this.money);
 
         // Create two hard code towers inside the circles
         this.hardCodeTower1 = this.add.image(4 * 32, 4 * 32, 'tower1');
@@ -248,7 +254,7 @@ export class GameScene extends Phaser.Scene {
         this.health = this.health - 0.25;
         if (this.health <= 0) {
             this.carrier.alpha = 0;
-            this.carrier.body.debugShowBody = false;
+            this.carrier.body.destroy();
         }
         this.healthText.setText("Health: " + this.health.toFixed(0));
     }
@@ -258,7 +264,7 @@ export class GameScene extends Phaser.Scene {
         this.health = this.health - 0.25;
         if (this.health <= 0) {
             this.carrier.alpha = 0;
-            this.carrier.body.debugShowBody = false;
+            this.carrier.body.destroy();
         }
         this.healthText.setText("Health: " + this.health.toFixed(0));
     }

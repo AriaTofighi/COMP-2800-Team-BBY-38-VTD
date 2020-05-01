@@ -95,7 +95,7 @@ export class LoadScene extends Phaser.Scene {
         this.load.image("endButton", endButton);
 
         // Uncomment to test loading visuals
-        for (let i = 0; i < 1000; i ++) {
+        for (let i = 0; i < 600; i ++) {
             this.load.image('bullet' + i, bullet);
         }
     }
