@@ -75,58 +75,58 @@ export class GameScene extends Phaser.Scene {
             repeat: -1, // infinite
         });
 
-                //Create sidebar
-                let sidebar = this.add.container(width, height/2 - 200);
-                let sidebox = this.add.graphics();
-                sidebar.add(sidebox);
-                sidebox.fillStyle(0xff0000);
-                sidebox.fillRect(0, 0, 100, 400);
+        //Create sidebar
+        let sidebar = this.add.container(width, height / 2 - 200);
+        let sidebox = this.add.graphics();
+        sidebar.add(sidebox);
+        sidebox.fillStyle(0xff0000);
+        sidebox.fillRect(0, 0, 100, 400);
 
-                // Creating the cancel button
-                let cancelButton = this.add.image(54, 370, 'cancelButton');
-                cancelButton.alpha = 0;
-                cancelButton.setInteractive().on('pointerdown', function () {
-                    this.tower1IsSelected = false;
-                    descText.setText("");
-                    costText.setText("");
-                    cancelButton.alpha = 0;
-                }.bind(this));
-        
-                //Create first tower in menu.
-                let menuTower1 = this.add.image(54, 64, 'tower1');
-                menuTower1.setInteractive().on('pointerdown', () => {
-                    this.tower1IsSelected = true;
-                    descText.setText("Description: Soap Tower");
-                    costText.setText("Cost: 100");
-                    cancelButton.alpha = 1;
+        // Creating the cancel button
+        let cancelButton = this.add.image(54, 370, 'cancelButton');
+        cancelButton.alpha = 0;
+        cancelButton.setInteractive().on('pointerdown', function () {
+            this.tower1IsSelected = false;
+            descText.setText("");
+            costText.setText("");
+            cancelButton.alpha = 0;
+        }.bind(this));
 
-                    // Create cursor grid cell hover image and draw
-                    this.createTile();                    
+        //Create first tower in menu.
+        let menuTower1 = this.add.image(54, 64, 'tower1');
+        menuTower1.setInteractive().on('pointerdown', () => {
+            this.tower1IsSelected = true;
+            descText.setText("Description: Soap Tower");
+            costText.setText("Cost: 100");
+            cancelButton.alpha = 1;
+
+            // Create cursor grid cell hover image and draw
+            this.createTile();
+        });
+        sidebar.add(menuTower1);
+        sidebar.add(cancelButton);
+
+        //Create menu toggle button
+        let menuButton = this.add.rectangle(width - 20, height - 20, 40, 40, 0x00ff00);
+        let menuShowing = false;
+        menuButton.setInteractive();
+        menuButton.on('pointerdown', () => {
+            if (!menuShowing) {
+                this.tweens.add({
+                    targets: sidebar,
+                    x: width - 100,
+                    duration: 200
                 });
-                sidebar.add(menuTower1);
-                sidebar.add(cancelButton);
-        
-                //Create menu toggle button
-                let menuButton = this.add.rectangle(width-20, height-20, 40, 40, 0x00ff00);
-                let menuShowing = false;
-                menuButton.setInteractive();
-                menuButton.on('pointerdown', () => {
-                    if(!menuShowing){
-                        this.tweens.add({
-                            targets: sidebar,
-                            x: width - 100,
-                            duration: 200
-                        });
-                        menuShowing = true;
-                    } else {
-                        this.tweens.add({
-                            targets: sidebar,
-                            x: width + 100,
-                            duration: 200
-                        });
-                        menuShowing = false;
-                    }
+                menuShowing = true;
+            } else {
+                this.tweens.add({
+                    targets: sidebar,
+                    x: width + 100,
+                    duration: 200
                 });
+                menuShowing = false;
+            }
+        });
 
         //Create description area.
         let infoContainer = this.add.container(width - 250, 10);
