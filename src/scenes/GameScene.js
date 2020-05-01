@@ -53,6 +53,29 @@ export class GameScene extends Phaser.Scene {
         let grid = this.add.grid(0, 0, cellWidth * colCount , cellWidth * rowCount, cellWidth, cellWidth, 0x000000, 0, 0x222222, 1);
         grid.setOrigin(0, 0);
         
+        //Create background image.
+        let bg = this.add.image(width/2, height/2, 'bg');
+        bg.setDisplaySize(width, height);
+
+        //Create path tiles.
+        let tileX, tileY
+        let pathTile;
+        for(let i = 0; i < rowCount; i++){
+            for(let j = 0; j < colCount; j++){
+                if(this.isPathTile(i, j)){
+                    //Position for tile placement
+                    tileX = cellWidth * j + halfCell;
+                    tileY = cellWidth * i + halfCell;
+                    pathTile = this.add.image(tileX, tileY, 'road');
+
+                    if(this.isPathTile(i+1, j))
+                        pathTile.setRotation(-Math.PI/2);
+                    pathTile.setDisplaySize(32, 32);
+                }
+                    
+            }
+        }
+
         // Create and draw path
         let graphics = this.add.graphics();
         graphics.lineStyle(1, 0xFFFFFF);
@@ -135,8 +158,10 @@ export class GameScene extends Phaser.Scene {
         this.physics.world.enable(this.circle2);
         this.circle2.body.setCircle(40);
 
-        // Create health text
+        // Create resource information text
         healthText = this.add.text(500, 10, "Health: 100");
+        let money = 100;
+        let moneyText = this.add.text(500, healthText.getBottomCenter().y + 10, 'Money: ' + money);
 
         // Calling the funcion to make the tower button
         this.createTowerIcon();
@@ -163,7 +188,10 @@ export class GameScene extends Phaser.Scene {
     }
 
     isPathTile(i, j) {
-        return this.gridCells[i][j] === 1;
+        //Check if given values are inbounds first.
+        if(i >= 0 && j >= 0 && i < this.gridCells.length && j < this.gridCells[i].length)
+            return this.gridCells[i][j] === 1;
+        return null;
     }
 
     // making the tower button
