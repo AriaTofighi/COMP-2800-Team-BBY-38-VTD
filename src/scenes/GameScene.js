@@ -51,7 +51,7 @@ export class GameScene extends Phaser.Scene {
         const rowCount = height / cellWidth; // 19 rows, use cellWidth * 18 for last row
         
         // Create and draw grid
-        let grid = this.add.grid(0, 0, cellWidth * colCount , cellWidth * rowCount, cellWidth, cellWidth, 0x000000, 0, 0x222222, 1);
+        let grid = this.add.grid(0, 0, cellWidth * colCount , cellWidth * rowCount, cellWidth, cellWidth, 0x000000, 0, 0x222222, 0);
         grid.setOrigin(0, 0);
         
         // Create and draw path
@@ -78,6 +78,7 @@ export class GameScene extends Phaser.Scene {
         //Create sidebar
         let sidebar = this.add.container(width, height / 2 - 200);
         let sidebox = this.add.graphics();
+        sidebar.depth = 1;
         sidebar.add(sidebox);
         sidebox.fillStyle(0xff0000);
         sidebox.fillRect(0, 0, 100, 400);
@@ -109,6 +110,7 @@ export class GameScene extends Phaser.Scene {
 
         //Create menu toggle button
         let menuButton = this.add.rectangle(width - 20, height - 20, 40, 40, 0x00ff00);
+        menuButton.depth = 1;
         let menuShowing = false;
         menuButton.setInteractive();
         menuButton.on('pointerdown', () => {
@@ -215,18 +217,20 @@ export class GameScene extends Phaser.Scene {
 
     overlap1() {
         console.log("Circle1 hit.");
-        this.health = this.health - 0.1;
+        this.health = this.health - 0.25;
         if (this.health <= 0) {
             this.carrier.alpha = 0;
+            this.carrier.body.debugShowBody = false;
         }
         this.healthText.setText("Health: " + this.health.toFixed(0));
     }
 
     overlap2() {
         console.log("Circle2 hit.");
-        this.health = this.health - 0.1;
+        this.health = this.health - 0.25;
         if (this.health <= 0) {
             this.carrier.alpha = 0;
+            this.carrier.body.debugShowBody = false;
         }
         this.healthText.setText("Health: " + this.health.toFixed(0));
     }
