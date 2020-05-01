@@ -1,8 +1,5 @@
 import { Grid } from "matter";
 
-let health = 100;
-let healthText = "Health: ";
-
 export class GameScene extends Phaser.Scene {
 
     constructor() {
@@ -92,7 +89,8 @@ export class GameScene extends Phaser.Scene {
         this.circle2.body.setCircle(40);
 
         // Create health text
-        healthText = this.add.text(500, 10, "Health: 100");
+        this.healthText = this.add.text(500, 10, "Health: 100");
+        this.health = 100;
 
         // Calling the funcion to make the tower button
         this.createTowerIcon();
@@ -137,17 +135,27 @@ export class GameScene extends Phaser.Scene {
     }
 
     update() {
-        this.physics.overlap(this.carrier, this.circle1, function() {
-            console.log("Circle1 hit.");
-            health = health - 0.1;
-            healthText.setText("Health: " + health.toFixed(0));
-        });
+        this.physics.overlap(this.carrier, this.circle1, this.overlap1.bind(this));
 
-        this.physics.overlap(this.carrier, this.circle2, function() {
-            console.log("Circle2 hit.");
-            health = health - 0.1;
-            healthText.setText("Health: " + health.toFixed(0));
-        });
+        this.physics.overlap(this.carrier, this.circle2, this.overlap2.bind(this));
     }
 
+    overlap1() {
+        console.log("Circle1 hit.");
+        this.health = this.health - 0.1;
+        if (this.health <= 0) {
+            this.carrier.alpha = 0;
+        }
+        this.healthText.setText("Health: " + this.health.toFixed(0));
+    }
+
+    overlap2() {
+        console.log("Circle2 hit.");
+        this.health = this.health - 0.1;
+        if (this.health <= 0) {
+            this.carrier.alpha = 0;
+        }
+        this.healthText.setText("Health: " + this.health.toFixed(0));
+    }
+    
 }
