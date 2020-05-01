@@ -132,6 +132,9 @@ export class GameScene extends Phaser.Scene {
         this.physics.world.enable(this.circle2);
         this.circle2.body.setCircle(40);
 
+        // Removes debug outline of physics body
+        this.circle1.body.debugShowBody = false;
+
         // Create health text
         this.healthText = this.add.text(500, 10, "Health: 100");
         this.health = 100;
