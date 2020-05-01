@@ -77,49 +77,49 @@ export class GameScene extends Phaser.Scene {
             repeat: -1, // infinite
         });
 
-                //Create sidebar
-                let sidebar = this.add.container(width, height/2 - 200);
-                let sidebox = this.add.graphics();
-                sidebar.add(sidebox);
-                sidebox.fillStyle(0xff0000);
-                sidebox.fillRect(0, 0, 100, 400);
-        
-                //Create first tower in menu.
-                let menuTower1 = this.add.image(54, 64, 'tower1');
-                menuTower1.setInteractive().on('pointerdown', () => {
-                    descText.setText("Description: Soap Tower");
-                    costText.setText("Cost: 100");
+        //Create sidebar
+        let sidebar = this.add.container(width, height / 2 - 200);
+        let sidebox = this.add.graphics();
+        sidebar.add(sidebox);
+        sidebox.fillStyle(0xff0000);
+        sidebox.fillRect(0, 0, 100, 400);
+
+        //Create first tower in menu.
+        let menuTower1 = this.add.image(54, 64, 'tower1');
+        menuTower1.setInteractive().on('pointerdown', () => {
+            descText.setText("Description: Soap Tower");
+            costText.setText("Cost: 100");
+        });
+        sidebar.add(menuTower1);
+
+        //Create menu toggle button
+        let menuButton = this.add.rectangle(width - 20, height - 20, 40, 40, 0x00ff00);
+        let menuShowing = false;
+        menuButton.setInteractive();
+        menuButton.on('pointerdown', () => {
+            if (!menuShowing) {
+                this.tweens.add({
+                    targets: sidebar,
+                    x: width - 100,
+                    duration: 200
                 });
-                sidebar.add(menuTower1);
-        
-                //Create menu toggle button
-                let menuButton = this.add.rectangle(width-20, height-20, 40, 40, 0x00ff00);
-                let menuShowing = false;
-                menuButton.setInteractive();
-                menuButton.on('pointerdown', () => {
-                    if(!menuShowing){
-                        this.tweens.add({
-                            targets: sidebar,
-                            x: width - 100,
-                            duration: 200
-                        });
-                        menuShowing = true;
-                    } else {
-                        this.tweens.add({
-                            targets: sidebar,
-                            x: width + 100,
-                            duration: 200
-                        });
-                        menuShowing = false;
-                    }
+                menuShowing = true;
+            } else {
+                this.tweens.add({
+                    targets: sidebar,
+                    x: width + 100,
+                    duration: 200
                 });
-        
-                //Create description area.
-                let infoContainer = this.add.container(width-250, 0);
-                let descText = this.add.text(0, 0, '');
-                let costText = this.add.text(0, descText.getBottomCenter().y + 10, '');
-                infoContainer.add(descText);
-                infoContainer.add(costText);
+                menuShowing = false;
+            }
+        });
+
+        //Create description area.
+        let infoContainer = this.add.container(width - 250, 0);
+        let descText = this.add.text(0, 0, '');
+        let costText = this.add.text(0, descText.getBottomCenter().y + 10, '');
+        infoContainer.add(descText);
+        infoContainer.add(costText);
 
         // Create and draw bullet
         // let bullet = this.add.image(cellWidth * 24, cellWidth * 18, 'bullet');
@@ -137,9 +137,6 @@ export class GameScene extends Phaser.Scene {
 
         // Create health text
         healthText = this.add.text(500, 10, "Health: 100");
-
-        // Calling the funcion to make the tower button
-        this.createTowerIcon();
     }
 
     createTile() {
@@ -149,7 +146,7 @@ export class GameScene extends Phaser.Scene {
         this.tile.alpha = 0;
 
         this.input.on('pointermove', function (pointer) {
-            console.log(pointer);
+            // console.log(pointer);
             let i = Math.floor(pointer.y / 32); // row index
             let j = Math.floor(pointer.x / 32); // col index
             this.tile.setPosition(j * 32, i * 32);
@@ -164,20 +161,6 @@ export class GameScene extends Phaser.Scene {
 
     isPathTile(i, j) {
         return this.gridCells[i][j] === 1;
-    }
-
-    // making the tower button
-    createTowerIcon () {
-        const tower1 = this.add.image(768, 160, 'tower1');
-        tower1.setDisplayOrigin(0, 0);
-        tower1.setDisplaySize(32, 32);
-        tower1.setInteractive();
-        tower1.on('pointerdown', this.tower1EventHandler);
-    }
-
-    // The tower one click handler
-    tower1EventHandler() {
-        // what the clicking on the tower button does!
     }
 
     update() {
