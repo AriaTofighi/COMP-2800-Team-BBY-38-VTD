@@ -54,6 +54,29 @@ export class GameScene extends Phaser.Scene {
         let grid = this.add.grid(0, 0, cellWidth * colCount , cellWidth * rowCount, cellWidth, cellWidth, 0x000000, 0, 0x222222, 0);
         grid.setOrigin(0, 0);
         
+        //Create background image.
+        let bg = this.add.image(width/2, height/2, 'bg');
+        bg.setDisplaySize(width, height);
+
+        //Create path tiles.
+        let tileX, tileY
+        let pathTile;
+        for(let i = 0; i < rowCount; i++){
+            for(let j = 0; j < colCount; j++){
+                if(this.isPathTile(i, j)){
+                    //Position for tile placement
+                    tileX = cellWidth * j + halfCell;
+                    tileY = cellWidth * i + halfCell;
+                    pathTile = this.add.image(tileX, tileY, 'road');
+
+                    if(this.isPathTile(i+1, j))
+                        pathTile.setRotation(-Math.PI/2);
+                    pathTile.setDisplaySize(32, 32);
+                }
+                    
+            }
+        }
+
         // Create and draw path
         let graphics = this.add.graphics();
         graphics.lineStyle(1, 0xFFFFFF);
@@ -155,9 +178,11 @@ export class GameScene extends Phaser.Scene {
         // Removes debug outline of physics body
         this.circle1.body.debugShowBody = false;
 
-        // Create health text
-        this.healthText = this.add.text(width / 2, 10, "Health: 100");
+        // Create resource information text
         this.health = 100;
+        this.healthText = this.add.text(width / 2, 10, "Health: " + this.health);
+        this.money = 100;
+        this.moneyText = this.add.text(width / 2, healthText.getBottomCenter().y + 10, 'Money: ' + this.money);
 
         // Create two hard code towers inside the circles
         this.hardCodeTower1 = this.add.image(4 * 32, 4 * 32, 'tower1');
@@ -206,7 +231,10 @@ export class GameScene extends Phaser.Scene {
     }
 
     isPathTile(i, j) {
-        return this.gridCells[i][j] === 1;
+        //Check if given values are inbounds first.
+        if(i >= 0 && j >= 0 && i < this.gridCells.length && j < this.gridCells[i].length)
+            return this.gridCells[i][j] === 1;
+        return null;
     }
 
     update() {
