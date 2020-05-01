@@ -6,6 +6,10 @@ export class GameScene extends Phaser.Scene {
         super('Game');
     }
 
+    init() {
+        this.tower1IsSelected = false;
+    }
+
     preload() {
         // Ones represent grid cells that are path tiles you cannot place towers on
         this.gridCells = [
@@ -58,9 +62,6 @@ export class GameScene extends Phaser.Scene {
         path.lineTo(cellWidth * 24 + halfCell, cellWidth * 10 + halfCell);
         path.draw(graphics);
 
-        // Create cursor grid cell hover image and draw
-        this.createTile();
-
         // Create carrier that follows path
         this.carrier = this.add.follower(path, cellWidth * 3 + 16, 0 + 16, 'carrier');
         this.carrier.setDisplaySize(32, 32);
@@ -80,14 +81,30 @@ export class GameScene extends Phaser.Scene {
                 sidebar.add(sidebox);
                 sidebox.fillStyle(0xff0000);
                 sidebox.fillRect(0, 0, 100, 400);
+
+                // making the cancel button
+                let cancelButton = this.add.image(54, 370, 'cancelButton');
+                cancelButton.alpha = 0;
+                cancelButton.setInteractive().on('pointerdown', function () {
+                    this.tower1IsSelected = false;
+                    descText.setText("");
+                    costText.setText("");
+                    cancelButton.alpha = 0;
+                }.bind(this));
         
                 //Create first tower in menu.
                 let menuTower1 = this.add.image(54, 64, 'tower1');
                 menuTower1.setInteractive().on('pointerdown', () => {
+                    this.tower1IsSelected = true;
                     descText.setText("Description: Soap Tower");
                     costText.setText("Cost: 100");
+                    cancelButton.alpha = 1;
+
+                    // Create cursor grid cell hover image and draw
+                    this.createTile();                    
                 });
                 sidebar.add(menuTower1);
+                sidebar.add(cancelButton);
         
                 //Create menu toggle button
                 let menuButton = this.add.rectangle(width-20, height-20, 40, 40, 0x00ff00);
@@ -138,22 +155,36 @@ export class GameScene extends Phaser.Scene {
     }
 
     createTile() {
-        this.tile = this.add.image(0, 0, 'tile');
-        this.tile.setDisplaySize(32, 32);
-        this.tile.setOrigin(0, 0);
-        this.tile.alpha = 0;
+        this.tower1 = this.add.image(0, 0, 'tower1');
+        this.tower1.setDisplaySize(32, 32);
+        this.tower1.setOrigin(0, 0);
+        this.tower1.alpha = 0;
 
         this.input.on('pointermove', function (pointer) {
-            console.log(pointer);
             let i = Math.floor(pointer.y / 32); // row index
             let j = Math.floor(pointer.x / 32); // col index
-            this.tile.setPosition(j * 32, i * 32);
-            if (this.isPathTile(i, j)) {
-                this.tile.alpha = 0;
+            this.tower1.setPosition(j * 32, i * 32);
+            if (this.tower1IsSelected) {
+                if (this.isPathTile(i, j)) {
+                    this.tower1.alpha = 0;
+                } else {
+                    this.tower1.alpha = 1;
+                }
             } else {
-                this.tile.alpha = 1;
+                this.tower1.alpha = 0;
             }
 
+        }.bind(this));
+
+        this.input.on('pointerdown', function (pointer) {
+            if (this.tower1IsSelected) {
+                let copy = this.add.image(0 , 0, 'tower1');
+                let i = Math.floor(pointer.y / 32); // row index
+                let j = Math.floor(pointer.x / 32); // col index
+                copy.setPosition(j * 32, i * 32);
+                copy.setOrigin(0, 0);
+                copy.setDisplaySize(32, 32);
+            }
         }.bind(this));
     }
 
