@@ -112,7 +112,7 @@ export class GameScene extends Phaser.Scene {
         });
 
         //Create description area.
-        let infoContainer = this.add.container(width - 250, 0);
+        let infoContainer = this.add.container(width - 250, 10);
         let descText = this.add.text(0, 0, '');
         let costText = this.add.text(0, descText.getBottomCenter().y + 10, '');
         infoContainer.add(descText);
@@ -136,7 +136,7 @@ export class GameScene extends Phaser.Scene {
         this.circle1.body.debugShowBody = false;
 
         // Create health text
-        this.healthText = this.add.text(500, 10, "Health: 100");
+        this.healthText = this.add.text(width / 2, 10, "Health: 100");
         this.health = 100;
     }
 
