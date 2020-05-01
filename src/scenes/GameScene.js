@@ -1,17 +1,27 @@
 import { Grid } from "matter";
 
 export class GameScene extends Phaser.Scene {
-
+    
+    /**
+     * Constructor for GameScene object.
+     */
     constructor() {
         super('Game');
     }
 
+    /**
+     * Initializes the game.
+     */
     init() {
         this.tower1IsSelected = false;
     }
 
+    /**
+     * Set up the game scene entities.
+     */
     preload() {
-        // Ones represent grid cells that are path tiles you cannot place towers on
+        // Ones represent grid cells that are path tiles.
+        // You cannot place towers on path tiles.
         this.gridCells = [
             [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -35,6 +45,9 @@ export class GameScene extends Phaser.Scene {
         ];
     }
 
+    /**
+     * Creates the grid, background images, path tiles, carriers, menu, and sidebar.
+     */
     create() {
         // Begin writing game objects/logic here
         // this.add.image(200, 100, 'carrier');
@@ -46,9 +59,9 @@ export class GameScene extends Phaser.Scene {
         let height = this.sys.canvas.height; 
         let cellWidth = 32;
         let cellHeight = 32;
-        let halfCell = 16; // used to move objects to center of cells
-        const colCount = width / cellWidth; // 25 cols, use cellWidth * 24 for last col
-        const rowCount = height / cellWidth; // 19 rows, use cellWidth * 18 for last row
+        let halfCell = 16; // Used to move objects to center of cells
+        const colCount = width / cellWidth; // 25 columns; use cellWidth * 24 for last column
+        const rowCount = height / cellWidth; // 19 rows; use cellWidth * 18 for last row
         
         // Create and draw grid
         let grid = this.add.grid(0, 0, cellWidth * colCount , cellWidth * rowCount, cellWidth, cellWidth, 0x000000, 0, 0x222222, 0);
@@ -129,6 +142,8 @@ export class GameScene extends Phaser.Scene {
             // Create cursor grid cell hover image and draw
             this.createTile();
         });
+
+        // Add Tower 1 and cancel button to the sidebar
         sidebar.add(menuTower1);
         sidebar.add(cancelButton);
 
@@ -190,7 +205,7 @@ export class GameScene extends Phaser.Scene {
         this.money = 100;
         this.moneyText = this.add.text(width / 2, this.healthText.getBottomCenter().y + 10, 'Money: ' + this.money);
 
-        // Create two hard code towers inside the circles
+        // Create two hard coded towers inside the circles
         this.hardCodeTower1 = this.add.image(4 * 32, 4 * 32, 'tower1');
         this.hardCodeTower1.setOrigin(0, 0);
         this.hardCodeTower1.setDisplaySize(32, 32);
@@ -200,6 +215,9 @@ export class GameScene extends Phaser.Scene {
         this.hardCodeTower2.setDisplaySize(32, 32);
     }
 
+    /**
+     * Create the tiles.
+     */
     createTile() {
         this.tower1 = this.add.image(0, 0, 'tower1');
         this.tower1.setDisplaySize(32, 32);
@@ -208,8 +226,8 @@ export class GameScene extends Phaser.Scene {
 
         this.input.on('pointermove', function (pointer) {
             // console.log(pointer);
-            let i = Math.floor(pointer.y / 32); // row index
-            let j = Math.floor(pointer.x / 32); // col index
+            let i = Math.floor(pointer.y / 32); // Row index
+            let j = Math.floor(pointer.x / 32); // Column index
             this.tower1.setPosition(j * 32, i * 32);
             if (this.tower1IsSelected) {
                 if (this.isPathTile(i, j)) {
@@ -236,6 +254,10 @@ export class GameScene extends Phaser.Scene {
         }.bind(this));
     }
 
+    /**
+     * Check if it's a path tile or not.
+     * @return True if it is a path tile, false otherwise.
+     */
     isPathTile(i, j) {
         //Check if given values are inbounds first.
         if(i >= 0 && j >= 0 && i < this.gridCells.length && j < this.gridCells[i].length)
@@ -243,12 +265,18 @@ export class GameScene extends Phaser.Scene {
         return null;
     }
 
+    /**
+     * Update the physics.
+     */
     update() {
         this.physics.overlap(this.carrier, this.circle1, this.overlap1.bind(this));
 
         this.physics.overlap(this.carrier, this.circle2, this.overlap2.bind(this));
     }
 
+    /**
+     * Check for overlap on Circle 1. If there's overlap, subtract health.
+     */
     overlap1() {
         console.log("Circle1 hit.");
         this.health = this.health - 0.25;
@@ -259,6 +287,9 @@ export class GameScene extends Phaser.Scene {
         this.healthText.setText("Health: " + this.health.toFixed(0));
     }
 
+    /**
+     * Check for overlap on Circle 2. If there's overlap, subtract health.
+     */
     overlap2() {
         console.log("Circle2 hit.");
         this.health = this.health - 0.25;
