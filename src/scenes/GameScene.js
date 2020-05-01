@@ -57,7 +57,7 @@ export class GameScene extends Phaser.Scene {
         // Create and draw path
         let graphics = this.add.graphics();
         graphics.lineStyle(1, 0xFFFFFF);
-        let path = this.add.path(cellWidth * 3 + halfCell, 0 + halfCell );
+        let path = this.add.path(cellWidth * 3 + halfCell, 0 + halfCell);
         path.lineTo(cellWidth * 3 + halfCell, cellWidth * 10 + halfCell);
         path.lineTo(cellWidth * 24 + halfCell, cellWidth * 10 + halfCell);
         path.draw(graphics);
@@ -84,6 +84,7 @@ export class GameScene extends Phaser.Scene {
 
         // Creating the cancel button
         let cancelButton = this.add.image(54, 370, 'cancelButton');
+        cancelButton.setDisplaySize(64, 64);
         cancelButton.alpha = 0;
         cancelButton.setInteractive().on('pointerdown', function () {
             this.tower1IsSelected = false;
@@ -141,8 +142,8 @@ export class GameScene extends Phaser.Scene {
         // bullet.setOrigin(0, 0);
 
         // Create and draw a circle to test overlap/collision
-        this.circle1 = this.add.circle(cellWidth*4 + halfCell, cellHeight*4 + halfCell, 40, 0xff0000, 0.5);
-        this.circle2 = this.add.circle(cellWidth*7 + halfCell, cellHeight*9 + halfCell, 40, 0xff0000, 0.5);
+        this.circle1 = this.add.circle(cellWidth * 4 + halfCell, cellHeight * 4 + halfCell, 40, 0xff0000, 0.5);
+        this.circle2 = this.add.circle(cellWidth * 7 + halfCell, cellHeight * 9 + halfCell, 40, 0xff0000, 0.5);
 
         this.physics.world.enable(this.circle1);
         this.circle1.body.setCircle(40);
@@ -155,6 +156,15 @@ export class GameScene extends Phaser.Scene {
         // Create health text
         this.healthText = this.add.text(width / 2, 10, "Health: 100");
         this.health = 100;
+
+        // Create two hard code towers inside the circles
+        this.hardCodeTower1 = this.add.image(4 * 32, 4 * 32, 'tower1');
+        this.hardCodeTower1.setOrigin(0, 0);
+        this.hardCodeTower1.setDisplaySize(32, 32);
+
+        this.hardCodeTower2 = this.add.image(7 * 32, 9 * 32, 'tower1');
+        this.hardCodeTower2.setOrigin(0, 0);
+        this.hardCodeTower2.setDisplaySize(32, 32);
     }
 
     createTile() {
@@ -181,10 +191,11 @@ export class GameScene extends Phaser.Scene {
         }.bind(this));
 
         this.input.on('pointerdown', function (pointer) {
-            if (this.tower1IsSelected) {
+            let i = Math.floor(pointer.y / 32); // row index
+            let j = Math.floor(pointer.x / 32); // col index
+
+            if (this.tower1IsSelected && !this.isPathTile(i, j)) {
                 let copy = this.add.image(0 , 0, 'tower1');
-                let i = Math.floor(pointer.y / 32); // row index
-                let j = Math.floor(pointer.x / 32); // col index
                 copy.setPosition(j * 32, i * 32);
                 copy.setOrigin(0, 0);
                 copy.setDisplaySize(32, 32);
