@@ -5,6 +5,9 @@ import tower1 from "../../assets/ingame/tower1.png";
 import cancelButton from "../../assets/buttons/cancel.png";
 import pauseButton from "../../assets/buttons/pause.png";
 import endButton from "../../assets/buttons/end.png";
+import grass from "../../assets/ingame/grass.png";
+import corner from "../../assets/ingame/corner.png";
+import road from "../../assets/ingame/road.png";
 import { BlendModes } from "phaser";
 
 export class LoadScene extends Phaser.Scene {
@@ -82,6 +85,9 @@ export class LoadScene extends Phaser.Scene {
         this.load.image('carrier', carrier);
         this.load.image('tile', tile);
         this.load.image('tower1', tower1);
+        this.load.image('bg', grass);
+        this.load.image('corner', corner);
+        this.load.image('road', road);;
 
         // Load button images
         this.load.image("cancelButton", cancelButton);
