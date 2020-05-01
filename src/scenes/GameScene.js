@@ -82,7 +82,7 @@ export class GameScene extends Phaser.Scene {
                 sidebox.fillStyle(0xff0000);
                 sidebox.fillRect(0, 0, 100, 400);
 
-                // making the cancel button
+                // Creating the cancel button
                 let cancelButton = this.add.image(54, 370, 'cancelButton');
                 cancelButton.alpha = 0;
                 cancelButton.setInteractive().on('pointerdown', function () {
@@ -127,13 +127,13 @@ export class GameScene extends Phaser.Scene {
                         menuShowing = false;
                     }
                 });
-        
-                //Create description area.
-                let infoContainer = this.add.container(width-250, 0);
-                let descText = this.add.text(0, 0, '');
-                let costText = this.add.text(0, descText.getBottomCenter().y + 10, '');
-                infoContainer.add(descText);
-                infoContainer.add(costText);
+
+        //Create description area.
+        let infoContainer = this.add.container(width - 250, 10);
+        let descText = this.add.text(0, 0, '');
+        let costText = this.add.text(0, descText.getBottomCenter().y + 10, '');
+        infoContainer.add(descText);
+        infoContainer.add(costText);
 
         // Create and draw bullet
         // let bullet = this.add.image(cellWidth * 24, cellWidth * 18, 'bullet');
@@ -149,8 +149,11 @@ export class GameScene extends Phaser.Scene {
         this.physics.world.enable(this.circle2);
         this.circle2.body.setCircle(40);
 
+        // Removes debug outline of physics body
+        this.circle1.body.debugShowBody = false;
+
         // Create health text
-        this.healthText = this.add.text(500, 10, "Health: 100");
+        this.healthText = this.add.text(width / 2, 10, "Health: 100");
         this.health = 100;
     }
 
@@ -161,6 +164,7 @@ export class GameScene extends Phaser.Scene {
         this.tower1.alpha = 0;
 
         this.input.on('pointermove', function (pointer) {
+            // console.log(pointer);
             let i = Math.floor(pointer.y / 32); // row index
             let j = Math.floor(pointer.x / 32); // col index
             this.tower1.setPosition(j * 32, i * 32);
