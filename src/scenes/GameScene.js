@@ -1,4 +1,5 @@
 import { Grid } from "matter";
+import Carrier from "../game_objects/Carrier";
 
 export class GameScene extends Phaser.Scene {
     
@@ -99,18 +100,12 @@ export class GameScene extends Phaser.Scene {
         path.lineTo(cellWidth * 24 + halfCell, cellWidth * 10 + halfCell);
         // path.draw(graphics);
 
-        // Create carrier that follows path
-        this.carrier = this.add.follower(path, cellWidth * 3 + 16, 0 + 16, 'carrier');
-        this.carrier.setDisplaySize(32, 32);
-        this.physics.world.enable(this.carrier);
-        this.carrier.body.setCircle(16, 16, 16);
-        this.carrier.setRotation(1.5708);
-        this.carrier.startFollow({
-            rotateToPath: true,
-            duration: 5000,
-            yoyo: true, // switches directions when end of path is reached
-            repeat: -1, // infinite
-        });
+        // Creates carrier on A keyboard press
+        this.input.keyboard.on('keydown-A', function() {
+            console.log("A pressed");
+            this.carrier = new Carrier(this, path, cellWidth * 3 + 16, 0 + 16, 'carrier');
+            console.log(this.carrier);
+        }.bind(this));
 
         //Create sidebar
         let sidebar = this.add.container(width, height / 2 - 200);
@@ -196,8 +191,6 @@ export class GameScene extends Phaser.Scene {
         // Removes debug outline of physics body
         this.circle1.body.debugShowBody = false;
         this.circle2.body.debugShowBody = false;
-        this.carrier.body.debugShowBody = false;
-
 
         // Create resource information text
         this.health = 100;
@@ -260,17 +253,17 @@ export class GameScene extends Phaser.Scene {
      */
     isPathTile(i, j) {
         //Check if given values are inbounds first.
-        if(i >= 0 && j >= 0 && i < this.gridCells.length && j < this.gridCells[i].length)
+        // if(i >= 0 && j >= 0 && i < this.gridCells.length && j < this.gridCells[i].length)
             return this.gridCells[i][j] === 1;
-        return null;
+        // return null;
     }
 
     /**
      * Update the physics.
      */
     update() {
+        console.log(this.carrier);
         this.physics.overlap(this.carrier, this.circle1, this.overlap1.bind(this));
-
         this.physics.overlap(this.carrier, this.circle2, this.overlap2.bind(this));
     }
 
