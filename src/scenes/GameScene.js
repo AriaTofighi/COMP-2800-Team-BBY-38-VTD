@@ -1,5 +1,6 @@
 import { Grid } from "matter";
 import Carrier from "../game_objects/Carrier";
+import Turret from "../game_objects/Turret";
 
 export class GameScene extends Phaser.Scene {
     
@@ -115,17 +116,6 @@ export class GameScene extends Phaser.Scene {
         sidebox.fillStyle(0xff0000);
         sidebox.fillRect(0, 0, 100, 400);
 
-        // Creating the cancel button
-        let cancelButton = this.add.image(54, 370, 'cancelButton');
-        cancelButton.setDisplaySize(64, 64);
-        cancelButton.alpha = 0;
-        cancelButton.setInteractive().on('pointerdown', function () {
-            this.tower1IsSelected = false;
-            descText.setText("");
-            costText.setText("");
-            cancelButton.alpha = 0;
-        }.bind(this));
-
         //Create first tower in menu.
         let menuTower1 = this.add.image(54, 64, 'tower1');
         menuTower1.setInteractive().on('pointerdown', () => {
@@ -137,6 +127,17 @@ export class GameScene extends Phaser.Scene {
             // Create cursor grid cell hover image and draw
             this.createTile();
         });
+
+        // Creating the cancel button
+        let cancelButton = this.add.image(54, 370, 'cancelButton');
+        cancelButton.setDisplaySize(64, 64);
+        cancelButton.alpha = 0;
+        cancelButton.setInteractive().on('pointerdown', function () {
+            this.tower1IsSelected = false;
+            descText.setText("");
+            costText.setText("");
+            cancelButton.alpha = 0;
+        }.bind(this));
 
         // Add Tower 1 and cancel button to the sidebar
         sidebar.add(menuTower1);
@@ -197,39 +198,53 @@ export class GameScene extends Phaser.Scene {
         this.healthText = this.add.text(width / 2, 10, "Health: " + this.health);
         this.money = 100;
         this.moneyText = this.add.text(width / 2, this.healthText.getBottomCenter().y + 10, 'Money: ' + this.money);
-
-        // Create two hard coded towers inside the circles
-        this.hardCodeTower1 = this.add.image(4 * 32, 4 * 32, 'tower1');
-        this.hardCodeTower1.setOrigin(0, 0);
-        this.hardCodeTower1.setDisplaySize(32, 32);
-
-        this.hardCodeTower2 = this.add.image(7 * 32, 9 * 32, 'tower1');
-        this.hardCodeTower2.setOrigin(0, 0);
-        this.hardCodeTower2.setDisplaySize(32, 32);
     }
 
     /**
      * Create the tiles.
      */
     createTile() {
-        this.tower1 = this.add.image(0, 0, 'tower1');
-        this.tower1.setDisplaySize(32, 32);
-        this.tower1.setOrigin(0, 0);
-        this.tower1.alpha = 0;
+        // showing the turret example with its radius
+        this.turretExampleRadius = this.add.circle(0, 0, 60, 0xECDBDB);
+        this.turretExampleRadius.alpha = 0.8;
+        this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0.8);
+
+        this.turretExample = this.add.image(0, 0, 'tower1');
+        this.turretExample.setOrigin(0, 0);
+        this.turretExample.setDisplaySize(32, 32);
+        this.turretExample.alpha = 0;
+
+        // showing no turret is allowed here
+        this.noTurretHere = this.add.image(0, 0, 'noTurret');
+        this.noTurretHere.setDisplaySize(32, 32);
+        this.noTurretHere.setOrigin(0, 0);
+        this.noTurretHere.alpha = 0;
 
         this.input.on('pointermove', function (pointer) {
-            // console.log(pointer);
             let i = Math.floor(pointer.y / 32); // Row index
             let j = Math.floor(pointer.x / 32); // Column index
-            this.tower1.setPosition(j * 32, i * 32);
+            
+            this.turretExample.setPosition(j * 32, i * 32);
+            this.noTurretHere.setPosition(j * 32, i * 32);
+            this.turretExampleRadius.setPosition((j + 0.5) * 32, (i + 0.5) * 32);
+
             if (this.tower1IsSelected) {
                 if (this.isPathTile(i, j)) {
-                    this.tower1.alpha = 0;
+                    this.turretExample.alpha = 0;
+                    this.turretExampleRadius.alpha = 0;
+                    this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0);
+                    this.noTurretHere.alpha = 1;
                 } else {
-                    this.tower1.alpha = 1;
+                    this.turretExample.alpha = 1;
+                    this.turretExampleRadius.alpha = 0.8;
+                    this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0.8);
+                    this.noTurretHere.alpha = 0;
                 }
             } else {
-                this.tower1.alpha = 0;
+                this.turretExample.alpha = 0;
+                this.turretExampleRadius.alpha = 0;
+                this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0);
+                this.noTurretHere.alpha = 0;
             }
 
         }.bind(this));
@@ -239,10 +254,7 @@ export class GameScene extends Phaser.Scene {
             let j = Math.floor(pointer.x / 32); // col index
 
             if (this.tower1IsSelected && !this.isPathTile(i, j)) {
-                let copy = this.add.image(0 , 0, 'tower1');
-                copy.setPosition(j * 32, i * 32);
-                copy.setOrigin(0, 0);
-                copy.setDisplaySize(32, 32);
+                this.turretCopy = new Turret(this, j, i);
             }
         }.bind(this));
     }
