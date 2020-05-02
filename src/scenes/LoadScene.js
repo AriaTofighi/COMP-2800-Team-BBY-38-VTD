@@ -5,13 +5,23 @@ import tower1 from "../../assets/ingame/tower1.png";
 import cancelButton from "../../assets/buttons/cancel.png";
 import pauseButton from "../../assets/buttons/pause.png";
 import endButton from "../../assets/buttons/end.png";
+import grass from "../../assets/ingame/grass.png";
+import corner from "../../assets/ingame/corner.png";
+import road from "../../assets/ingame/road.png";
 import { BlendModes } from "phaser";
 
 export class LoadScene extends Phaser.Scene {
+
+    /**
+     * Constructor for LoadScene object.
+     */
     constructor() {
         super('Load');
     }
 
+    /**
+     * Set up the loading screen entities.
+     */
     preload() {
         // Canvas dimensions
         let width = this.sys.canvas.width;
@@ -28,7 +38,7 @@ export class LoadScene extends Phaser.Scene {
         loadBox.fillStyle(0x222222, 0.9);
         loadBox.fillRect(width / 2 - 200, height / 2 - 10, 400, 40);
 
-        // Display loading... text
+        // Display "Loading..." text
         let loadingTxt = this.add.text(width / 2, height / 2 - 50, "Loading...", {
             color: "white",
             fontFamily: "Courier"
@@ -39,7 +49,6 @@ export class LoadScene extends Phaser.Scene {
         let percTxt = this.add.text(width / 2, height / 2 + 10, "0%", {
             color: "white",
             fontFamily: "Courier"
-
         });
         percTxt.setOrigin();
 
@@ -47,11 +56,10 @@ export class LoadScene extends Phaser.Scene {
         let loadItemTxt = this.add.text(width / 2, height / 2 + 60, "Loading asset: " + "fileName", {
             color: "white",
             fontFamily: "Courier"
-
         });
         loadItemTxt.setOrigin();
 
-        // Listen for load percentage progress and adjust text
+        // Listens for load percentage progress and adjust text
         this.load.on('progress', function (value) {
             console.log(value);
             percTxt.setText(Math.round(value * 100) + "%");
@@ -82,6 +90,9 @@ export class LoadScene extends Phaser.Scene {
         this.load.image('carrier', carrier);
         this.load.image('tile', tile);
         this.load.image('tower1', tower1);
+        this.load.image('bg', grass);
+        this.load.image('corner', corner);
+        this.load.image('road', road);;
 
         // Load button images
         this.load.image("cancelButton", cancelButton);
@@ -89,11 +100,14 @@ export class LoadScene extends Phaser.Scene {
         this.load.image("endButton", endButton);
 
         // Uncomment to test loading visuals
-        // for (let i = 0; i < 1000; i ++) {
-        //     this.load.image('bullet' + i, bullet);
-        // }
+        for (let i = 0; i < 600; i ++) {
+            this.load.image('bullet' + i, bullet);
+        }
     }
 
+    /**
+     * Create the load scene.
+     */
     create() {   
         this.scene.start('Game');
     }

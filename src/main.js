@@ -12,9 +12,14 @@ let config = {
         parent: 'body',
         mode: Phaser.Scale.FIT,
     },
-    roundPixels: true
+    roundPixels: true,
+    physics: {
+        default: 'arcade',
+        arcade: {debug: true}
+    }
 };
 
+//Sets up the game and adds the GameScene, BootScene, and LoadScene to the game.
 let game = new Phaser.Game(config);
 game.scene.add('Game', GameScene);
 game.scene.add('Boot', BootScene);
