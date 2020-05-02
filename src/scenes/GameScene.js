@@ -177,20 +177,20 @@ export class GameScene extends Phaser.Scene {
         // bullet.setDisplaySize(32, 32);
         // bullet.setOrigin(0, 0);
 
-        // Create and draw a circle to test overlap/collision
-        this.circle1 = this.add.circle(cellWidth * 4 + halfCell, cellHeight * 4 + halfCell, 40, 0x008080 , 0.2);
-        this.circle1.setStrokeStyle(2, 0x046307, 0.8);
-        this.circle2 = this.add.circle(cellWidth * 7 + halfCell, cellHeight * 9 + halfCell, 40, 0x008080 , 0.2);
-        this.circle2.setStrokeStyle(2, 0x046307, 0.8);
+        // // Create and draw a circle to test overlap/collision
+        // this.circle1 = this.add.circle(cellWidth * 4 + halfCell, cellHeight * 4 + halfCell, 40, 0x008080 , 0.2);
+        // this.circle1.setStrokeStyle(2, 0x046307, 0.8);
+        // this.circle2 = this.add.circle(cellWidth * 7 + halfCell, cellHeight * 9 + halfCell, 40, 0x008080 , 0.2);
+        // this.circle2.setStrokeStyle(2, 0x046307, 0.8);
 
-        this.physics.world.enable(this.circle1);
-        this.circle1.body.setCircle(40);
-        this.physics.world.enable(this.circle2);
-        this.circle2.body.setCircle(40);
+        // this.physics.world.enable(this.circle1);
+        // this.circle1.body.setCircle(40);
+        // this.physics.world.enable(this.circle2);
+        // this.circle2.body.setCircle(40);
 
-        // Removes debug outline of physics body
-        this.circle1.body.debugShowBody = false;
-        this.circle2.body.debugShowBody = false;
+        // // Removes debug outline of physics body
+        // this.circle1.body.debugShowBody = false;
+        // this.circle2.body.debugShowBody = false;
 
         // Create resource information text
         this.health = 100;
@@ -262,35 +262,35 @@ export class GameScene extends Phaser.Scene {
      * Update the physics.
      */
     update() {
-        console.log(this.carrier);
-        this.physics.overlap(this.carrier, this.circle1, this.overlap1.bind(this));
-        this.physics.overlap(this.carrier, this.circle2, this.overlap2.bind(this));
+        // console.log(this.carrier);
+        // this.physics.overlap(this.carrier, this.circle1, this.overlap1.bind(this));
+        // this.physics.overlap(this.carrier, this.circle2, this.overlap2.bind(this));
     }
 
-    /**
-     * Check for overlap on Circle 1. If there's overlap, subtract health.
-     */
-    overlap1() {
-        console.log("Circle1 hit.");
-        this.health = this.health - 0.25;
-        if (this.health <= 0) {
-            this.carrier.alpha = 0;
-            this.carrier.body.destroy();
-        }
-        this.healthText.setText("Health: " + this.health.toFixed(0));
-    }
+    // /**
+    //  * Check for overlap on Circle 1. If there's overlap, subtract health.
+    //  */
+    // overlap1() {
+    //     console.log("Circle1 hit.");
+    //     this.health = this.health - 0.25;
+    //     if (this.health <= 0) {
+    //         this.carrier.alpha = 0;
+    //         this.carrier.body.destroy();
+    //     }
+    //     this.healthText.setText("Health: " + this.health.toFixed(0));
+    // }
 
-    /**
-     * Check for overlap on Circle 2. If there's overlap, subtract health.
-     */
-    overlap2() {
-        console.log("Circle2 hit.");
-        this.health = this.health - 0.25;
-        if (this.health <= 0) {
-            this.carrier.alpha = 0;
-            this.carrier.body.destroy();
-        }
-        this.healthText.setText("Health: " + this.health.toFixed(0));
-    }
+    // /**
+    //  * Check for overlap on Circle 2. If there's overlap, subtract health.
+    //  */
+    // overlap2() {
+    //     console.log("Circle2 hit.");
+    //     this.health = this.health - 0.25;
+    //     if (this.health <= 0) {
+    //         this.carrier.alpha = 0;
+    //         this.carrier.body.destroy();
+    //     }
+    //     this.healthText.setText("Health: " + this.health.toFixed(0));
+    // }
     
 }
