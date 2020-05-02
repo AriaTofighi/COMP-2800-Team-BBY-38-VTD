@@ -11,6 +11,8 @@ let config = {
     scale: {
         parent: 'body',
         mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+
     },
     roundPixels: true,
     physics: {
