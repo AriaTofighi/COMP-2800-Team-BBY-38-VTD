@@ -108,7 +108,7 @@ export class GameScene extends Phaser.Scene {
         this.input.keyboard.on('keydown-A', function() {
             console.log("A pressed");
             this.carrier = new Carrier(this, path, cellWidth * 3 + 16, 0 + 16, 'carrier');
-            console.log(this.carrier);
+            this.carriers.add(this.carrier);
         }.bind(this));
 
         //Create sidebar
@@ -199,8 +199,23 @@ export class GameScene extends Phaser.Scene {
         // Create resource information text
         this.health = 100;
         this.healthText = this.add.text(width / 2, 10, "Health: " + this.health);
-        this.money = 100;
+        this.money = 1000;
         this.moneyText = this.add.text(width / 2, this.healthText.getBottomCenter().y + 10, 'Money: ' + this.money);
+
+        // Creating Pause button
+        const pauseButton = this.add.image(1 * 32, 1 * 32, 'pauseButton');
+        pauseButton.setInteractive().on('pointerdown', function () {
+            console.log("Pause button pressed!");
+        }.bind(this));
+
+        // Creating the game objects groups
+        this.createGroups();
+    }
+
+    createGroups() {
+        this.carriers = this.physics.add.group({ classType: Carrier, runChildUpdate: true });
+        this.turretRadiuses = this.physics.add.group({ classType: Turret, runChildUpdate: true });
+        this.turrets = this.add.group({ classType: Turret, runChildUpdate: true });
     }
 
     /**
@@ -257,7 +272,11 @@ export class GameScene extends Phaser.Scene {
             let j = Math.floor(pointer.x / 32); // col index
 
             if (this.tower1IsSelected && !this.isPathTile(i, j)) {
-                this.turretCopy = new Turret(this, j, i);
+                this.turret = new Turret(this, j, i);
+                this.turrets.add(this.turret);
+                this.turretRadiuses.add(this.turret.radius);
+                this.money -= this.turret.price;
+                this.moneyText.setText('Money: ' + this.money);
             }
         }.bind(this));
     }

@@ -5,7 +5,10 @@ export default class Turret extends Phaser.GameObjects.Image {
         this.scene = scene;
 
         // Setting the damage of the turret
-        this.damage = 100;
+        this.damage = 20;
+
+        // Setting the price of the turret
+        this.price = 100;
 
         this.setDisplaySize(32, 32);
         this.setOrigin(0, 0);
@@ -16,6 +19,10 @@ export default class Turret extends Phaser.GameObjects.Image {
         this.radius.alpha = 0;
         this.radius.setPosition((x + 0.5) * 32, (y + 0.5) * 32);
         this.radius.setStrokeStyle(3, 0x046307, 0);
+
+        this.scene.physics.world.enable(this.radius);
+        this.radius.body.setCircle(60);
+        this.radius.body.debugShowBody = false;
 
         // Showing the radius of the turret when hovering
         this.setInteractive().on('pointerover', function () {
@@ -30,6 +37,23 @@ export default class Turret extends Phaser.GameObjects.Image {
         }.bind(this));
 
         this.scene.add.existing(this);
+    }
 
+    update() {
+        this.scene.physics.overlap(this.scene.carriers, this.scene.turretRadiuses, this.fire.bind(this));
+    }
+
+    fire(carrier, radius) {
+        console.log("fire");
+
+        // Updating the carrier hp
+        carrier.hp -= 1;
+
+        // Updating the health bar
+        carrier.barHealth.clear();
+        carrier.healthRect.width = 30 * (carrier.hp / 100);
+        carrier.barHealth.fillStyle(0xd11141);
+        carrier.barHealth.fillRectShape(carrier.healthRect);
+        // carrier.barHealth.generateTexture('barHealth');
     }
 }
