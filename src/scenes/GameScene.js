@@ -108,12 +108,13 @@ export class GameScene extends Phaser.Scene {
         this.input.keyboard.on('keydown-A', function() {
             console.log("A pressed");
             this.carrier = new Carrier(this, path, cellWidth * 3 + 16, 0 + 16, 'carrier');
-<<<<<<< HEAD
-            console.log(this.carrier);
-
-=======
             this.carriers.add(this.carrier);
->>>>>>> 7fc205e75c59b23ccab1d3bae86b4219a90a6b49
+
+            // Making the bullet follow this carrier
+            setInterval(function() {
+                this.physics.moveToObject(this.bullet, this.carrier, 230);
+            }.bind(this), 100);
+
         }.bind(this));
 
         //Create sidebar
@@ -188,11 +189,6 @@ export class GameScene extends Phaser.Scene {
         this.bullet.body.debugShowBody = false;
         this.bullet.setInteractive();
 
-        setInterval(function() {
-            this.physics.moveToObject(this.bullet, this.carrier, 230);
-        }.bind(this), 100);
-
-
         // // Create and draw a circle to test overlap/collision
         // this.circle1 = this.add.circle(cellWidth * 4 + halfCell, cellHeight * 4 + halfCell, 40, 0x008080 , 0.2);
         // this.circle1.setStrokeStyle(2, 0x046307, 0.8);
@@ -214,8 +210,6 @@ export class GameScene extends Phaser.Scene {
         this.money = 1000;
         this.moneyText = this.add.text(width / 2, this.healthText.getBottomCenter().y + 10, 'Money: ' + this.money);
 
-<<<<<<< HEAD
-=======
         // Creating Pause button
         const pauseButton = this.add.image(1 * 32, 1 * 32, 'pauseButton');
         pauseButton.setInteractive().on('pointerdown', function () {
@@ -230,7 +224,6 @@ export class GameScene extends Phaser.Scene {
         this.carriers = this.physics.add.group({ classType: Carrier, runChildUpdate: true });
         this.turretRadiuses = this.physics.add.group({ classType: Turret, runChildUpdate: true });
         this.turrets = this.add.group({ classType: Turret, runChildUpdate: true });
->>>>>>> 7fc205e75c59b23ccab1d3bae86b4219a90a6b49
     }
 
     /**

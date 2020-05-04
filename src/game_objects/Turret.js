@@ -44,7 +44,6 @@ export default class Turret extends Phaser.GameObjects.Image {
     }
 
     fire(carrier, radius) {
-        console.log("fire");
         // Updating the carrier hp
         carrier.hp -= 1;
 
