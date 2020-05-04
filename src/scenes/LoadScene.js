@@ -105,6 +105,11 @@ export class LoadScene extends Phaser.Scene {
         // for (let i = 0; i < 600; i ++) {
         //     this.load.image('bullet' + i, bullet);
         // }
+
+        var url;
+  
+        url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexpathfollowerplugin.min.js';
+        this.load.plugin('rexpathfollowerplugin', url, true);
     }
 
     /**

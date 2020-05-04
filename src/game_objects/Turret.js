@@ -45,15 +45,19 @@ export default class Turret extends Phaser.GameObjects.Image {
 
     fire(carrier, radius) {
         console.log("fire");
-
         // Updating the carrier hp
         carrier.hp -= 1;
 
         // Updating the health bar
         carrier.barHealth.clear();
-        carrier.healthRect.width = 30 * (carrier.hp / 100);
         carrier.barHealth.fillStyle(0xd11141);
+        var newWidth =  Math.floor(30 * (carrier.hp / 100.0));
+        
+        // Checking if the virus is still alive
+        if (newWidth >= 0) {
+            carrier.healthRect.width = newWidth;
+        }
+        
         carrier.barHealth.fillRectShape(carrier.healthRect);
-        // carrier.barHealth.generateTexture('barHealth');
     }
 }

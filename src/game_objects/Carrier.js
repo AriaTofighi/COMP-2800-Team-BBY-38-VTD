@@ -17,33 +17,42 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
 
         // The background part of the bar
         this.barBack.fillStyle(0xA32020);
-        this.barBack.fillRect(5 * 32, 2 * 32, 30, 6);
+        this.barBack.fillRect(-15, -20, 30, 6);
 
         // The health part of the bar
-        this.healthRect = new Phaser.Geom.Rectangle(5 * 32, 2 * 32, 30, 6);
+        this.healthRect = new Phaser.Geom.Rectangle(-15, -20, 30, 6);
         this.barHealth.fillStyle(0xd11141);
         this.barHealth.fillRectShape(this.healthRect);
-        
-        // this.barBack.setVisible(false);
-        // this.barHealth.setVisible(false);
 
-        // this.barBack.generateTexture('barBack');
-        // this.barHealth.generateTexture('barHealth');
+        // Adding the background part of the bar to a path follower
+        this.barBack.pathFollower = this.scene.plugins.get('rexpathfollowerplugin').add(this.barBack, {
+            path: this.path,
+            t: 0,
+        });
 
-        // this.barBackFollow = this.scene.add.follower(this.path, 338, 235, 'barBack');
-        // this.barHealthFollow = this.scene.add.follower(this.path, 338, 235, 'barHealth');
+        // Starts the background bar movement
+        this.scene.tweens.add({
+            targets: this.barBack.pathFollower,
+            t: 1,
+            duration: 5000,
+            yoyo: false, // switches directions when end of path is reached
+            repeat: 0, // infinite
+        });
 
-        // this.barBackFollow.startFollow({
-        //     duration: 5000,
-        //     yoyo: false, // switches directions when end of path is reached
-        //     repeat: 0, // infinite
-        // });
+        // Adding the health part of the bar to a path follower
+        this.barHealth.pathFollower = this.scene.plugins.get('rexpathfollowerplugin').add(this.barHealth, {
+            path: this.path,
+            t: 0
+        });
 
-        // this.barHealthFollow.startFollow({
-        //     duration: 5000,
-        //     yoyo: false, // switches directions when end of path is reached
-        //     repeat: 0, // infinite
-        // });
+        // Starts the health bar movement
+        this.scene.tweens.add({
+            targets: this.barHealth.pathFollower,
+            t: 1,
+            duration: 5000,
+            yoyo: false, // switches directions when end of path is reached
+            repeat: 0, // infinite
+        });
 
         this.setDisplaySize(32, 32);
         this.scene.physics.world.enable(this);
