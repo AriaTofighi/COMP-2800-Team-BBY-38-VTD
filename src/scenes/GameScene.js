@@ -109,6 +109,7 @@ export class GameScene extends Phaser.Scene {
             console.log("A pressed");
             this.carrier = new Carrier(this, path, cellWidth * 3 + 16, 0 + 16, 'carrier');
             console.log(this.carrier);
+
         }.bind(this));
 
         //Create sidebar
@@ -177,9 +178,16 @@ export class GameScene extends Phaser.Scene {
         infoContainer.add(costText);
 
         // Create and draw bullet
-        // let bullet = this.add.image(cellWidth * 24, cellWidth * 18, 'bullet');
-        // bullet.setDisplaySize(32, 32);
-        // bullet.setOrigin(0, 0);
+        this.bullet = this.physics.add.image(cellWidth * 15 + halfCell, cellWidth * 18 + halfCell, 'bullet');
+        this.bullet.setDisplaySize(32, 32);
+        this.bullet.body.debugShowVelocity = false;
+        this.bullet.body.debugShowBody = false;
+        this.bullet.setInteractive();
+
+        setInterval(function() {
+            this.physics.moveToObject(this.bullet, this.carrier, 230);
+        }.bind(this), 100);
+
 
         // // Create and draw a circle to test overlap/collision
         // this.circle1 = this.add.circle(cellWidth * 4 + halfCell, cellHeight * 4 + halfCell, 40, 0x008080 , 0.2);
@@ -201,6 +209,7 @@ export class GameScene extends Phaser.Scene {
         this.healthText = this.add.text(width / 2, 10, "Health: " + this.health);
         this.money = 100;
         this.moneyText = this.add.text(width / 2, this.healthText.getBottomCenter().y + 10, 'Money: ' + this.money);
+
     }
 
     /**
