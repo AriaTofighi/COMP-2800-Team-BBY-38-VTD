@@ -23,7 +23,7 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
 
         // The health part of the bar
         this.healthRect = new Phaser.Geom.Rectangle(-15, -20, 30, 6);
-        this.barHealth.fillStyle(0xd11141);
+        this.barHealth.fillStyle(0xffffff);
         this.barHealth.fillRectShape(this.healthRect);
 
         // Adding the background part of the bar to a path follower
@@ -36,7 +36,7 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
         this.scene.tweens.add({
             targets: this.barBack.pathFollower,
             t: 1,
-            duration: 5000,
+            duration: 50000,
             yoyo: false, // switches directions when end of path is reached
             repeat: 0, // infinite
         });
@@ -51,7 +51,7 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
         this.scene.tweens.add({
             targets: this.barHealth.pathFollower,
             t: 1,
-            duration: 5000,
+            duration: 50000,
             yoyo: false, // switches directions when end of path is reached
             repeat: 0, // infinite
         });
@@ -63,7 +63,7 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
         this.setRotation(1.5708);
         this.startFollow({
             rotateToPath: true,
-            duration: 5000,
+            duration: 50000,
             yoyo: false, // switches directions when end of path is reached
             repeat: 0, // infinite
         });
