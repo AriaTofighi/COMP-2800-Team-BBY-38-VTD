@@ -214,6 +214,10 @@ export class GameScene extends Phaser.Scene {
         // Creating Pause button
         const pauseButton = this.add.image(1 * 32, 1 * 32, 'pauseButton');
         pauseButton.setInteractive().on('pointerdown', function () {
+            // Make carrier
+            this.carrier = new Carrier(this, path, this.cellWidth * 3 + 16, 0 + 16, 'carrier');
+            this.carriers.add(this.carrier);
+
             console.log("Pause button pressed!");
         }.bind(this));
 
@@ -277,10 +281,11 @@ export class GameScene extends Phaser.Scene {
         }.bind(this));
 
         this.input.on('pointerdown', function (pointer) {
+
             let i = Math.floor(pointer.y / 32); // row index
             let j = Math.floor(pointer.x / 32); // col index
 
-            if (this.tower1IsSelected && !this.isPathTile(i, j)) {
+            if (this.tower1IsSelected && !this.isPathTile(i, j) && this.money >= 100) {
                 this.turret = new Turret(this, j, i);
                 this.turrets.add(this.turret);
                 this.money -= this.turret.price;

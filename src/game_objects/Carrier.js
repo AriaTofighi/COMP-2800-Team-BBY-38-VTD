@@ -3,7 +3,7 @@ import 'phaser';
 export default class Carrier extends Phaser.GameObjects.PathFollower {
     constructor(scene, path, x, y, texture) {
         super(scene, path, x, y, texture);
-        
+        this.duration = 5000;
         this.x = x;
         this.y = y;
         this.scene = scene;
@@ -36,7 +36,7 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
         this.scene.tweens.add({
             targets: this.barBack.pathFollower,
             t: 1,
-            duration: 50000,
+            duration: this.duration,
             yoyo: false, // switches directions when end of path is reached
             repeat: 0, // infinite
         });
@@ -51,7 +51,7 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
         this.scene.tweens.add({
             targets: this.barHealth.pathFollower,
             t: 1,
-            duration: 50000,
+            duration: this.duration,
             yoyo: false, // switches directions when end of path is reached
             repeat: 0, // infinite
         });
@@ -63,7 +63,7 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
         this.setRotation(1.5708);
         this.startFollow({
             rotateToPath: true,
-            duration: 50000,
+            duration: this.duration,
             yoyo: false, // switches directions when end of path is reached
             repeat: 0, // infinite
         });
