@@ -69,13 +69,26 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
         });
 
         this.scene.add.existing(this);
-        
+
         // Automatically destroys the carrier after path duration complete
-        setTimeout(() => {
+        // setTimeout(() => {
+        //     this.destroy();
+        //     this.barBack.alpha = 0;
+        //     this.barHealth.alpha = 0;
+        // }, this.duration);
+
+    }
+
+    update() {
+        // Destroys this carrier and makes the health bar invisible if reaches end of path
+        if (this.reachedEndPath()) {
             this.destroy();
             this.barBack.alpha = 0;
             this.barHealth.alpha = 0;
-        }, this.duration);
+        }
+    }
 
+    reachedEndPath() {
+        return this.x == this.scene.cellWidth * 24 + this.scene.halfCell && this.y == this.scene.cellWidth * 10 + this.scene.halfCell;
     }
 }

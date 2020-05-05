@@ -1,8 +1,17 @@
+import Bullet from "../game_objects/Bullet";
+
 export default class Turret extends Phaser.GameObjects.Image {
     constructor(scene, j, i) {
         super(scene, j, i, 'tower1');
-
+        this.x = j * 32 + this.scene.halfCell;
+        this.y = i * 32 + this.scene.halfCell;
         this.scene = scene;
+        this.firstFireTimeSet = false;
+        this.firstFireTime;
+        this.secondFireTime;
+        this.delta = 0;
+        this.fireRate = 10;
+        this.bulletSpeed = 10;
 
         // Setting the damage of the turret
         this.damage = 20;
@@ -11,7 +20,7 @@ export default class Turret extends Phaser.GameObjects.Image {
         this.price = 100;
 
         this.setDisplaySize(32, 32);
-        this.setPosition(j * 32 + this.scene.halfCell, i * 32 + this.scene.halfCell);
+        this.setPosition(this.x, this.y);
 
         // Creating the radius of the turret
         this.radius = this.scene.add.circle(0, 0, 60, 0xECDBDB);
@@ -38,7 +47,8 @@ export default class Turret extends Phaser.GameObjects.Image {
         this.scene.add.existing(this);
     }
 
-    update() {
-        
+    update(time, delta) {
+        this.delta += delta;
+        console.log('Delta: ' + this.delta);
     }
 }

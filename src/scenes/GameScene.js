@@ -304,6 +304,7 @@ export class GameScene extends Phaser.Scene {
     update() {
         this.physics.overlap(this.carriers, this.turrets, this.fire.bind(this));
         this.physics.overlap(this.carriers, this.bullets, this.destroyBullet.bind(this));
+
         // console.log(this.carrier);
         // this.physics.overlap(this.carrier, this.circle1, this.overlap1.bind(this));
         // this.physics.overlap(this.carrier, this.circle2, this.overlap2.bind(this));
@@ -335,7 +336,11 @@ export class GameScene extends Phaser.Scene {
     //     this.healthText.setText("Health: " + this.health.toFixed(0));
     // }
 
+    // Fires a turret shot at a carrier (must be here, NOT Turret.js for access to groups)
     fire(carrier, turret) {
+        if (!(turret.delta >= 1000 / turret.fireRate)) {
+            return;
+        }
         // console.log("fire");
         // Updating the carrier hp
         carrier.hp -= 1;
@@ -365,12 +370,15 @@ export class GameScene extends Phaser.Scene {
         this.bullet.body.debugShowVelocity = false;
 
         // Shoots at the carrier
-        this.physics.moveToObject(this.bullet, carrier, 230);
+        this.physics.moveToObject(this.bullet, carrier, turret.bulletSpeed * 100);
 
         // Follows the carrier all the time
         // setInterval(function() {
         //     this.physics.moveToObject(this.bullet, carrier, 230);
         // }.bind(this), 100);
+
+        turret.delta = 0;
+
     }
 
     destroyBullet(carrier, bullet) {

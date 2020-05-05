@@ -4,7 +4,7 @@ export default class Bullet extends Phaser.GameObjects.Image {
         this.scene = scene;
         this.x = x;
         this.y = y;
-
+        
         this.setDisplaySize(8, 8);
         this.setPosition(x + this.scene.halfCell / 2, y + this.scene.halfCell / 2);
 
