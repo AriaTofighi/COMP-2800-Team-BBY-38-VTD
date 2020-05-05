@@ -3,7 +3,7 @@ import 'phaser';
 export default class Carrier extends Phaser.GameObjects.PathFollower {
     constructor(scene, path, x, y, texture) {
         super(scene, path, x, y, texture);
-        this.duration = 5000;
+        this.duration = 8000;
         this.x = x;
         this.y = y;
         this.scene = scene;
@@ -82,6 +82,8 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
     update() {
         // Destroys this carrier and makes the health bar invisible if reaches end of path
         if (this.reachedEndPath()) {
+            this.scene.health -= 5;
+            this.scene.healthText.setText("Health: " + this.scene.health);
             this.destroy();
             this.barBack.alpha = 0;
             this.barHealth.alpha = 0;

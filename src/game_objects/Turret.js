@@ -10,7 +10,7 @@ export default class Turret extends Phaser.GameObjects.Image {
         this.firstFireTime;
         this.secondFireTime;
         this.delta = 0;
-        this.fireRate = 10;
+        this.fireRate = 15;
         this.bulletSpeed = 10;
 
         // Setting the damage of the turret
@@ -49,6 +49,6 @@ export default class Turret extends Phaser.GameObjects.Image {
 
     update(time, delta) {
         this.delta += delta;
-        console.log('Delta: ' + this.delta);
+        // console.log('Delta: ' + this.delta);
     }
 }

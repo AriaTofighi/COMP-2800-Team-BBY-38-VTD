@@ -343,7 +343,7 @@ export class GameScene extends Phaser.Scene {
         }
         // console.log("fire");
         // Updating the carrier hp
-        carrier.hp -= 1;
+        carrier.hp -= turret.damage;
 
         // Updating the health bar
         carrier.barHealth.clear();
@@ -354,6 +354,8 @@ export class GameScene extends Phaser.Scene {
         if (newWidth >= 0) {
             carrier.healthRect.width = newWidth;
         } else {
+            this.money += 25;
+            this.moneyText.setText("Money: " + this.money);
             carrier.destroy();
             carrier.barBack.alpha = 0;
             carrier.barHealth.alpha = 0;
