@@ -58,12 +58,12 @@ export class GameScene extends Phaser.Scene {
         // this.add.image(400, 100, 'tower1');
 
         // Create grid variables
-        let width = this.sys.canvas.width;
+        this.width = this.sys.canvas.width;
         let height = this.sys.canvas.height; 
         this.cellWidth = 32;
         this.cellHeight = 32;
         this.halfCell = 16; // Used to move objects to center of cells
-        const colCount = width / this.cellWidth; // 25 columns; use this.cellWidth * 24 for last column
+        const colCount = this.width / this.cellWidth; // 25 columns; use this.cellWidth * 24 for last column
         const rowCount = height / this.cellWidth; // 19 rows; use this.cellWidth * 18 for last row
         
         // Create and draw grid
@@ -72,8 +72,8 @@ export class GameScene extends Phaser.Scene {
         grid.setOrigin(0, 0);
         
         //Create background image.
-        let bg = this.add.image(width/2, height/2, 'bg');
-        bg.setDisplaySize(width, height);
+        let bg = this.add.image(this.width/2, height/2, 'bg');
+        bg.setDisplaySize(this.width, height);
 
         //Create path tiles.
         let tileX, tileY
@@ -107,7 +107,7 @@ export class GameScene extends Phaser.Scene {
 
         // Creates carrier on A keyboard press
         this.input.keyboard.on('keydown-A', function() {
-            console.log("A pressed");
+            // console.log("A pressed");
             this.carrier = new Carrier(this, path, this.cellWidth * 3 + 16, 0 + 16, 'carrier');
             this.carriers.add(this.carrier);
 
@@ -119,16 +119,18 @@ export class GameScene extends Phaser.Scene {
         }.bind(this));
 
         //Create sidebar
-        let sidebar = this.add.container(width, height / 2 - 200);
+        this.sidebar = this.add.container(this.width, height / 2 - 200);
         let sidebox = this.add.graphics();
-        sidebar.depth = 1;
-        sidebar.add(sidebox);
+        this.sidebar.depth = 1;
+        this.sidebar.add(sidebox);
         sidebox.fillStyle(0xff0000);
         sidebox.fillRect(0, 0, 100, 400);
 
         //Create first tower in menu.
         let menuTower1 = this.add.image(54, 64, 'tower1');
         menuTower1.setInteractive().on('pointerdown', () => {
+            // Tower has been selected
+            // this.toggleSidebar();
             this.tower1IsSelected = true;
             descText.setText("Description: Soap Tower");
             costText.setText("Cost: 100");
@@ -149,35 +151,22 @@ export class GameScene extends Phaser.Scene {
             cancelButton.alpha = 0;
         }.bind(this));
 
-        // Add Tower 1 and cancel button to the sidebar
-        sidebar.add(menuTower1);
-        sidebar.add(cancelButton);
+        // Add Tower 1 and cancel button to the this.sidebar
+        this.sidebar.add(menuTower1);
+        this.sidebar.add(cancelButton);
 
-        //Create menu toggle button
-        let menuButton = this.add.rectangle(width - 20, height - 20, 40, 40, 0x00ff00);
+        // Create menu toggle button
+        let menuButton = this.add.rectangle(this.width - 20, height - 20, 40, 40, 0x00ff00);
         menuButton.depth = 1;
-        let menuShowing = false;
         menuButton.setInteractive();
+        this.menuShowing = false;
+        // On-click of menu toggle button
         menuButton.on('pointerdown', () => {
-            if (!menuShowing) {
-                this.tweens.add({
-                    targets: sidebar,
-                    x: width - 100,
-                    duration: 200
-                });
-                menuShowing = true;
-            } else {
-                this.tweens.add({
-                    targets: sidebar,
-                    x: width + 100,
-                    duration: 200
-                });
-                menuShowing = false;
-            }
+            this.toggleSidebar();
         });
 
-        //Create description area.
-        let infoContainer = this.add.container(width - 250, 10);
+        // Create description area.
+        let infoContainer = this.add.container(this.width - 250, 10);
         let descText = this.add.text(0, 0, '');
         let costText = this.add.text(0, descText.getBottomCenter().y + 10, '');
         infoContainer.add(descText);
@@ -190,30 +179,19 @@ export class GameScene extends Phaser.Scene {
         // this.bullet.body.debugShowBody = false;
         // this.bullet.setInteractive();
 
-        // // Create and draw a circle to test overlap/collision
-        // this.circle1 = this.add.circle(this.cellWidth * 4 + this.halfCell, this.cellHeight * 4 + this.halfCell, 40, 0x008080 , 0.2);
-        // this.circle1.setStrokeStyle(2, 0x046307, 0.8);
-        // this.circle2 = this.add.circle(this.cellWidth * 7 + this.halfCell, this.cellHeight * 9 + this.halfCell, 40, 0x008080 , 0.2);
-        // this.circle2.setStrokeStyle(2, 0x046307, 0.8);
-
-        // this.physics.world.enable(this.circle1);
-        // this.circle1.body.setCircle(40);
-        // this.physics.world.enable(this.circle2);
-        // this.circle2.body.setCircle(40);
-
-        // // Removes debug outline of physics body
-        // this.circle1.body.debugShowBody = false;
-        // this.circle2.body.debugShowBody = false;
-
         // Create resource information text
         this.health = 100;
-        this.healthText = this.add.text(width / 2, 10, "Health: " + this.health);
+        this.healthText = this.add.text(this.width / 2, 10, "Health: " + this.health);
         this.money = 1000;
-        this.moneyText = this.add.text(width / 2, this.healthText.getBottomCenter().y + 10, 'Money: ' + this.money);
+        this.moneyText = this.add.text(this.width / 2, this.healthText.getBottomCenter().y + 10, 'Money: ' + this.money);
 
         // Creating Pause button
         const pauseButton = this.add.image(1 * 32, 1 * 32, 'pauseButton');
         pauseButton.setInteractive().on('pointerdown', function () {
+            // Make carrier
+            this.carrier = new Carrier(this, path, this.cellWidth * 3 + 16, 0 + 16, 'carrier');
+            this.carriers.add(this.carrier);
+
             console.log("Pause button pressed!");
         }.bind(this));
 
@@ -225,6 +203,25 @@ export class GameScene extends Phaser.Scene {
         this.carriers = this.physics.add.group({ classType: Carrier, runChildUpdate: true });
         this.turrets = this.physics.add.group({ classType: Turret, runChildUpdate: true });
         this.bullets = this.physics.add.group({ classType: Bullet, runChildUpdate: true});
+    }
+
+    // Retracts or expands sidebar
+    toggleSidebar() {
+        if (!this.menuShowing) {
+            this.tweens.add({
+                targets: this.sidebar,
+                x: this.width - 100,
+                duration: 200
+            });
+            this.menuShowing = true;
+        } else {
+            this.tweens.add({
+                targets: this.sidebar,
+                x: this.width + 100,
+                duration: 200
+            });
+            this.menuShowing = false;
+        }
     }
 
     /**
@@ -246,7 +243,7 @@ export class GameScene extends Phaser.Scene {
         this.noTurretHere.setDisplaySize(32, 32);
         this.noTurretHere.setOrigin(0, 0);
         this.noTurretHere.alpha = 0;
-
+        // Determines if the cursor is over a valid tile for tower placement
         this.input.on('pointermove', function (pointer) {
             let i = Math.floor(pointer.y / 32); // Row index
             let j = Math.floor(pointer.x / 32); // Column index
@@ -276,15 +273,16 @@ export class GameScene extends Phaser.Scene {
 
         }.bind(this));
 
+        // Place tower
         this.input.on('pointerdown', function (pointer) {
             let i = Math.floor(pointer.y / 32); // row index
             let j = Math.floor(pointer.x / 32); // col index
-
-            if (this.tower1IsSelected && !this.isPathTile(i, j)) {
+            if (this.tower1IsSelected && !this.isPathTile(i, j) && this.money >= 100) {
                 this.turret = new Turret(this, j, i);
                 this.turrets.add(this.turret);
                 this.money -= this.turret.price;
                 this.moneyText.setText('Money: ' + this.money);
+                // this.toggleSidebar();
             }
         }.bind(this));
     }
@@ -306,6 +304,7 @@ export class GameScene extends Phaser.Scene {
     update() {
         this.physics.overlap(this.carriers, this.turrets, this.fire.bind(this));
         this.physics.overlap(this.carriers, this.bullets, this.destroyBullet.bind(this));
+
         // console.log(this.carrier);
         // this.physics.overlap(this.carrier, this.circle1, this.overlap1.bind(this));
         // this.physics.overlap(this.carrier, this.circle2, this.overlap2.bind(this));
@@ -337,8 +336,12 @@ export class GameScene extends Phaser.Scene {
     //     this.healthText.setText("Health: " + this.health.toFixed(0));
     // }
 
+    // Fires a turret shot at a carrier (must be here, NOT Turret.js for access to groups)
     fire(carrier, turret) {
-        console.log("fire");
+        if (!(turret.delta >= 1000 / turret.fireRate)) {
+            return;
+        }
+        // console.log("fire");
         // Updating the carrier hp
         carrier.hp -= 1;
 
@@ -367,12 +370,15 @@ export class GameScene extends Phaser.Scene {
         this.bullet.body.debugShowVelocity = false;
 
         // Shoots at the carrier
-        this.physics.moveToObject(this.bullet, carrier, 230);
+        this.physics.moveToObject(this.bullet, carrier, turret.bulletSpeed * 100);
 
         // Follows the carrier all the time
         // setInterval(function() {
         //     this.physics.moveToObject(this.bullet, carrier, 230);
         // }.bind(this), 100);
+
+        turret.delta = 0;
+
     }
 
     destroyBullet(carrier, bullet) {
