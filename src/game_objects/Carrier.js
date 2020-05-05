@@ -69,6 +69,13 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
         });
 
         this.scene.add.existing(this);
+        
+        // Automatically destroys the carrier after path duration complete
+        setTimeout(() => {
+            this.destroy();
+            this.barBack.alpha = 0;
+            this.barHealth.alpha = 0;
+        }, this.duration);
 
     }
 }

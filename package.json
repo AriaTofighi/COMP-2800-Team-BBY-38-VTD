@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "jquery": "^3.5.1",
     "matter": "^0.2.0",
     "phaser": "^3.23.0"
   }

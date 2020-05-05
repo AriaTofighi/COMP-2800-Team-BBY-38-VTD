@@ -1,8 +1,9 @@
 export default class Bullet extends Phaser.GameObjects.Image {
     constructor(scene, x, y) {
         super(scene, x, y, 'bullet');
-
         this.scene = scene;
+        this.x = x;
+        this.y = y;
 
         this.setDisplaySize(8, 8);
         this.setPosition(x + this.scene.halfCell / 2, y + this.scene.halfCell / 2);
@@ -11,5 +12,11 @@ export default class Bullet extends Phaser.GameObjects.Image {
         this.body.debugShowBody = false;
 
         this.scene.add.existing(this);
+    }
+
+    update() {
+        if (this.x < -20 || this.x > this.scene.sys.canvas.width + 20 || this.y > this.scene.sys.canvas.height + 20 || this.y < -20) {
+            this.destroy();
+        }
     }
 }
