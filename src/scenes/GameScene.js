@@ -1,6 +1,7 @@
 import { Grid } from "matter";
 import Carrier from "../game_objects/Carrier";
 import Turret from "../game_objects/Turret";
+import 'jquery';
 
 export class GameScene extends Phaser.Scene {
     

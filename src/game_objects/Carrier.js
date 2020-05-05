@@ -1,3 +1,5 @@
+import 'phaser';
+
 export default class Carrier extends Phaser.GameObjects.PathFollower {
     constructor(scene, path, x, y, texture) {
         super(scene, path, x, y, texture);

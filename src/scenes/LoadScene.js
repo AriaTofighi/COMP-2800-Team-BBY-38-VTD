@@ -10,6 +10,7 @@ import corner from "../../assets/ingame/corner.png";
 import road from "../../assets/ingame/road.png";
 import noTurret from "../../assets/ingame/noTurret.png";
 import { BlendModes } from "phaser";
+import 'phaser';
 
 export class LoadScene extends Phaser.Scene {
 

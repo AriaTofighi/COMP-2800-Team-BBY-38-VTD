@@ -2,6 +2,8 @@
 import {GameScene} from "./scenes/GameScene";
 import {BootScene} from "./scenes/BootScene";
 import {LoadScene} from "./scenes/LoadScene";
+import phaser from '../node_modules/phaser';
+import jquery from '../node_modules/jquery';
 
 // Phaser game config
 let config = {
