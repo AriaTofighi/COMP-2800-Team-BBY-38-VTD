@@ -1,6 +1,7 @@
 import { Grid } from "matter";
 import Carrier from "../game_objects/Carrier";
 import Turret from "../game_objects/Turret";
+import Bullet from "../game_objects/Bullet";
 
 export class GameScene extends Phaser.Scene {
     
@@ -59,14 +60,14 @@ export class GameScene extends Phaser.Scene {
         // Create grid variables
         let width = this.sys.canvas.width;
         let height = this.sys.canvas.height; 
-        const cellWidth = 32;
-        const cellHeight = 32;
-        const halfCell = 16; // Used to move objects to center of cells
-        const colCount = width / cellWidth; // 25 columns; use cellWidth * 24 for last column
-        const rowCount = height / cellWidth; // 19 rows; use cellWidth * 18 for last row
+        this.cellWidth = 32;
+        this.cellHeight = 32;
+        this.halfCell = 16; // Used to move objects to center of cells
+        const colCount = width / this.cellWidth; // 25 columns; use this.cellWidth * 24 for last column
+        const rowCount = height / this.cellWidth; // 19 rows; use this.cellWidth * 18 for last row
         
         // Create and draw grid
-        let grid = this.add.grid(0, 0, cellWidth * colCount , cellWidth * rowCount, cellWidth, cellWidth, 0x000000, 0, 0x222222, 0); // change last param to 1 to see grid lines
+        let grid = this.add.grid(0, 0, this.cellWidth * colCount , this.cellWidth * rowCount, this.cellWidth, this.cellWidth, 0x000000, 0, 0x222222, 0); // change last param to 1 to see grid lines
         grid.setDepth(1);
         grid.setOrigin(0, 0);
         
@@ -81,8 +82,8 @@ export class GameScene extends Phaser.Scene {
             for (let j = 0; j < colCount; j++) {
                 if (this.isPathTile(i, j)) {
                     //Position for tile placement
-                    tileX = cellWidth * j + halfCell;
-                    tileY = cellWidth * i + halfCell;
+                    tileX = this.cellWidth * j + this.halfCell;
+                    tileY = this.cellWidth * i + this.halfCell;
                     if (i == 10 && j == 3) { // grid index coordinates for the path corner
                         pathTile = this.add.image(tileX, tileY, 'corner');
                         pathTile.setRotation(Math.PI);
@@ -99,21 +100,21 @@ export class GameScene extends Phaser.Scene {
         // Create and draw path
         let graphics = this.add.graphics();
         graphics.lineStyle(1, 0xFFFFFF);
-        let path = this.add.path(cellWidth * 3 + halfCell, 0 + halfCell);
-        path.lineTo(cellWidth * 3 + halfCell, cellWidth * 10 + halfCell);
-        path.lineTo(cellWidth * 24 + halfCell, cellWidth * 10 + halfCell);
+        let path = this.add.path(this.cellWidth * 3 + this.halfCell, 0 + this.halfCell);
+        path.lineTo(this.cellWidth * 3 + this.halfCell, this.cellWidth * 10 + this.halfCell);
+        path.lineTo(this.cellWidth * 24 + this.halfCell, this.cellWidth * 10 + this.halfCell);
         // path.draw(graphics);
 
         // Creates carrier on A keyboard press
         this.input.keyboard.on('keydown-A', function() {
             console.log("A pressed");
-            this.carrier = new Carrier(this, path, cellWidth * 3 + 16, 0 + 16, 'carrier');
+            this.carrier = new Carrier(this, path, this.cellWidth * 3 + 16, 0 + 16, 'carrier');
             this.carriers.add(this.carrier);
 
             // Making the bullet follow this carrier
-            setInterval(function() {
-                this.physics.moveToObject(this.bullet, this.carrier, 230);
-            }.bind(this), 100);
+            // setInterval(function() {
+            //     this.physics.moveToObject(this.bullet, this.carrier, 230);
+            // }.bind(this), 100);
 
         }.bind(this));
 
@@ -183,16 +184,16 @@ export class GameScene extends Phaser.Scene {
         infoContainer.add(costText);
 
         // Create and draw bullet
-        this.bullet = this.physics.add.image(cellWidth * 15 + halfCell, cellWidth * 18 + halfCell, 'bullet');
-        this.bullet.setDisplaySize(32, 32);
-        this.bullet.body.debugShowVelocity = false;
-        this.bullet.body.debugShowBody = false;
-        this.bullet.setInteractive();
+        // this.bullet = this.physics.add.image(this.cellWidth * 15 + this.halfCell, this.cellWidth * 18 + this.halfCell, 'bullet');
+        // this.bullet.setDisplaySize(32, 32);
+        // this.bullet.body.debugShowVelocity = false;
+        // this.bullet.body.debugShowBody = false;
+        // this.bullet.setInteractive();
 
         // // Create and draw a circle to test overlap/collision
-        // this.circle1 = this.add.circle(cellWidth * 4 + halfCell, cellHeight * 4 + halfCell, 40, 0x008080 , 0.2);
+        // this.circle1 = this.add.circle(this.cellWidth * 4 + this.halfCell, this.cellHeight * 4 + this.halfCell, 40, 0x008080 , 0.2);
         // this.circle1.setStrokeStyle(2, 0x046307, 0.8);
-        // this.circle2 = this.add.circle(cellWidth * 7 + halfCell, cellHeight * 9 + halfCell, 40, 0x008080 , 0.2);
+        // this.circle2 = this.add.circle(this.cellWidth * 7 + this.halfCell, this.cellHeight * 9 + this.halfCell, 40, 0x008080 , 0.2);
         // this.circle2.setStrokeStyle(2, 0x046307, 0.8);
 
         // this.physics.world.enable(this.circle1);
@@ -222,8 +223,8 @@ export class GameScene extends Phaser.Scene {
 
     createGroups() {
         this.carriers = this.physics.add.group({ classType: Carrier, runChildUpdate: true });
-        this.turretRadiuses = this.physics.add.group({ classType: Turret, runChildUpdate: true });
-        this.turrets = this.add.group({ classType: Turret, runChildUpdate: true });
+        this.turrets = this.physics.add.group({ classType: Turret, runChildUpdate: true });
+        this.bullets = this.physics.add.group({ classType: Bullet, runChildUpdate: true});
     }
 
     /**
@@ -282,7 +283,6 @@ export class GameScene extends Phaser.Scene {
             if (this.tower1IsSelected && !this.isPathTile(i, j)) {
                 this.turret = new Turret(this, j, i);
                 this.turrets.add(this.turret);
-                this.turretRadiuses.add(this.turret.radius);
                 this.money -= this.turret.price;
                 this.moneyText.setText('Money: ' + this.money);
             }
@@ -304,6 +304,8 @@ export class GameScene extends Phaser.Scene {
      * Update the physics.
      */
     update() {
+        this.physics.overlap(this.carriers, this.turrets, this.fire.bind(this));
+        this.physics.overlap(this.carriers, this.bullets, this.destroyBullet.bind(this));
         // console.log(this.carrier);
         // this.physics.overlap(this.carrier, this.circle1, this.overlap1.bind(this));
         // this.physics.overlap(this.carrier, this.circle2, this.overlap2.bind(this));
@@ -334,5 +336,46 @@ export class GameScene extends Phaser.Scene {
     //     }
     //     this.healthText.setText("Health: " + this.health.toFixed(0));
     // }
-    
+
+    fire(carrier, turret) {
+        console.log("fire");
+        // Updating the carrier hp
+        carrier.hp -= 1;
+
+        // Updating the health bar
+        carrier.barHealth.clear();
+        carrier.barHealth.fillStyle(0xffffff);
+        var newWidth =  Math.floor(30 * (carrier.hp / 100.0));
+        
+        // Checking if the virus is still alive
+        if (newWidth >= 0) {
+            carrier.healthRect.width = newWidth;
+        } else {
+            carrier.destroy();
+            carrier.barBack.alpha = 0;
+            carrier.barHealth.alpha = 0;
+        }
+        carrier.barHealth.fillRectShape(carrier.healthRect);
+
+        // Rotating the turret towards the carrier when firing
+        var angle = Phaser.Math.Angle.Between(turret.x, turret.y, carrier.x, carrier.y);
+        turret.setRotation(angle);
+
+        // Creating a bullet
+        this.bullet = new Bullet(this, turret.x, turret.y);
+        this.bullets.add(this.bullet);
+        this.bullet.body.debugShowVelocity = false;
+
+        // Shoots at the carrier
+        this.physics.moveToObject(this.bullet, carrier, 230);
+
+        // Follows the carrier all the time
+        // setInterval(function() {
+        //     this.physics.moveToObject(this.bullet, carrier, 230);
+        // }.bind(this), 100);
+    }
+
+    destroyBullet(carrier, bullet) {
+        bullet.destroy();
+    }
 }
