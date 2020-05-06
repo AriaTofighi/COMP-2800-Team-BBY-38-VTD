@@ -1,4 +1,4 @@
-import logo from "../../assets/logo/logo.png";
+import logo from "../../assets/logo/vtdlogo.png";
 
 export class BootScene extends Phaser.Scene {
 
