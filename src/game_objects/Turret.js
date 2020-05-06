@@ -11,10 +11,7 @@ export default class Turret extends Phaser.GameObjects.Image {
         this.secondFireTime;
         this.delta = 0;
         this.fireRate = 15;
-        this.bulletSpeed = 10;
-
-        // Setting the damage of the turret
-        this.damage = 20;
+        this.bulletSpeed = 3;
 
         // Setting the price of the turret
         this.price = 100;

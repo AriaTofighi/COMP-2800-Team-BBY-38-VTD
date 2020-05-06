@@ -303,7 +303,7 @@ export class GameScene extends Phaser.Scene {
      */
     update() {
         this.physics.overlap(this.carriers, this.turrets, this.fire.bind(this));
-        this.physics.overlap(this.carriers, this.bullets, this.destroyBullet.bind(this));
+        this.physics.overlap(this.carriers, this.bullets, this.carrierHit.bind(this));
 
         // console.log(this.carrier);
         // this.physics.overlap(this.carrier, this.circle1, this.overlap1.bind(this));
@@ -342,25 +342,6 @@ export class GameScene extends Phaser.Scene {
             return;
         }
         // console.log("fire");
-        // Updating the carrier hp
-        carrier.hp -= turret.damage;
-
-        // Updating the health bar
-        carrier.barHealth.clear();
-        carrier.barHealth.fillStyle(0xffffff);
-        var newWidth =  Math.floor(30 * (carrier.hp / 100.0));
-        
-        // Checking if the virus is still alive
-        if (newWidth >= 0) {
-            carrier.healthRect.width = newWidth;
-        } else {
-            this.money += 25;
-            this.moneyText.setText("Money: " + this.money);
-            carrier.destroy();
-            carrier.barBack.alpha = 0;
-            carrier.barHealth.alpha = 0;
-        }
-        carrier.barHealth.fillRectShape(carrier.healthRect);
 
         // Rotating the turret towards the carrier when firing
         var angle = Phaser.Math.Angle.Between(turret.x, turret.y, carrier.x, carrier.y);
@@ -383,7 +364,26 @@ export class GameScene extends Phaser.Scene {
 
     }
 
-    destroyBullet(carrier, bullet) {
+    carrierHit(carrier, bullet) {
+        // Updating the carrier hp
+        carrier.hp -= bullet.damage;
+
+        // Updating the health bar
+        carrier.barHealth.clear();
+        carrier.barHealth.fillStyle(0xffffff);
+        var newWidth =  Math.floor(30 * (carrier.hp / 100.0));
+        
+        // Checking if the virus is still alive
+        if (newWidth >= 0) {
+            carrier.healthRect.width = newWidth;
+        } else {
+            this.money += 25;
+            this.moneyText.setText("Money: " + this.money);
+            carrier.destroy();
+            carrier.barBack.alpha = 0;
+            carrier.barHealth.alpha = 0;
+        }
+        carrier.barHealth.fillRectShape(carrier.healthRect);
         bullet.destroy();
     }
 }
