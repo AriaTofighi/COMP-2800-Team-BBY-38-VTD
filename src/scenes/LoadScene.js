@@ -30,7 +30,7 @@ export class LoadScene extends Phaser.Scene {
         // Display logo
         let logo = this.add.image(0, 0, 'logo');
         logo.setPosition(width / 2, height / 2 - 170);
-        logo.setDisplaySize(width / 3, height / 5);
+        logo.setDisplaySize(width / 2, height / 4);
         
         // Display load progress bar
         let loadBar = this.add.graphics();
