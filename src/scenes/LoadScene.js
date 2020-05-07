@@ -89,7 +89,7 @@ export class LoadScene extends Phaser.Scene {
 
         // Load sprites
         this.load.image('bullet', bullet);
-        this.load.image('carrier', carrier);
+        this.load.spritesheet('carrier', carrier, {frameWidth: 37, frameHeight: 37});
         this.load.image('tile', tile);
         this.load.image('tower1', tower1);
         this.load.image('bg', grass);

@@ -3,4 +3,33 @@ body {
     margin: 0;
     width: 100vw;
     height: 100vh;
+    background-color: black;
+}
+
+#gallery{
+    display: flex;
+    margin-top: 30px;
+}
+
+.portrait{
+    text-align: center;
+    width: 90%;
+}
+
+.portrait img{
+    width: 80%;
+    border: 6px solid #bfbfbf;
+    border-radius: 4px;
+}
+
+p{
+    color: #d4d4d4;
+    width: 70%;
+    margin: auto;
+    font-size: 1.2em;
+    margin-top: 20px;
+}
+
+h3{
+    color: #d4d4d4;
 }

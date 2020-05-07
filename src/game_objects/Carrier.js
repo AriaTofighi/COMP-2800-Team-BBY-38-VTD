@@ -47,6 +47,8 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
             t: 0
         });
 
+        this.play('walk');
+
         // Starts the health bar movement
         this.scene.tweens.add({
             targets: this.barHealth.pathFollower,
@@ -56,7 +58,7 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
             repeat: 0, // infinite
         });
 
-        this.setDisplaySize(32, 32);
+        this.setDisplaySize(24, 24);
         this.scene.physics.world.enable(this);
         this.body.debugShowBody = false;
         this.body.setCircle(16, 16, 16);
