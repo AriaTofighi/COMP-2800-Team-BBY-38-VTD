@@ -364,6 +364,7 @@ export class GameScene extends Phaser.Scene {
 
     }
 
+    // Triggered when the carrier has been struck by a bullet
     carrierHit(carrier, bullet) {
         // Updating the carrier hp
         carrier.hp -= bullet.damage;

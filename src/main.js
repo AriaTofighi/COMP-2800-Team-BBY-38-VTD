@@ -2,7 +2,10 @@
 import {GameScene} from "./scenes/GameScene";
 import {BootScene} from "./scenes/BootScene";
 import {LoadScene} from "./scenes/LoadScene";
+import {MenuScene1} from "./scenes/MenuScene1";
+import {MenuScene2} from "./scenes/MenuScene2";
 import phaser from '../node_modules/phaser';
+
 
 // Phaser game config
 let config = {
@@ -27,5 +30,7 @@ let game = new Phaser.Game(config);
 game.scene.add('Game', GameScene);
 game.scene.add('Boot', BootScene);
 game.scene.add('Load', LoadScene);
+game.scene.add('Menu1', MenuScene1);
+game.scene.add('Menu2', MenuScene2);
 game.scene.start('Boot');
 

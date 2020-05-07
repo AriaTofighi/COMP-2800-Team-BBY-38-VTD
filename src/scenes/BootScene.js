@@ -17,7 +17,7 @@ export class BootScene extends Phaser.Scene {
     }
 
     /**
-     * Create the boot scene.
+     * Start the boot scene.
      */
     create() {
         this.scene.start('Load');
