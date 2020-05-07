@@ -28,23 +28,23 @@ export class GameScene extends Phaser.Scene {
         this.gridCells = [
             [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+            [0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+            [0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+            [0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+            [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+            [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
         ];
     }
 
@@ -52,11 +52,6 @@ export class GameScene extends Phaser.Scene {
      * Creates the grid, background images, path tiles, carriers, menu, and sidebar.
      */
     create() {
-        // Begin writing game objects/logic here
-        // this.add.image(200, 100, 'carrier');
-        // this.add.image(300, 100, 'tile');
-        // this.add.image(400, 100, 'tower1');
-
         // Create grid variables
         this.width = this.sys.canvas.width;
         let height = this.sys.canvas.height; 
@@ -81,18 +76,38 @@ export class GameScene extends Phaser.Scene {
         for (let i = 0; i < rowCount; i++) {
             for (let j = 0; j < colCount; j++) {
                 if (this.isPathTile(i, j)) {
-                    //Position for tile placement
+                    //Position for tile placement  
                     tileX = this.cellWidth * j + this.halfCell;
                     tileY = this.cellWidth * i + this.halfCell;
-                    if (i == 10 && j == 3) { // grid index coordinates for the path corner
+                    if (i == 10 && j == 3 || i == 15 && j == 1 || i == 7 && j == 9) {
+                        // Bottom left corner
                         pathTile = this.add.image(tileX, tileY, 'corner');
                         pathTile.setRotation(Math.PI);
+                    } else if (i == 10 && j == 6 || i == 15 && j == 13 || i == 11 && j == 21) {
+                        // Bottom right corner
+                        pathTile = this.add.image(tileX, tileY, 'corner');
+                        pathTile.setRotation(Math.PI / 2);
+                    } else if (i == 5 && j == 6 || i == 2 && j == 13 || i == 7 && j == 21) {
+                        // Top right corner
+                        pathTile = this.add.image(tileX, tileY, 'corner');
+                    } else if (i == 5 && j == 1 || i == 2 && j == 9 || i == 11 && j == 16) {
+                        // Top left corner
+                        pathTile = this.add.image(tileX, tileY, 'corner');
+                        pathTile.setRotation(Math.PI / 2 * 3);
                     } else {
+                        // Not a corner tile AKA regular tile
                         pathTile = this.add.image(tileX, tileY, 'road');
-                        if (this.isPathTile(i + 1, j))
-                            pathTile.setRotation(-Math.PI / 2);
+                        pathTile.setRotation(Math.PI / 2);
+                        if (i == 10 && j >= 4 && j <= 5 || 
+                            i == 5 && j != 3 && j <= 5 && j >= 2 ||
+                            i == 15 && j >= 2 && j <= 12 ||
+                            i == 2 && j >= 10 && j <= 12 ||
+                            i == 7 && j != 13 && j >= 10 && j <= 21 ||
+                            i == 11 && j >= 17 && j <= 20) {
+                                pathTile.setRotation();
+                        }
                     }
-                    pathTile.setDisplaySize(32, 32);
+                    pathTile.setDisplaySize(this.halfCell * 2, this.halfCell * 2);
                 } 
             }
         }
@@ -100,15 +115,27 @@ export class GameScene extends Phaser.Scene {
         // Create and draw path
         let graphics = this.add.graphics();
         graphics.lineStyle(1, 0xFFFFFF);
-        let path = this.add.path(this.cellWidth * 3 + this.halfCell, 0 + this.halfCell);
+        let path = this.add.path(this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell); // -1 to start off screen
         path.lineTo(this.cellWidth * 3 + this.halfCell, this.cellWidth * 10 + this.halfCell);
-        path.lineTo(this.cellWidth * 24 + this.halfCell, this.cellWidth * 10 + this.halfCell);
+        path.lineTo(this.cellWidth * 6 + this.halfCell, this.cellWidth * 10 + this.halfCell);
+        path.lineTo(this.cellWidth * 6 + this.halfCell, this.cellWidth * 5 + this.halfCell);
+        path.lineTo(this.cellWidth * 1 + this.halfCell, this.cellWidth * 5 + this.halfCell);
+        path.lineTo(this.cellWidth * 1 + this.halfCell, this.cellWidth * 15 + this.halfCell);
+        path.lineTo(this.cellWidth * 13 + this.halfCell, this.cellWidth * 15 + this.halfCell);
+        path.lineTo(this.cellWidth * 13 + this.halfCell, this.cellWidth * 2 + this.halfCell);
+        path.lineTo(this.cellWidth * 9 + this.halfCell, this.cellWidth * 2 + this.halfCell);
+        path.lineTo(this.cellWidth * 9 + this.halfCell, this.cellWidth * 7 + this.halfCell);
+        path.lineTo(this.cellWidth * 21 + this.halfCell, this.cellWidth * 7 + this.halfCell);
+        path.lineTo(this.cellWidth * 21 + this.halfCell, this.cellWidth * 11 + this.halfCell);
+        path.lineTo(this.cellWidth * 16 + this.halfCell, this.cellWidth * 11 + this.halfCell);
+        path.lineTo(this.cellWidth * 16 + this.halfCell, this.cellWidth * 19 + this.halfCell); // 19 to end off screen
+
         // path.draw(graphics);
 
         // Creates carrier on A keyboard press
         this.input.keyboard.on('keydown-A', function() {
             // console.log("A pressed");
-            this.carrier = new Carrier(this, path, this.cellWidth * 3 + 16, 0 + 16, 'carrier');
+            this.carrier = new Carrier(this, path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier');
             this.carriers.add(this.carrier);
 
             // Making the bullet follow this carrier
@@ -182,14 +209,19 @@ export class GameScene extends Phaser.Scene {
         // Create resource information text
         this.health = 100;
         this.healthText = this.add.text(this.width / 2, 10, "Health: " + this.health);
-        this.money = 1000;
+        this.money = 400;
         this.moneyText = this.add.text(this.width / 2, this.healthText.getBottomCenter().y + 10, 'Money: ' + this.money);
+
+        this.input.keyboard.on('keydown-M', function() {
+            this.money += 100;
+            this.moneyText.setText("Money: " + this.money);
+        }.bind(this));
 
         // Creating Pause button
         const pauseButton = this.add.image(1 * 32, 1 * 32, 'pauseButton');
         pauseButton.setInteractive().on('pointerdown', function () {
             // Make carrier
-            this.carrier = new Carrier(this, path, this.cellWidth * 3 + 16, 0 + 16, 'carrier');
+            this.carrier = new Carrier(this, path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier');
             this.carriers.add(this.carrier);
 
             console.log("Pause button pressed!");
@@ -292,6 +324,9 @@ export class GameScene extends Phaser.Scene {
      * @return True if it is a path tile, false otherwise.
      */
     isPathTile(i, j) {
+        if (this.gridCells[i] == undefined || this.gridCells[i][j] == undefined) {
+            return undefined;
+        }
         //Check if given values are inbounds first.
         // if(i >= 0 && j >= 0 && i < this.gridCells.length && j < this.gridCells[i].length)
             return this.gridCells[i][j] === 1;
@@ -304,37 +339,10 @@ export class GameScene extends Phaser.Scene {
     update() {
         this.physics.overlap(this.carriers, this.turrets, this.fire.bind(this));
         this.physics.overlap(this.carriers, this.bullets, this.carrierHit.bind(this));
-
         // console.log(this.carrier);
         // this.physics.overlap(this.carrier, this.circle1, this.overlap1.bind(this));
         // this.physics.overlap(this.carrier, this.circle2, this.overlap2.bind(this));
     }
-
-    // /**
-    //  * Check for overlap on Circle 1. If there's overlap, subtract health.
-    //  */
-    // overlap1() {
-    //     console.log("Circle1 hit.");
-    //     this.health = this.health - 0.25;
-    //     if (this.health <= 0) {
-    //         this.carrier.alpha = 0;
-    //         this.carrier.body.destroy();
-    //     }
-    //     this.healthText.setText("Health: " + this.health.toFixed(0));
-    // }
-
-    // /**
-    //  * Check for overlap on Circle 2. If there's overlap, subtract health.
-    //  */
-    // overlap2() {
-    //     console.log("Circle2 hit.");
-    //     this.health = this.health - 0.25;
-    //     if (this.health <= 0) {
-    //         this.carrier.alpha = 0;
-    //         this.carrier.body.destroy();
-    //     }
-    //     this.healthText.setText("Health: " + this.health.toFixed(0));
-    // }
 
     // Fires a turret shot at a carrier (must be here, NOT Turret.js for access to groups)
     fire(carrier, turret) {

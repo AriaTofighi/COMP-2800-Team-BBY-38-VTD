@@ -3,7 +3,7 @@ import 'phaser';
 export default class Carrier extends Phaser.GameObjects.PathFollower {
     constructor(scene, path, x, y, texture) {
         super(scene, path, x, y, texture);
-        this.duration = 8000;
+        this.duration = 30000;
         this.x = x;
         this.y = y;
         this.scene = scene;
@@ -19,10 +19,10 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
 
         // The background part of the bar
         this.barBack.fillStyle(0xA32020);
-        this.barBack.fillRect(-15, -20, 30, 6);
+        this.barBack.fillRect(-this.scene.halfCell, -this.scene.halfCell, this.scene.halfCell * 2, 4);
 
         // The health part of the bar
-        this.healthRect = new Phaser.Geom.Rectangle(-15, -20, 30, 6);
+        this.healthRect = new Phaser.Geom.Rectangle(-this.scene.halfCell, -this.scene.halfCell, this.scene.halfCell * 2, 4);
         this.barHealth.fillStyle(0xffffff);
         this.barHealth.fillRectShape(this.healthRect);
 
@@ -91,6 +91,6 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
     }
 
     reachedEndPath() {
-        return this.x == this.scene.cellWidth * 24 + this.scene.halfCell && this.y == this.scene.cellWidth * 10 + this.scene.halfCell;
+        return this.x == this.scene.cellWidth * 16 + this.scene.halfCell && this.y == this.scene.cellWidth * 19 + this.scene.halfCell;
     }
 }
