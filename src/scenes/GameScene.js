@@ -97,6 +97,13 @@ export class GameScene extends Phaser.Scene {
             }
         }
 
+        let walkCycle = this.anims.create({
+            key: 'walk',
+            frames: this.anims.generateFrameNumbers('carrier', {start: 0, end: 7}),
+            frameRate: 12,
+            repeat: -1 
+        });
+
         // Create and draw path
         let graphics = this.add.graphics();
         graphics.lineStyle(1, 0xFFFFFF);
