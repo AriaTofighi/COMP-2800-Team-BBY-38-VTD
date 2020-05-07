@@ -27,7 +27,6 @@ export default class Turret3 extends Phaser.GameObjects.Image {
 
         this.scene.physics.world.enable(this);
         this.body.setCircle(200, -167, -167);
-        console.log(this.body);
         this.body.debugShowBody = false;
 
         // Showing the radius of the turret when hovering
