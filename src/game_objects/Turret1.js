@@ -1,6 +1,6 @@
 import Bullet from "../game_objects/Bullet";
 
-export default class Turret extends Phaser.GameObjects.Image {
+export default class Turret1 extends Phaser.GameObjects.Image {
     constructor(scene, j, i) {
         super(scene, j, i, 'tower1');
         this.x = j * 32 + this.scene.halfCell;

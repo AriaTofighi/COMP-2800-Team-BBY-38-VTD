@@ -2,13 +2,18 @@ import bullet from "../../assets/ingame/bullet.png";
 import carrier from "../../assets/ingame/carrier.png";
 import tile from "../../assets/ingame/tile.png";
 import tower1 from "../../assets/ingame/tower1.png";
+import tower2 from "../../assets/ingame/tower2.png";
+import tower3 from "../../assets/ingame/tower3.png";
 import cancelButton from "../../assets/buttons/cancel.png";
 import pauseButton from "../../assets/buttons/pause.png";
 import endButton from "../../assets/buttons/end.png";
 import grass from "../../assets/ingame/grass.png";
 import corner from "../../assets/ingame/corner.png";
 import road from "../../assets/ingame/road.png";
-import noTurret from "../../assets/ingame/noTurret.png";
+import noTurret1 from "../../assets/ingame/noTurret1.png";
+import noTurret2 from "../../assets/ingame/noTurret2.png";
+import noTurret3 from "../../assets/ingame/noTurret3.png";
+import menuButton from "../../assets/buttons/menuButton.png"
 import { BlendModes } from "phaser";
 import 'phaser';
 
@@ -92,15 +97,20 @@ export class LoadScene extends Phaser.Scene {
         this.load.image('carrier', carrier);
         this.load.image('tile', tile);
         this.load.image('tower1', tower1);
+        this.load.image('tower2', tower2);
+        this.load.image('tower3', tower3);
         this.load.image('bg', grass);
         this.load.image('corner', corner);
         this.load.image('road', road);;
-        this.load.image('noTurret', noTurret);
+        this.load.image('noTurret1', noTurret1);
+        this.load.image('noTurret2', noTurret2);
+        this.load.image('noTurret3', noTurret3);
 
         // Load button images
         this.load.image("cancelButton", cancelButton);
         this.load.image("pauseButton", pauseButton);
         this.load.image("endButton", endButton);
+        this.load.image("menuButton", menuButton);
 
         // Uncomment to test loading visuals
         // for (let i = 0; i < 600; i ++) {
