@@ -2,6 +2,8 @@
 import {GameScene} from "./scenes/GameScene";
 import {BootScene} from "./scenes/BootScene";
 import {LoadScene} from "./scenes/LoadScene";
+import { PauseScene } from "./scenes/PauseScene";
+import { GameOverScene } from "./scenes/GameOverScene";
 import phaser from '../node_modules/phaser';
 
 // Phaser game config
@@ -22,10 +24,12 @@ let config = {
     }
 };
 
-//Sets up the game and adds the GameScene, BootScene, and LoadScene to the game.
+//Sets up the game and adds the GameScene, BootScene, LoadScene, PauseScene, and GameOverScene to the game.
 let game = new Phaser.Game(config);
 game.scene.add('Game', GameScene);
 game.scene.add('Boot', BootScene);
 game.scene.add('Load', LoadScene);
+game.scene.add('Pause', PauseScene);
+game.scene.add('GameOver', GameOverScene);
 game.scene.start('Boot');
 

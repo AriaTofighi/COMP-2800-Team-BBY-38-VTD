@@ -6,7 +6,6 @@ import tower2 from "../../assets/ingame/tower2.png";
 import tower3 from "../../assets/ingame/tower3.png";
 import cancelButton from "../../assets/buttons/cancel.png";
 import pauseButton from "../../assets/buttons/pause.png";
-import endButton from "../../assets/buttons/end.png";
 import grass from "../../assets/ingame/grass.png";
 import corner from "../../assets/ingame/corner.png";
 import road from "../../assets/ingame/road.png";
@@ -14,6 +13,16 @@ import noTurret1 from "../../assets/ingame/noTurret1.png";
 import noTurret2 from "../../assets/ingame/noTurret2.png";
 import noTurret3 from "../../assets/ingame/noTurret3.png";
 import menuButton from "../../assets/buttons/menuButton.png"
+import resumeButton from "../../assets/pauseMenu/resume.png";
+import resumePressButton from "../../assets/pauseMenu/resume_press.png";
+import saveButton from "../../assets/pauseMenu/save.png";
+import savePressButton from "../../assets/pauseMenu/save_press.png";
+import endButton from "../../assets/pauseMenu/End.png";
+import endPressButton from "../../assets/pauseMenu/end_press.png";
+import pauseBackground from "../../assets/pauseMenu/pause_background.png";
+import restartButton from "../../assets/buttons/restart.png";
+import restartPressButton from "../../assets/buttons/restart_press.png";
+import gameOver from "../../assets/ingame/game_over.png";
 import { BlendModes } from "phaser";
 import 'phaser';
 
@@ -89,6 +98,16 @@ export class LoadScene extends Phaser.Scene {
             loadBox.destroy();
         });
 
+        // Load game over sprite
+        this.load.spritesheet({
+            key: 'gameOver',
+            url: gameOver,
+            frameConfig: {
+                frameWidth: 800,
+                frameHeight: 600
+            }
+        });
+
         // Add logo
         this.add.image(logo);
 
@@ -109,8 +128,18 @@ export class LoadScene extends Phaser.Scene {
         // Load button images
         this.load.image("cancelButton", cancelButton);
         this.load.image("pauseButton", pauseButton);
-        this.load.image("endButton", endButton);
         this.load.image("menuButton", menuButton);
+        this.load.image('restartButton', restartButton);
+        this.load.image('restartPressButton', restartPressButton);
+
+        // Load pause menu images
+        this.load.image('pauseBackground', pauseBackground);
+        this.load.image('resumeButton', resumeButton);
+        this.load.image('resumePressButton', resumePressButton);
+        this.load.image('saveButton', saveButton);
+        this.load.image('savePressButton', savePressButton);
+        this.load.image('endButton', endButton);
+        this.load.image('endPressButton', endPressButton);
 
         // Uncomment to test loading visuals
         // for (let i = 0; i < 600; i ++) {

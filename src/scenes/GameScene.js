@@ -133,7 +133,7 @@ export class GameScene extends Phaser.Scene {
         sidebox.fillRect(4, -9, 96, 384);
 
         //Create first tower in menu
-        let menuTower1 = this.add.image(54, 35, 'tower1');
+        let menuTower1 = this.add.image(50, 72, 'tower1');
         menuTower1.setInteractive().on('pointerdown', () => {
             // Tower1 has been selected
             // this.toggleSidebar();
@@ -152,7 +152,7 @@ export class GameScene extends Phaser.Scene {
         });
 
         // Create second tower in menu
-        let menuTower2 = this.add.image(54, 131, 'tower2');
+        let menuTower2 = this.add.image(50, 176, 'tower2');
         menuTower2.setInteractive().on('pointerdown', () => {
             // Tower2 has been selected
             this.tower1IsSelected = false;
@@ -170,7 +170,7 @@ export class GameScene extends Phaser.Scene {
         });
 
         // Create third tower in menu
-        let menuTower3 = this.add.image(54, 227, 'tower3');
+        let menuTower3 = this.add.image(50, 280, 'tower3');
         menuTower3.setInteractive().on("pointerdown", () => {
             // Tower3 has been selected
             this.tower1IsSelected = false;
@@ -236,13 +236,16 @@ export class GameScene extends Phaser.Scene {
         this.moneyText = this.add.text(this.width / 2, this.healthText.getBottomCenter().y + 10, 'Money: ' + this.money);
 
         // Creating Pause button
-        const pauseButton = this.add.image(1 * 32, 1 * 32, 'pauseButton');
-        pauseButton.setInteractive().on('pointerdown', function () {
-            // Make carrier
-            this.carrier = new Carrier(this, path, this.cellWidth * 3 + 16, 0 + 16, 'carrier');
-            this.carriers.add(this.carrier);
+        this.pauseButton = this.add.image(1 * 32, 1 * 32, 'pauseButton');
+        this.pauseButton.setInteractive().on('pointerdown', function () {
+            this.scene.launch('Pause');
+            this.scene.pause('Game');
+        }.bind(this));
 
-            console.log("Pause button pressed!");
+        // Pause the game when clicking escape
+        this.input.keyboard.on('keydown-ESC', function () {
+            this.scene.launch('Pause');
+            this.scene.pause('Game');
         }.bind(this));
 
         // Creating the game objects groups
@@ -483,6 +486,10 @@ export class GameScene extends Phaser.Scene {
     update() {
         this.physics.overlap(this.carriers, this.turrets, this.fire.bind(this));
         this.physics.overlap(this.carriers, this.bullets, this.carrierHit.bind(this));
+        if (this.health <= 0) {
+            this.scene.launch('GameOver');
+            this.scene.pause('Game');
+        }
     }
 
 
