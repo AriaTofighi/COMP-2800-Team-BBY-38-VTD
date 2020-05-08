@@ -1,6 +1,6 @@
-import bullet from "../../assets/ingame/bullet.png";
+import bullet from "../../assets/ingame/soapbullet.png";
 import carrier from "../../assets/ingame/carrier.png";
-import tile from "../../assets/ingame/tile.png";
+//import tile from "../../assets/ingame/tile.png";
 import tower1 from "../../assets/ingame/tower1.png";
 import cancelButton from "../../assets/buttons/cancel.png";
 import pauseButton from "../../assets/buttons/pause.png";
@@ -101,7 +101,7 @@ export class LoadScene extends Phaser.Scene {
         // Load sprites
         this.load.image('bullet', bullet);
         this.load.spritesheet('carrier', carrier, {frameWidth: 37, frameHeight: 37});
-        this.load.image('tile', tile);
+        //this.load.image('tile', tile);
         this.load.image('tower1', tower1);
         this.load.image('bg', grass);
         this.load.image('corner', corner);

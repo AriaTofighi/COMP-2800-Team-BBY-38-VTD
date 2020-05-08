@@ -66,12 +66,12 @@ export class GameScene extends Phaser.Scene {
     create() {
         // Create grid variables
         this.width = this.sys.canvas.width;
-        let height = this.sys.canvas.height; 
+        this.height = this.sys.canvas.height; 
         this.cellWidth = 32;
         this.cellHeight = 32;
         this.halfCell = 16; // Used to move objects to center of cells
         const colCount = this.width / this.cellWidth; // 25 columns; use this.cellWidth * 24 for last column
-        const rowCount = height / this.cellWidth; // 19 rows; use this.cellWidth * 18 for last row
+        const rowCount = this.height / this.cellWidth; // 19 rows; use this.cellWidth * 18 for last row
         
         // Create and draw grid
         let grid = this.add.grid(0, 0, this.cellWidth * colCount , this.cellWidth * rowCount, this.cellWidth, this.cellWidth, 0x000000, 0, 0x222222, 0); // change last param to 1 to see grid lines
@@ -79,11 +79,12 @@ export class GameScene extends Phaser.Scene {
         grid.setOrigin(0, 0);
         
         //Create background image.
-        let bg = this.add.image(this.width/2, height/2, 'bg');
-        bg.setDisplaySize(this.width, height);
+        let bg = this.add.tileSprite(this.width/2, this.height/2, this.width, this.height, 'bg');
+        //let bg = this.add.image(this.width/2, this.height/2, 'bg');
+        //bg.setDisplaySize(this.width, this.height);
 
         //Create path tiles.
-        let tileX, tileY
+        let tileX, tileY;
         let pathTile;
         for (let i = 0; i < rowCount; i++) {
             for (let j = 0; j < colCount; j++) {
@@ -184,7 +185,7 @@ export class GameScene extends Phaser.Scene {
         }.bind(this));
      
         //Create sidebar
-        this.sidebar = this.add.container(this.width, height / 2 - 200);
+        this.sidebar = this.add.container(this.width, this.height / 2 - 200);
         let sidebox = this.add.graphics();
         this.sidebar.depth = 1;
         this.sidebar.add(sidebox);
@@ -221,7 +222,7 @@ export class GameScene extends Phaser.Scene {
         this.sidebar.add(cancelButton);
 
         // Create menu toggle button
-        let menuButton = this.add.rectangle(this.width - 20, height - 20, 40, 40, 0x00ff00);
+        let menuButton = this.add.rectangle(this.width - 20, this.height - 20, 40, 40, 0x00ff00);
         menuButton.depth = 1;
         menuButton.setInteractive();
         this.menuShowing = false;
@@ -314,6 +315,7 @@ export class GameScene extends Phaser.Scene {
 
     createGroups() {
         this.carriers = this.physics.add.group({ classType: Carrier, runChildUpdate: true });
+        this.civilians = this.physics.add.group({classType: Carrier, runChildUpdate: true});
         this.turrets = this.physics.add.group({ classType: Turret, runChildUpdate: true });
         this.bullets = this.physics.add.group({ classType: Bullet, runChildUpdate: true});
     }
@@ -441,7 +443,7 @@ export class GameScene extends Phaser.Scene {
         // console.log("fire");
 
         // Rotating the turret towards the carrier when firing
-        var angle = Phaser.Math.Angle.Between(turret.x, turret.y, carrier.x, carrier.y);
+        var angle = Phaser.Math.Angle.Between(turret.x, turret.y, carrier.x, carrier.y) + (Math.PI / 2);
         turret.setRotation(angle);
 
         // Creating a bullet
@@ -477,7 +479,10 @@ export class GameScene extends Phaser.Scene {
         } else {
             this.money += 25;
             this.moneyText.setText("Money: " + this.money);
-            carrier.destroy();
+            carrier.clearTint();
+            carrier.clean = true;
+            this.carriers.remove(carrier);
+            this.civilians.add(carrier);
             carrier.barBack.alpha = 0;
             carrier.barHealth.alpha = 0;
         }
