@@ -506,7 +506,7 @@ export class GameScene extends Phaser.Scene {
         turret.setRotation(angle);
 
         // Creating a bullet
-        this.bullet = new Bullet(this, turret.x, turret.y);
+        this.bullet = new Bullet(this, turret.x + this.halfCell * Math.cos(angle), turret.y + this.halfCell * Math.sin(angle));
         this.bullets.add(this.bullet);
         this.bullet.body.debugShowVelocity = false;
 

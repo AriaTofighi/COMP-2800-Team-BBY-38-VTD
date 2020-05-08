@@ -23,6 +23,7 @@ import pauseBackground from "../../assets/pauseMenu/pause_background.png";
 import restartButton from "../../assets/buttons/restart.png";
 import restartPressButton from "../../assets/buttons/restart_press.png";
 import gameOver from "../../assets/ingame/game_over.png";
+import startRound from "../../assets/buttons/startRound.png";
 import { BlendModes } from "phaser";
 import 'phaser';
 
@@ -131,6 +132,7 @@ export class LoadScene extends Phaser.Scene {
         this.load.image("menuButton", menuButton);
         this.load.image('restartButton', restartButton);
         this.load.image('restartPressButton', restartPressButton);
+        this.load.image('startRound', startRound);
 
         // Load pause menu images
         this.load.image('pauseBackground', pauseBackground);
