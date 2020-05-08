@@ -97,10 +97,6 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
     }
 
     reachedEndPath() {
-<<<<<<< HEAD
         return this.x == this.scene.cellWidth * 16 + this.scene.halfCell && this.y == this.scene.cellWidth * 19 + this.scene.halfCell;
-=======
-        return this.x >= this.scene.cellWidth * 24 + this.scene.halfCell && this.y == this.scene.cellWidth * 10 + this.scene.halfCell;
->>>>>>> risham_sprites
     }
 }
