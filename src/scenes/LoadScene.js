@@ -1,6 +1,6 @@
-import bullet from "../../assets/ingame/bullet.png";
+import bullet from "../../assets/ingame/soapbullet.png";
 import carrier from "../../assets/ingame/carrier.png";
-import tile from "../../assets/ingame/tile.png";
+//import tile from "../../assets/ingame/tile.png";
 import tower1 from "../../assets/ingame/tower1.png";
 import tower2 from "../../assets/ingame/tower2.png";
 import tower3 from "../../assets/ingame/tower3.png";
@@ -24,6 +24,17 @@ import restartButton from "../../assets/buttons/restart.png";
 import restartPressButton from "../../assets/buttons/restart_press.png";
 import gameOver from "../../assets/ingame/game_over.png";
 import startRound from "../../assets/buttons/startRound.png";
+import menuBackground from "../../assets/menu/menu_background.png";
+import login from "../../assets/menu/login.png";
+import loginPress from "../../assets/menu/login_press.png";
+import signup from "../../assets/menu/signup.png";
+import signupPress from "../../assets/menu/signup_press.png";
+import guest from "../../assets/menu/guest.png";
+import guestPress from "../../assets/menu/guest_press.png";
+import newGame from "../../assets/menu2/new_game.png";
+import newGamePress from "../../assets/menu2/new_game_press.png";
+import loadGame from "../../assets/menu2/load_game.png";
+import loadGamePress from "../../assets/menu2/load_game_press.png";
 import { BlendModes } from "phaser";
 import 'phaser';
 
@@ -41,13 +52,13 @@ export class LoadScene extends Phaser.Scene {
      */
     preload() {
         // Canvas dimensions
-        let width = this.sys.canvas.width;
-        let height = this.sys.canvas.width; 
+        let width = this.game.renderer.width;
+        let height = this.game.renderer.height; 
 
         // Display logo
         let logo = this.add.image(0, 0, 'logo');
         logo.setPosition(width / 2, height / 2 - 170);
-        logo.setDisplaySize(width / 2, height / 4);
+        logo.setDisplaySize(width / 2, height / 3);
         
         // Display load progress bar
         let loadBar = this.add.graphics();
@@ -78,7 +89,7 @@ export class LoadScene extends Phaser.Scene {
 
         // Listens for load percentage progress and adjust text
         this.load.on('progress', function (value) {
-            console.log(value);
+            // console.log(value);
             percTxt.setText(Math.round(value * 100) + "%");
             loadBar.clear();
             loadBar.fillStyle(0xffffff, 1);
@@ -114,8 +125,8 @@ export class LoadScene extends Phaser.Scene {
 
         // Load sprites
         this.load.image('bullet', bullet);
-        this.load.image('carrier', carrier);
-        this.load.image('tile', tile);
+        this.load.spritesheet('carrier', carrier, {frameWidth: 37, frameHeight: 37});
+        //this.load.image('tile', tile);
         this.load.image('tower1', tower1);
         this.load.image('tower2', tower2);
         this.load.image('tower3', tower3);
@@ -143,6 +154,19 @@ export class LoadScene extends Phaser.Scene {
         this.load.image('endButton', endButton);
         this.load.image('endPressButton', endPressButton);
 
+        // Load menu assets
+        this.load.image('menuBackground', menuBackground);
+        this.load.image('login', login);
+        this.load.image('loginPress', loginPress);
+        this.load.image('signup', signup);
+        this.load.image('signupPress', signupPress);
+        this.load.image('guest', guest);
+        this.load.image('guestPress', guestPress);
+        this.load.image('newGame', newGame);
+        this.load.image('newGamePress', newGamePress);
+        this.load.image('loadGame', loadGame);
+        this.load.image('loadGamePress', loadGamePress);
+
         // Uncomment to test loading visuals
         // for (let i = 0; i < 600; i ++) {
         //     this.load.image('bullet' + i, bullet);
@@ -158,6 +182,7 @@ export class LoadScene extends Phaser.Scene {
      * Create the load scene.
      */
     create() {   
-        this.scene.start('Game');
+        // TODO: check if user is logged in, if so, take them straight to Menu2
+        this.scene.start('Menu1');
     }
 }

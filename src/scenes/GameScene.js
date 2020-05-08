@@ -6,6 +6,11 @@ import Turret1 from "../game_objects/Turret1";
 import Turret2 from "../game_objects/Turret2";
 import Turret3 from "../game_objects/Turret3";
 import Bullet from "../game_objects/Bullet";
+import {default as r1Config} from "../round_configs/r1Config.json";
+import {default as r2Config} from "../round_configs/r2Config.json";
+import {default as r3Config} from "../round_configs/r3Config.json";
+import {default as rDefaultConfig} from "../round_configs/rDefaultConfig.json";
+
 
 export class GameScene extends Phaser.Scene {
 
@@ -20,6 +25,13 @@ export class GameScene extends Phaser.Scene {
      * Initializes the game.
      */
     init() {
+        // Initializes round configurations
+        this.r1Config = r1Config;
+        this.r2Config = r2Config;
+        this.r3Config = r3Config;
+        this.rDefaultConfig = rDefaultConfig; 
+        this.roundConfigs = [this.r1Config, this.r2Config, this.r3Config];
+        this.currentRound = 0;
         this.tower1IsSelected = false;
         this.tower2IsSelected = false;
         this.tower3IsSelected = false;
@@ -34,23 +46,23 @@ export class GameScene extends Phaser.Scene {
         this.gridCells = [
             [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+            [0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+            [0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+            [0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+            [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+            [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
         ];
     }
 
@@ -58,64 +70,99 @@ export class GameScene extends Phaser.Scene {
      * Creates the grid, background images, path tiles, carriers, menu, and sidebar.
      */
     create() {
-        // Begin writing game objects/logic here
-        // this.add.image(200, 100, 'carrier');
-        // this.add.image(300, 100, 'tile');
-        // this.add.image(400, 100, 'tower1');
-
         // Create grid variables
         this.width = this.sys.canvas.width;
-        let height = this.sys.canvas.height;
+        this.height = this.sys.canvas.height; 
         this.cellWidth = 32;
         this.cellHeight = 32;
         this.halfCell = 16; // Used to move objects to center of cells
         const colCount = this.width / this.cellWidth; // 25 columns; use this.cellWidth * 24 for last column
-        const rowCount = height / this.cellWidth; // 19 rows; use this.cellWidth * 18 for last row
-
+        const rowCount = this.height / this.cellWidth; // 19 rows; use this.cellWidth * 18 for last row
+        
         // Create and draw grid
         let grid = this.add.grid(0, 0, this.cellWidth * colCount, this.cellWidth * rowCount, this.cellWidth, this.cellWidth, 0x000000, 0, 0x222222, 0); // change last param to 1 to see grid lines
         grid.setDepth(1);
         grid.setOrigin(0, 0);
 
         //Create background image.
-        let bg = this.add.image(this.width / 2, height / 2, 'bg');
-        bg.setDisplaySize(this.width, height);
+        let bg = this.add.tileSprite(this.width/2, this.height/2, this.width, this.height, 'bg');
+        //let bg = this.add.image(this.width/2, this.height/2, 'bg');
+        //bg.setDisplaySize(this.width, this.height);
 
         //Create path tiles.
-        let tileX, tileY
+        let tileX, tileY;
         let pathTile;
         for (let i = 0; i < rowCount; i++) {
             for (let j = 0; j < colCount; j++) {
                 if (this.isPathTile(i, j)) {
-                    //Position for tile placement
+                    //Position for tile placement  
                     tileX = this.cellWidth * j + this.halfCell;
                     tileY = this.cellWidth * i + this.halfCell;
-                    if (i == 10 && j == 3) { // grid index coordinates for the path corner
+                    if (i == 10 && j == 3 || i == 15 && j == 1 || i == 7 && j == 9) {
+                        // Bottom left corner
                         pathTile = this.add.image(tileX, tileY, 'corner');
                         pathTile.setRotation(Math.PI);
+                    } else if (i == 10 && j == 6 || i == 15 && j == 13 || i == 11 && j == 21) {
+                        // Bottom right corner
+                        pathTile = this.add.image(tileX, tileY, 'corner');
+                        pathTile.setRotation(Math.PI / 2);
+                    } else if (i == 5 && j == 6 || i == 2 && j == 13 || i == 7 && j == 21) {
+                        // Top right corner
+                        pathTile = this.add.image(tileX, tileY, 'corner');
+                    } else if (i == 5 && j == 1 || i == 2 && j == 9 || i == 11 && j == 16) {
+                        // Top left corner
+                        pathTile = this.add.image(tileX, tileY, 'corner');
+                        pathTile.setRotation(Math.PI / 2 * 3);
                     } else {
+                        // Not a corner tile AKA regular tile
                         pathTile = this.add.image(tileX, tileY, 'road');
-                        if (this.isPathTile(i + 1, j))
-                            pathTile.setRotation(-Math.PI / 2);
+                        pathTile.setRotation(Math.PI / 2);
+                        if (i == 10 && j >= 4 && j <= 5 || 
+                            i == 5 && j != 3 && j <= 5 && j >= 2 ||
+                            i == 15 && j >= 2 && j <= 12 ||
+                            i == 2 && j >= 10 && j <= 12 ||
+                            i == 7 && j != 13 && j >= 10 && j <= 21 ||
+                            i == 11 && j >= 17 && j <= 20) {
+                                pathTile.setRotation();
+                        }
                     }
-                    pathTile.setDisplaySize(32, 32);
-                }
+                    pathTile.setDisplaySize(this.halfCell * 2, this.halfCell * 2);
+                } 
             }
         }
+
+        let walkCycle = this.anims.create({
+            key: 'walk',
+            frames: this.anims.generateFrameNumbers('carrier', {start: 0, end: 7}),
+            frameRate: 12,
+            repeat: -1 
+        });
 
         // Create and draw path
         let graphics = this.add.graphics();
         graphics.lineStyle(1, 0xFFFFFF);
-        let path = this.add.path(this.cellWidth * 3 + this.halfCell, 0 + this.halfCell);
-        path.lineTo(this.cellWidth * 3 + this.halfCell, this.cellWidth * 10 + this.halfCell);
-        path.lineTo(this.cellWidth * 24 + this.halfCell, this.cellWidth * 10 + this.halfCell);
-        // path.draw(graphics);
+        this.path = this.add.path(this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell); // -1 to start off screen
+        this.path.lineTo(this.cellWidth * 3 + this.halfCell, this.cellWidth * 10 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 6 + this.halfCell, this.cellWidth * 10 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 6 + this.halfCell, this.cellWidth * 5 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 1 + this.halfCell, this.cellWidth * 5 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 1 + this.halfCell, this.cellWidth * 15 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 13 + this.halfCell, this.cellWidth * 15 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 13 + this.halfCell, this.cellWidth * 2 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 9 + this.halfCell, this.cellWidth * 2 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 9 + this.halfCell, this.cellWidth * 7 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 21 + this.halfCell, this.cellWidth * 7 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 21 + this.halfCell, this.cellWidth * 11 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 16 + this.halfCell, this.cellWidth * 11 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 16 + this.halfCell, this.cellWidth * 19 + this.halfCell); // 19 to end off screen
+
+        // this.path.draw(graphics);
 
         // Creates carrier on A keyboard press
         this.input.keyboard.on('keydown-A', function () {
             // console.log("A pressed");
-            this.carrier = new Carrier(this, path, this.cellWidth * 3 + 16, 0 + 16, 'carrier');
-            this.carriers.add(this.carrier);
+            // let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', this.round1Duration, this.round1CarrierHP);
+            // this.carriers.add(carrier);
 
             // Making the bullet follow this carrier
             // setInterval(function() {
@@ -124,8 +171,26 @@ export class GameScene extends Phaser.Scene {
 
         }.bind(this));
 
+        // Start round text button
+        // this.startRoundText = this.add.text(180, 20, "Start Round");
+        // this.startRoundText.setInteractive({cursor: 'pointer'});
+        // this.startRoundText.once('pointerdown', function() {
+        //     this.startRound(this.roundConfigs[0]);
+        // }.bind(this));
+        // this.startRoundText.on('pointerover', function() {
+        //     this.startRoundText.setStyle({
+        //         color: '#0C0F12'
+        //     })
+        //     this.startRoundText.setColor(0x0c0f12);
+        // }.bind(this));
+        // this.startRoundText.on('pointerout', function() {
+        //     this.startRoundText.setStyle({
+        //         color: '#FFFFFF'
+        //     })
+        // }.bind(this));
+     
         //Create sidebar
-        this.sidebar = this.add.container(this.width, height / 2 - 200);
+        this.sidebar = this.add.container(this.width, this.height / 2 - 200);
         let sidebox = this.add.graphics();
         this.sidebar.depth = 1;
         this.sidebar.add(sidebox);
@@ -188,7 +253,7 @@ export class GameScene extends Phaser.Scene {
         });
 
         // Creating the cancel button
-        this.cancelButton = this.add.image(this.width - 32, height - 96, 'cancelButton');
+        this.cancelButton = this.add.image(this.width - 32, this.height - 96, 'cancelButton');
         this.cancelButton.setDisplaySize(64, 64);
         this.cancelButton.alpha = 0;
         this.cancelButton.setInteractive().on('pointerdown', this.cancelSelection.bind(this));
@@ -208,7 +273,7 @@ export class GameScene extends Phaser.Scene {
 
         // Create menu toggle button
         this.menuShowing = false;
-        this.menuButton = this.add.image(this.width - 32, height - 32, 'menuButton');
+        this.menuButton = this.add.image(this.width - 32, this.height - 32, 'menuButton');
         this.menuButton.setDisplaySize(64, 64);
         // On-click of menu toggle button
         this.menuButton.setInteractive().on('pointerdown', () => {
@@ -232,14 +297,26 @@ export class GameScene extends Phaser.Scene {
         // Create resource information text
         this.health = 100;
         this.healthText = this.add.text(this.width / 2, 10, "Health: " + this.health);
-        this.money = 10000;
+        this.money = 400;
         this.moneyText = this.add.text(this.width / 2, this.healthText.getBottomCenter().y + 10, 'Money: ' + this.money);
+
+        this.input.keyboard.on('keydown-M', function() {
+            this.money += 100;
+            this.moneyText.setText("Money: " + this.money);
+        }.bind(this));
 
         // Creating Pause button
         this.pauseButton = this.add.image(1 * 32, 1 * 32, 'pauseButton');
         this.pauseButton.setInteractive().on('pointerdown', function () {
             this.scene.launch('Pause');
             this.scene.pause('Game');
+        }.bind(this));
+
+        this.startRoundButton = this.add.image(this.halfCell * 3, this.height - 96 + this.halfCell * 3, 'startRound');
+        this.startRoundButton.setDisplaySize(96, 96);
+        this.startRoundButton.setInteractive();
+        this.startRoundButton.once('pointerdown', function() {
+            this.startRound(this.roundConfigs[0]);
         }.bind(this));
 
         // Pause the game when clicking escape
@@ -253,10 +330,16 @@ export class GameScene extends Phaser.Scene {
 
         // Placing ones in the grid cell array in place of the buttons
         this.placeButtonNumbers();
+
+        this.currentRoundText = this.add.text(180, 40, "Current round: " + this.currentRound);
     }
 
     createGroups() {
         this.carriers = this.physics.add.group({
+            classType: Carrier,
+            runChildUpdate: true
+        });
+        this.civilians = this.physics.add.group({
             classType: Carrier,
             runChildUpdate: true
         });
@@ -267,6 +350,47 @@ export class GameScene extends Phaser.Scene {
             classType: Bullet,
             runChildUpdate: true
         });
+    }
+
+    incrementDefaultConfig() {
+        this.rDefaultConfig.duration -= 1000; 
+        this.rDefaultConfig.carrierHP += 5;
+        this.rDefaultConfig.carrierCount += 5;
+        this.rDefaultConfig.carrierSpace -= 25;
+        console.log("default config adjusted");
+    }
+
+    startRound(config) {
+            this.currentRound += 1;
+            this.currentRoundText.setText("Current round: " + this.currentRound);
+            console.log("Starting round " + this.currentRound);
+            console.log("Config for this round: " + JSON.stringify(config));
+            this.startRoundButton.disableInteractive();
+            // Start directly for first time in order to give carrier group an active number immediately
+            let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
+            this.carriers.add(carrier);
+            let intervaler = setInterval(function () {
+                let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
+                this.carriers.add(carrier);
+            }.bind(this), config.carrierSpace);
+    
+            setTimeout(function () {
+                clearInterval(intervaler);
+            }.bind(this), (config.carrierCount - 1) * config.carrierSpace); 
+            
+            // Setting the correct round config for next round 
+            this.startRoundButton.once('pointerdown', function() {
+                if (this.currentRound <= this.roundConfigs.length - 1) { // -1 because first round is started manually
+                     this.startRound(this.roundConfigs[this.currentRound]);   
+                } else {
+                    console.log("else block hit");
+                    if (this.currentRound >= 4) { // if on round 4 when clicking start round 5+
+                        // First default config round has passed, begin incrementing
+                        this.incrementDefaultConfig();
+                    }
+                    this.startRound(this.rDefaultConfig);   
+                }
+            }.bind(this));
     }
 
     // Retracts or expands sidebar
@@ -474,6 +598,9 @@ export class GameScene extends Phaser.Scene {
      * @return True if it is a path tile, false otherwise.
      */
     isPathTile(i, j) {
+        if (this.gridCells[i] == undefined || this.gridCells[i][j] == undefined) {
+            return undefined;
+        }
         //Check if given values are inbounds first.
         // if(i >= 0 && j >= 0 && i < this.gridCells.length && j < this.gridCells[i].length)
         return this.gridCells[i][j] === 1;
@@ -490,9 +617,16 @@ export class GameScene extends Phaser.Scene {
             this.scene.launch('GameOver');
             this.scene.pause('Game');
         }
+
+        // Disables/enables the round start button if there are/aren't active carriers
+        if (this.carriers.countActive() == 0) {
+            this.startRoundButton.setInteractive();
+            this.startRoundButton.alpha = 1;
+        } else {
+            this.startRoundButton.disableInteractive();
+            this.startRoundButton.alpha = 0;
+        }
     }
-
-
 
     // Fires a turret shot at a carrier (must be here, NOT Turret.js for access to groups)
     fire(carrier, turret) {
@@ -522,6 +656,7 @@ export class GameScene extends Phaser.Scene {
 
     }
 
+    // Triggered when the carrier has been struck by a bullet
     carrierHit(carrier, bullet) {
         // Updating the carrier hp
         carrier.hp -= bullet.damage;
@@ -529,15 +664,18 @@ export class GameScene extends Phaser.Scene {
         // Updating the health bar
         carrier.barHealth.clear();
         carrier.barHealth.fillStyle(0xffffff);
-        var newWidth = Math.floor(30 * (carrier.hp / 100.0));
-
+        var newWidth =  Math.floor(30 * (carrier.hp / carrier.maxhp));
+        
         // Checking if the virus is still alive
         if (newWidth >= 0) {
             carrier.healthRect.width = newWidth;
         } else {
             this.money += 25;
             this.moneyText.setText("Money: " + this.money);
-            carrier.destroy();
+            carrier.clearTint();
+            carrier.clean = true;
+            this.carriers.remove(carrier);
+            this.civilians.add(carrier);
             carrier.barBack.alpha = 0;
             carrier.barHealth.alpha = 0;
         }
