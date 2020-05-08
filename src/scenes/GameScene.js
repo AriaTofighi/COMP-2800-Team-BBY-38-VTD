@@ -2,6 +2,11 @@ import { Grid } from "matter";
 import Carrier from "../game_objects/Carrier";
 import Turret from "../game_objects/Turret";
 import Bullet from "../game_objects/Bullet";
+import {default as r1Config} from "../round_configs/r1Config.json";
+import {default as r2Config} from "../round_configs/r2Config.json";
+import {default as r3Config} from "../round_configs/r3Config.json";
+import {default as rDefaultConfig} from "../round_configs/rDefaultConfig.json";
+
 
 export class GameScene extends Phaser.Scene {
     
@@ -16,6 +21,13 @@ export class GameScene extends Phaser.Scene {
      * Initializes the game.
      */
     init() {
+        // Initializes round configurations
+        this.r1Config = r1Config;
+        this.r2Config = r2Config;
+        this.r3Config = r3Config;
+        this.rDefaultConfig = rDefaultConfig; 
+        this.roundConfigs = [this.r1Config, this.r2Config, this.r3Config];
+        this.currentRound = 0;
         this.tower1IsSelected = false;
     }
 
@@ -115,28 +127,29 @@ export class GameScene extends Phaser.Scene {
         // Create and draw path
         let graphics = this.add.graphics();
         graphics.lineStyle(1, 0xFFFFFF);
-        let path = this.add.path(this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell); // -1 to start off screen
-        path.lineTo(this.cellWidth * 3 + this.halfCell, this.cellWidth * 10 + this.halfCell);
-        path.lineTo(this.cellWidth * 6 + this.halfCell, this.cellWidth * 10 + this.halfCell);
-        path.lineTo(this.cellWidth * 6 + this.halfCell, this.cellWidth * 5 + this.halfCell);
-        path.lineTo(this.cellWidth * 1 + this.halfCell, this.cellWidth * 5 + this.halfCell);
-        path.lineTo(this.cellWidth * 1 + this.halfCell, this.cellWidth * 15 + this.halfCell);
-        path.lineTo(this.cellWidth * 13 + this.halfCell, this.cellWidth * 15 + this.halfCell);
-        path.lineTo(this.cellWidth * 13 + this.halfCell, this.cellWidth * 2 + this.halfCell);
-        path.lineTo(this.cellWidth * 9 + this.halfCell, this.cellWidth * 2 + this.halfCell);
-        path.lineTo(this.cellWidth * 9 + this.halfCell, this.cellWidth * 7 + this.halfCell);
-        path.lineTo(this.cellWidth * 21 + this.halfCell, this.cellWidth * 7 + this.halfCell);
-        path.lineTo(this.cellWidth * 21 + this.halfCell, this.cellWidth * 11 + this.halfCell);
-        path.lineTo(this.cellWidth * 16 + this.halfCell, this.cellWidth * 11 + this.halfCell);
-        path.lineTo(this.cellWidth * 16 + this.halfCell, this.cellWidth * 19 + this.halfCell); // 19 to end off screen
+        this.path = this.add.path(this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell); // -1 to start off screen
+        this.path.lineTo(this.cellWidth * 3 + this.halfCell, this.cellWidth * 10 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 6 + this.halfCell, this.cellWidth * 10 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 6 + this.halfCell, this.cellWidth * 5 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 1 + this.halfCell, this.cellWidth * 5 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 1 + this.halfCell, this.cellWidth * 15 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 13 + this.halfCell, this.cellWidth * 15 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 13 + this.halfCell, this.cellWidth * 2 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 9 + this.halfCell, this.cellWidth * 2 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 9 + this.halfCell, this.cellWidth * 7 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 21 + this.halfCell, this.cellWidth * 7 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 21 + this.halfCell, this.cellWidth * 11 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 16 + this.halfCell, this.cellWidth * 11 + this.halfCell);
+        this.path.lineTo(this.cellWidth * 16 + this.halfCell, this.cellWidth * 19 + this.halfCell); // 19 to end off screen
 
-        // path.draw(graphics);
+        // this.path.draw(graphics);
 
         // Creates carrier on A keyboard press
         this.input.keyboard.on('keydown-A', function() {
+            console.log(this.carriers.countActive());
             // console.log("A pressed");
-            this.carrier = new Carrier(this, path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier');
-            this.carriers.add(this.carrier);
+            // let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', this.round1Duration, this.round1CarrierHP);
+            // this.carriers.add(carrier);
 
             // Making the bullet follow this carrier
             // setInterval(function() {
@@ -145,6 +158,24 @@ export class GameScene extends Phaser.Scene {
 
         }.bind(this));
 
+        // Start round text button
+        this.startRoundText = this.add.text(180, 20, "Start Round");
+        this.startRoundText.setInteractive({cursor: 'pointer'});
+        this.startRoundText.once('pointerdown', function() {
+            this.startRound(this.roundConfigs[0]);
+        }.bind(this));
+        this.startRoundText.on('pointerover', function() {
+            this.startRoundText.setStyle({
+                color: '#0C0F12'
+            })
+            this.startRoundText.setColor(0x0c0f12);
+        }.bind(this));
+        this.startRoundText.on('pointerout', function() {
+            this.startRoundText.setStyle({
+                color: '#FFFFFF'
+            })
+        }.bind(this));
+     
         //Create sidebar
         this.sidebar = this.add.container(this.width, height / 2 - 200);
         let sidebox = this.add.graphics();
@@ -171,7 +202,7 @@ export class GameScene extends Phaser.Scene {
         let cancelButton = this.add.image(54, 370, 'cancelButton');
         cancelButton.setDisplaySize(64, 64);
         cancelButton.alpha = 0;
-        cancelButton.setInteractive().on('pointerdown', function () {
+        cancelButton.setInteractive().on('pointerdown', function() {
             this.tower1IsSelected = false;
             descText.setText("");
             costText.setText("");
@@ -221,14 +252,57 @@ export class GameScene extends Phaser.Scene {
         const pauseButton = this.add.image(1 * 32, 1 * 32, 'pauseButton');
         pauseButton.setInteractive().on('pointerdown', function () {
             // Make carrier
-            this.carrier = new Carrier(this, path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier');
-            this.carriers.add(this.carrier);
+            let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', this.round1Duration, this.round1CarrierHP);
+            this.carriers.add(carrier);
 
             console.log("Pause button pressed!");
         }.bind(this));
 
         // Creating the game objects groups
         this.createGroups();
+
+        this.currentRoundText = this.add.text(180, 40, "Current round: " + this.currentRound);
+    }
+
+    incrementDefaultConfig() {
+        this.rDefaultConfig.round1Duration -= 1000; 
+        this.rDefaultConfig.carrierHP += 5;
+        this.rDefaultConfig.carrierCount += 5;
+        this.rDefaultConfig.carrierSpace -= 25;
+        console.log("default config adjusted");
+    }
+
+    startRound(config) {
+            this.currentRound += 1;
+            this.currentRoundText.setText("Current round: " + this.currentRound);
+            console.log("Starting round " + this.currentRound);
+            console.log("Config for this round: " + JSON.stringify(config));
+            this.startRoundText.disableInteractive();
+            // Start directly for first time in order to give carrier group an active number immediately
+            let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
+            this.carriers.add(carrier);
+            let intervaler = setInterval(function () {
+                let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
+                this.carriers.add(carrier);
+            }.bind(this), config.carrierSpace);
+    
+            setTimeout(function () {
+                clearInterval(intervaler);
+            }.bind(this), (config.carrierCount - 1) * config.carrierSpace); 
+
+            // Setting the correct round config for next round 
+            this.startRoundText.once('pointerdown', function() {
+                if (this.currentRound <= this.roundConfigs.length - 1) { // -1 because first round is started manually
+                     this.startRound(this.roundConfigs[this.currentRound]);   
+                } else {
+                    console.log("else block hit");
+                    if (this.currentRound >= 4) { // if on round 4 when clicking start round 5+
+                        // First default config round has passed, begin incrementing
+                        this.incrementDefaultConfig();
+                    }
+                    this.startRound(this.rDefaultConfig);   
+                }
+            }.bind(this));
     }
 
     createGroups() {
@@ -339,9 +413,17 @@ export class GameScene extends Phaser.Scene {
     update() {
         this.physics.overlap(this.carriers, this.turrets, this.fire.bind(this));
         this.physics.overlap(this.carriers, this.bullets, this.carrierHit.bind(this));
-        // console.log(this.carrier);
-        // this.physics.overlap(this.carrier, this.circle1, this.overlap1.bind(this));
-        // this.physics.overlap(this.carrier, this.circle2, this.overlap2.bind(this));
+        
+        this.startRoundText.setText("Start Round " + (this.currentRound + 1)); // add 1 to show queued up round
+
+        // Disables/enables the round start button if there are/aren't active carriers
+        if (this.carriers.countActive() == 0) {
+            this.startRoundText.setInteractive();
+            this.startRoundText.alpha = 1;
+        } else {
+            this.startRoundText.disableInteractive();
+            this.startRoundText.alpha = 0;
+        }
     }
 
     // Fires a turret shot at a carrier (must be here, NOT Turret.js for access to groups)
@@ -380,7 +462,7 @@ export class GameScene extends Phaser.Scene {
         // Updating the health bar
         carrier.barHealth.clear();
         carrier.barHealth.fillStyle(0xffffff);
-        var newWidth =  Math.floor(30 * (carrier.hp / 100.0));
+        var newWidth =  Math.floor(30 * (carrier.hp / carrier.maxhp));
         
         // Checking if the virus is still alive
         if (newWidth >= 0) {

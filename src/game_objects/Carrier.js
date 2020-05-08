@@ -1,21 +1,19 @@
 import 'phaser';
 
 export default class Carrier extends Phaser.GameObjects.PathFollower {
-    constructor(scene, path, x, y, texture) {
+    constructor(scene, path, x, y, texture, duration, hp) {
         super(scene, path, x, y, texture);
-        this.duration = 30000;
+        this.duration = duration;
         this.x = x;
         this.y = y;
         this.scene = scene;
         this.path = path;
-
-        // Setting the hp of the virus
-        this.hp = 100;
+        this.hp = hp;
+        this.maxhp = this.hp;
 
         // Creating the health bar for the virus
         this.barBack = this.scene.add.graphics();
         this.barHealth = this.scene.add.graphics();
-        
 
         // The background part of the bar
         this.barBack.fillStyle(0xA32020);
