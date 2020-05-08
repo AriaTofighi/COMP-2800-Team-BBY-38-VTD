@@ -265,7 +265,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     incrementDefaultConfig() {
-        this.rDefaultConfig.round1Duration -= 1000; 
+        this.rDefaultConfig.duration -= 1000; 
         this.rDefaultConfig.carrierHP += 5;
         this.rDefaultConfig.carrierCount += 5;
         this.rDefaultConfig.carrierSpace -= 25;
@@ -289,7 +289,7 @@ export class GameScene extends Phaser.Scene {
             setTimeout(function () {
                 clearInterval(intervaler);
             }.bind(this), (config.carrierCount - 1) * config.carrierSpace); 
-
+            
             // Setting the correct round config for next round 
             this.startRoundText.once('pointerdown', function() {
                 if (this.currentRound <= this.roundConfigs.length - 1) { // -1 because first round is started manually
