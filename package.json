@@ -3,5 +3,8 @@
     "bootstrap": "^4.4.1",
     "matter": "^0.2.0",
     "phaser": "^3.23.0"
+  },
+  "devDependencies": {
+    "marked": "^1.0.0"
   }
 }
