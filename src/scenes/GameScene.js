@@ -208,6 +208,7 @@ export class GameScene extends Phaser.Scene {
 
     createGroups() {
         this.carriers = this.physics.add.group({ classType: Carrier, runChildUpdate: true });
+        this.civilians = this.physics.add.group({classType: Carrier, runChildUpdate: true});
         this.turrets = this.physics.add.group({ classType: Turret, runChildUpdate: true });
         this.bullets = this.physics.add.group({ classType: Bullet, runChildUpdate: true});
     }
@@ -351,7 +352,7 @@ export class GameScene extends Phaser.Scene {
         // console.log("fire");
 
         // Rotating the turret towards the carrier when firing
-        var angle = Phaser.Math.Angle.Between(turret.x, turret.y, carrier.x, carrier.y);
+        var angle = Phaser.Math.Angle.Between(turret.x, turret.y, carrier.x, carrier.y) + (Math.PI / 2);
         turret.setRotation(angle);
 
         // Creating a bullet
@@ -387,7 +388,10 @@ export class GameScene extends Phaser.Scene {
         } else {
             this.money += 25;
             this.moneyText.setText("Money: " + this.money);
-            carrier.destroy();
+            carrier.clearTint();
+            carrier.clean = true;
+            this.carriers.remove(carrier);
+            this.civilians.add(carrier);
             carrier.barBack.alpha = 0;
             carrier.barHealth.alpha = 0;
         }

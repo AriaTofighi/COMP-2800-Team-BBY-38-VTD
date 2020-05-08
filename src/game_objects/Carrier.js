@@ -8,6 +8,7 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
         this.y = y;
         this.scene = scene;
         this.path = path;
+        this.clean = false;
 
         // Setting the hp of the virus
         this.hp = 100;
@@ -47,7 +48,10 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
             t: 0
         });
 
+        //Play walking animation
         this.play('walk');
+        //Set tint to indicate carrier status
+        this.setTint(0xff000);
 
         // Starts the health bar movement
         this.scene.tweens.add({
@@ -84,15 +88,17 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
     update() {
         // Destroys this carrier and makes the health bar invisible if reaches end of path
         if (this.reachedEndPath()) {
-            this.scene.health -= 5;
-            this.scene.healthText.setText("Health: " + this.scene.health);
-            this.destroy();
+            if (!this.clean){
+                this.scene.health -= 5;
+                this.scene.healthText.setText("Health: " + this.scene.health);
+            }
             this.barBack.alpha = 0;
             this.barHealth.alpha = 0;
+            this.destroy();
         }
     }
 
     reachedEndPath() {
-        return this.x == this.scene.cellWidth * 24 + this.scene.halfCell && this.y == this.scene.cellWidth * 10 + this.scene.halfCell;
+        return this.x >= this.scene.cellWidth * 24 + this.scene.halfCell && this.y == this.scene.cellWidth * 10 + this.scene.halfCell;
     }
 }
