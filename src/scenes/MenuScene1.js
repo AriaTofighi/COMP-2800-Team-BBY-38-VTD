@@ -27,6 +27,9 @@ export class MenuScene1 extends Phaser.Scene {
         // Display Login button
         this.login = this.add.image(width / 2, height / 2, 'login');
         this.login.setInteractive({cursor: 'pointer'});
+        this.login.on('pointerover', () => {
+            this.sound.play('hover');
+        });
         this.login.on('pointerdown', () => {
             this.login.setTexture('loginPress');
         });
@@ -51,15 +54,18 @@ export class MenuScene1 extends Phaser.Scene {
         // Display Guest button
         this.guest = this.add.image(width / 2, height / 2 + 70, 'guest');
         this.guest.setInteractive({cursor: 'pointer'});
-        this.guest.on('pointerdown', () => {
+        this.guest.on('pointerover', () => {
+            this.sound.play('hover');
+        });
+        this.guest.on('pointerdown', () => {            
             this.guest.setTexture('guestPress');
         });
+
         this.guest.on('pointerup', () => {
             this.guest.setTexture('guest');
             this.scene.start('Menu2');
         });
         this.input.on('pointerup', () => {
-            this.guest.add.audio('hover').play();
             this.guest.setTexture('guest');
         });
     }

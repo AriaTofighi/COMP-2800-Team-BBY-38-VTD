@@ -27,6 +27,9 @@ export class MenuScene2 extends Phaser.Scene {
         // Display New Game button
         this.newGame = this.add.image(width / 2, height / 2, 'newGame');
         this.newGame.setInteractive({cursor: 'pointer'});
+        this.newGame.on('pointerover', () => {
+            this.sound.play('hover');
+        });
         this.newGame.on('pointerdown', () => {
             this.newGame.setTexture('newGamePress');
         });
@@ -41,6 +44,9 @@ export class MenuScene2 extends Phaser.Scene {
         // Display Load Game button
         this.loadGame = this.add.image(width / 2, height / 2 + 70, 'loadGame');
         this.loadGame.setInteractive({cursor: 'pointer'});
+        this.loadGame.on('pointerover', () => {
+            this.sound.play('hover');
+        });
         this.loadGame.on('pointerdown', () => {
             this.loadGame.setTexture('loadGamePress');
         });
