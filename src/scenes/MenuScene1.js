@@ -8,7 +8,6 @@ export class MenuScene1 extends Phaser.Scene {
     }
 
     preload() {
-
     }
 
     create() {
@@ -34,7 +33,6 @@ export class MenuScene1 extends Phaser.Scene {
         this.login.on('pointerup', () => {
             this.login.setTexture('login');
             window.location.href = "../../login.html";
-            
         });
         this.input.on('pointerup', () => {
             this.login.setTexture('login');
@@ -61,11 +59,8 @@ export class MenuScene1 extends Phaser.Scene {
             this.scene.start('Menu2');
         });
         this.input.on('pointerup', () => {
+            this.guest.add.audio('hover').play();
             this.guest.setTexture('guest');
         });
-        
-
-
-
     }
 }
