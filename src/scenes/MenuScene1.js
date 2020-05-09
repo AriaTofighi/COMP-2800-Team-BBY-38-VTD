@@ -45,6 +45,7 @@ export class MenuScene1 extends Phaser.Scene {
         //     this.signup.setTexture('signupPress');
         // });
         // this.signup.on('pointerup', () => {
+        //     this.sound.play('buttonClick');
         //     this.signup.setTexture('signup');
         // });
 
@@ -52,14 +53,15 @@ export class MenuScene1 extends Phaser.Scene {
         this.guest = this.add.image(width / 2, height / 2 + 70, 'guest');
         this.guest.setInteractive({cursor: 'pointer'});
         this.guest.on('pointerdown', () => {
+
             this.guest.setTexture('guestPress');
         });
         this.guest.on('pointerup', () => {
+            this.sound.play('buttonClick');
             this.guest.setTexture('guest');
             this.scene.start('Menu2');
         });
         this.input.on('pointerup', () => {
-            this.guest.add.audio('hover').play();
             this.guest.setTexture('guest');
         });
     }
