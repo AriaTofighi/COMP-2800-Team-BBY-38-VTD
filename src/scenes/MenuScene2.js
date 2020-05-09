@@ -8,7 +8,6 @@ export class MenuScene2 extends Phaser.Scene {
     }
 
     preload() {
-
     }
 
     create() {
@@ -51,9 +50,5 @@ export class MenuScene2 extends Phaser.Scene {
         this.input.on('pointerup', () => {
             this.loadGame.setTexture('loadGame');
         });
-        
-
-
-
     }
 }
