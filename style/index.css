@@ -10,6 +10,7 @@ body {
 #gallery{
     display: flex;
     margin-top: 30px;
+    vertical-align: bottom;
 }
 
 .portrait{
@@ -19,7 +20,7 @@ body {
 
 .portrait img{
     width: 80%;
-    height: 300px;
+    height: 100%;
     border: 6px solid #bfbfbf;
     border-radius: 4px;
 }
