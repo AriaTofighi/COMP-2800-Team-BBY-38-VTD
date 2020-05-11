@@ -34,6 +34,7 @@ export class MenuScene2 extends Phaser.Scene {
             this.newGame.setTexture('newGamePress');
         });
         this.newGame.on('pointerup', () => {
+            this.sound.play('buttonClick');
             this.newGame.setTexture('newGame');
             this.scene.start('Game');
         });
@@ -51,6 +52,7 @@ export class MenuScene2 extends Phaser.Scene {
             this.loadGame.setTexture('loadGamePress');
         });
         this.loadGame.on('pointerup', () => {
+            this.sound.play('buttonClick');
             this.loadGame.setTexture('loadGame');
         });
         this.input.on('pointerup', () => {

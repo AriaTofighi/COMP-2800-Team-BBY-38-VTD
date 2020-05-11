@@ -31,6 +31,7 @@ export class GameOverScene extends Phaser.Scene {
             this.restartButton.setTexture('restartPressButton');
         }.bind(this));
         this.restartButton.on('pointerup', function () {
+            this.sound.play('buttonClick');
             this.restartButton.setTexture('restartPressButton');
 
             // TODO: what the restart button does

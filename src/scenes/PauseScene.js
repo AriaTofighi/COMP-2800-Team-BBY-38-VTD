@@ -20,6 +20,7 @@ export class PauseScene extends Phaser.Scene {
             this.resumeButton.setTexture('resumePressButton');
         }.bind(this));
         this.resumeButton.on('pointerup', function () {
+            this.sound.play('buttonClick');
             this.resumeButton.setTexture('resumePressButton');
             this.scene.resume('Game');
             this.scene.stop();
@@ -32,6 +33,7 @@ export class PauseScene extends Phaser.Scene {
             this.saveButton.setTexture('savePressButton');
         }.bind(this));
         this.saveButton.on('pointerup', function () {
+            this.sound.play('buttonClick');
             this.saveButton.setTexture('savePressButton');
 
             // TODO: what the save button does
@@ -44,6 +46,7 @@ export class PauseScene extends Phaser.Scene {
             this.endButton.setTexture('endPressButton');
         }.bind(this));
         this.endButton.on('pointerup', function () {
+            this.sound.play('buttonClick');
             this.endButton.setTexture('endPressButton');
 
             // TODO: what the end button does

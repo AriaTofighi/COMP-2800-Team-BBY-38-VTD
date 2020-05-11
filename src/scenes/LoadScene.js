@@ -35,7 +35,7 @@ import newGame from "../../assets/menu2/new_game.png";
 import newGamePress from "../../assets/menu2/new_game_press.png";
 import loadGame from "../../assets/menu2/load_game.png";
 import loadGamePress from "../../assets/menu2/load_game_press.png";
-import hover from "../../assets/audio/button-hover.mp3";
+import buttonClick from "../../assets/audio/button-click.mp3";
 import { BlendModes } from "phaser";
 import 'phaser';
 
@@ -168,7 +168,7 @@ export class LoadScene extends Phaser.Scene {
         this.load.image('loadGame', loadGame);
         this.load.image('loadGamePress', loadGamePress);
 
-        this.load.audio('hover', hover);
+        this.load.audio('buttonClick', buttonClick);
         // Uncomment to test loading visuals
         // for (let i = 0; i < 600; i ++) {
         //     this.load.image('bullet' + i, bullet);
