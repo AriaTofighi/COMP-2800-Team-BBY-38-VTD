@@ -15,41 +15,40 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-
-    <link type="text/css" href="style/index.css" rel="stylesheet">
+    
+    <!-- External CSS -->
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.5.0/firebase-ui-auth.css" />
+    <!-- Personal CSS -->
+    <link type="text/css" href="style/login.css" rel="stylesheet">
     <link rel="icon" href="assets/logo/favicon.png" type="image/png" sizes="32x32">
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-        <!-- Brand -->
-        <a class="navbar-brand" href="index.html">VTD</a>
-
-        <!-- Toggler/collapsibe Button -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Navbar links -->
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="login.html">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="about.html">About</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <h1>UNDER CONSTRUCTION</h1>
     
 
-    <!-- Insert scripts here -->
+    <div id="loader-container">
+        <h1 id="loader">Loading...</h1>
+    </div>
+    <!-- Sign out section -->
+    <div id="sign-out-container">
+        <h1 id="sign-in-status"></h1>
+        <button id="log-out-btn">Log Out</button>
+    </div>
+    
+    <!-- Sign in section -->
+    <div id="sign-in-container">
+        <div id="firebaseui-auth-container"></div>
+    </div>
 
+    <a href="index.html" class="btn btn-default">Back to VTD</a>
+
+    <!-- Insert scripts here -->
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/ui/4.5.0/firebase-ui-auth.js"></script>
+    <script src="src/login.js"></script>
 </body>
 
 </html>

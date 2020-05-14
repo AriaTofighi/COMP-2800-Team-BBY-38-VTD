@@ -360,12 +360,22 @@ export class GameScene extends Phaser.Scene {
         console.log("default config adjusted");
     }
 
+    enableStartRoundButton() {
+        this.startRoundButton.setInteractive();
+        this.startRoundButton.alpha = 1;
+    }
+
+    disableStartRoundButton() {
+        this.startRoundButton.disableInteractive();
+        this.startRoundButton.alpha = 0;
+    }
+
     startRound(config) {
             this.currentRound += 1;
             this.currentRoundText.setText("Current round: " + this.currentRound);
             console.log("Starting round " + this.currentRound);
             console.log("Config for this round: " + JSON.stringify(config));
-            this.startRoundButton.disableInteractive();
+            this.disableStartRoundButton();
             // Start directly for first time in order to give carrier group an active number immediately
             let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
             this.carriers.add(carrier);
@@ -376,7 +386,8 @@ export class GameScene extends Phaser.Scene {
     
             setTimeout(function () {
                 clearInterval(intervaler);
-            }.bind(this), (config.carrierCount - 1) * config.carrierSpace); 
+                this.enableStartRoundButton();
+            }.bind(this), (config.carrierCount - 1) * config.carrierSpace);
             
             // Setting the correct round config for next round 
             this.startRoundButton.once('pointerdown', function() {
@@ -616,15 +627,6 @@ export class GameScene extends Phaser.Scene {
         if (this.health <= 0) {
             this.scene.launch('GameOver');
             this.scene.pause('Game');
-        }
-
-        // Disables/enables the round start button if there are/aren't active carriers
-        if (this.carriers.countActive() == 0) {
-            this.startRoundButton.setInteractive();
-            this.startRoundButton.alpha = 1;
-        } else {
-            this.startRoundButton.disableInteractive();
-            this.startRoundButton.alpha = 0;
         }
     }
 

@@ -59,7 +59,6 @@ export class MenuScene1 extends Phaser.Scene {
 
             this.guest.setTexture('guestPress');
         });
-
         this.guest.on('pointerup', () => {
             this.sound.play('buttonClick');
             this.guest.setTexture('guest');
@@ -67,6 +66,22 @@ export class MenuScene1 extends Phaser.Scene {
         });
         this.input.on('pointerup', () => {
             this.guest.setTexture('guest');
+        });
+
+        // Display About button
+        this.about = this.add.image(width / 2, height / 2 + 140, 'about');
+        this.about.setInteractive({cursor: 'pointer'});      
+        this.about.on('pointerdown', () => {
+
+            this.about.setTexture('aboutPress');
+        });
+        this.about.on('pointerup', () => {
+            this.sound.play('buttonClick');
+            this.about.setTexture('about');
+            window.location.href = "../../about.html";
+        });
+        this.input.on('pointerup', () => {
+            this.about.setTexture('about');
         });
     }
 }

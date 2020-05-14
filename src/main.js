@@ -9,6 +9,7 @@ import {MenuScene2} from "./scenes/MenuScene2";
 import phaser from '../node_modules/phaser';
 
 
+
 // Phaser game config
 let config = {
     type: Phaser.AUTO,
