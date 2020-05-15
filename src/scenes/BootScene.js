@@ -1,4 +1,4 @@
-import logo from "../../assets/logo/logo.png";
+import logo from "../../assets/logo/vtdlogo.png";
 
 export class BootScene extends Phaser.Scene {
 
@@ -17,7 +17,7 @@ export class BootScene extends Phaser.Scene {
     }
 
     /**
-     * Create the boot scene.
+     * Start the boot scene.
      */
     create() {
         this.scene.start('Load');
