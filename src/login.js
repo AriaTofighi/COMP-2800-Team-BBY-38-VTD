@@ -17,7 +17,6 @@ console.log(db);
 var uiConfig = {
     callbacks: {
         signInSuccessWithAuthResult: function (authResult) {
-            document.getElementById('loader-container').style.display = 'flex';
             let user = authResult.user;
             let uniqueUser = authResult.additionalUserInfo.isNewUser;
             let dbRef = db.collection("users").doc(user.uid);
@@ -25,7 +24,8 @@ var uiConfig = {
             if (uniqueUser) {
                 dbRef.set({
                     name: user.displayName,
-                    email: user.email
+                    email: user.email,
+                    bestRound: 0
                 }).then(function () {
                     // alert("New user added to firestore");
                 }).catch(function (error) {
@@ -61,7 +61,6 @@ function signUserOut() {
     firebase.auth().signOut().then(function () {
         // Sign-out successful. 
         location.reload();
-        document.getElementById('loader-container').style.display = 'flex';
     }).catch(function (error) {
         // An error happened.
 
@@ -70,42 +69,45 @@ function signUserOut() {
 
 // Alters sign in status visually when window is loaded
 initApp = function () {
+    let time = new Date().getTime();
+
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
-            // User is signed in.       
+            // User is signed in. 
             let displayName = user.displayName;
             let email = user.email;
             displaySignOut(displayName);
-    
-            user.getIdToken().then(function (accessToken) {
-                // If need to use ID token
-            });
+            // user.getIdToken().then(function (accessToken) {
+            //     // If need to use ID token
+            // });
         } else {
             displaySignIn();
         }
+        console.log("Time elapsed: " + (new Date().getTime() - time) / 1000.0 + " seconds");
     }, function (error) {
         console.log(error);
     });
 };
 
 function displaySignOut(displayName) {
+    document.getElementById('loader-container').style.display = "none";
     document.getElementById('sign-in-status').textContent = 'Signed in as ' + displayName;
     document.getElementById('sign-out-container').style.display = "flex";
     document.getElementById('sign-in-container').style.display = "none";
     document.getElementById('log-out-btn').style.display = "initial";
     document.getElementById('firebaseui-auth-container').style.display = "none";
-    document.getElementById('loader-container').style.display = 'none';
+    document.getElementById('back-to-vtd').disabled = false;
 }
 
 function displaySignIn() {
+    document.getElementById('loader-container').style.display = 'none';
     document.getElementById('sign-in-status').textContent = '';
     document.getElementById('sign-out-container').style.display = "none";
     document.getElementById('sign-in-container').style.display = "flex";
     document.getElementById('log-out-btn').style.display = "none";
     document.getElementById('firebaseui-auth-container').style.display = "block";
-    document.getElementById('loader-container').style.display = 'none';
+    document.getElementById('back-to-vtd').disabled = false;
 }
-
 
 // Triggers when the window is loaded
 window.addEventListener('load', function () {
@@ -115,5 +117,6 @@ window.addEventListener('load', function () {
     ui.start('#firebaseui-auth-container', uiConfig);
     document.getElementById('log-out-btn').onclick = signUserOut;
     initApp();
+
 });
 

@@ -29,8 +29,8 @@ import login from "../../assets/menu/login.png";
 import loginPress from "../../assets/menu/login_press.png";
 import signup from "../../assets/menu/signup.png";
 import signupPress from "../../assets/menu/signup_press.png";
-import guest from "../../assets/menu/guest.png";
-import guestPress from "../../assets/menu/guest_press.png";
+import play from "../../assets/menu/play.png";
+import playPress from "../../assets/menu/play_press.png";
 import newGame from "../../assets/menu2/new_game.png";
 import newGamePress from "../../assets/menu2/new_game_press.png";
 import loadGame from "../../assets/menu2/load_game.png";
@@ -45,6 +45,10 @@ import towerDestroy from "../../assets/audio/tower_destroy.mp3";
 import gameOverAudio from "../../assets/audio/game_over.mp3";
 import soap from "../../assets/audio/soap.mp3";
 import waterStream from "../../assets/audio/water_stream.mp3";
+import logout from "../../assets/menu/logout.png";
+import logoutPress from "../../assets/menu/logout_press.png";
+import leaderboard from "../../assets/menu/leaderboard.png";
+import leaderboardPress from "../../assets/menu/leaderboard_press.png";
 
 import { BlendModes } from "phaser";
 import 'phaser';
@@ -171,14 +175,18 @@ export class LoadScene extends Phaser.Scene {
         this.load.image('loginPress', loginPress);
         this.load.image('signup', signup);
         this.load.image('signupPress', signupPress);
-        this.load.image('guest', guest);
-        this.load.image('guestPress', guestPress);
+        this.load.image('play', play);
+        this.load.image('playPress', playPress);
         this.load.image('newGame', newGame);
         this.load.image('newGamePress', newGamePress);
         this.load.image('loadGame', loadGame);
         this.load.image('loadGamePress', loadGamePress);
         this.load.image('about', about);
         this.load.image('aboutPress', aboutPress);
+        this.load.image('logout', logout);
+        this.load.image('logoutPress', logoutPress);
+        this.load.image('leaderboard', leaderboard);
+        this.load.image('leaderboardPress', leaderboardPress);
 
         // Load audio
         this.load.audio('buttonHover', buttonHover);
@@ -204,7 +212,36 @@ export class LoadScene extends Phaser.Scene {
      * Create the load scene.
      */
     create() {   
-        // TODO: check if user is logged in, if so, take them straight to Menu2
-        this.scene.start('Menu1');
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyC5esnkaw9-wOcFU1qaeA7__AEoCNawBuY",
+            authDomain: "virustd-8fdd6.firebaseapp.com",
+            databaseURL: "https://virustd-8fdd6.firebaseio.com",
+            projectId: "virustd-8fdd6",
+            storageBucket: "virustd-8fdd6.appspot.com",
+            messagingSenderId: "819193398890",
+            appId: "1:819193398890:web:393570d53dc05c5eeaec13"
+        };
+        // Initialize Firebase
+        this.app = firebase.initializeApp(firebaseConfig);
+        this.db = firebase.firestore();
+        console.log(this.db);
+
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                // User is signed in.       
+                this.scene.start('Menu1');
+            } else {
+                // User is not signed in.
+                this.scene.start('Menu1');
+            }
+        }.bind(this), function (error) {
+            console.log(error);
+        });
     }
+    
 }
+
+
+
+

@@ -8,24 +8,6 @@ body {
     background-color: black;
 }
 
-#gallery{
-    display: flex;
-    margin-top: 30px;
-    vertical-align: bottom;
-}
-
-.portrait{
-    text-align: center;
-    width: 90%;
-}
-
-.portrait img{
-    width: 80%;
-    height: 100%;
-    border: 6px solid #bfbfbf;
-    border-radius: 4px;
-}
-
 p{
     color: #d4d4d4;
     width: 70%;
@@ -43,19 +25,8 @@ h1{
     display: none;
 }
 
-#log-out-btn {
-    font-size: 30px;
-    display: none;
-    border: 2px solid black;
-    border-radius: 8px;
-    height: fit-content;
-    width: fit-content;
-    border-style: outset;
-
-}
-
 #sign-out-container, #sign-in-container, #loader-container {
-    height: calc(100vh - 56px);    
+    height: 100vh;    
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -74,4 +45,18 @@ h1{
     font-size: 2.5rem;
     background-color: darkred;
     color: white;
+}
+
+#log-out-btn {
+    font-size: 30px;
+    display: none;
+    border: 2px solid black;
+    border-radius: 8px;
+    height: fit-content;
+    width: fit-content;
+    border-style: outset;
+    padding: 10px;
+    background-color: darkred;
+    color: white;
+    font-weight: bolder;
 }

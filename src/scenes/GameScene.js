@@ -20,6 +20,8 @@ import {
 } from "../round_configs/rDefaultConfig.json";
 
 
+
+
 export class GameScene extends Phaser.Scene {
 
     /**
@@ -43,6 +45,11 @@ export class GameScene extends Phaser.Scene {
         this.tower1IsSelected = false;
         this.tower2IsSelected = false;
         this.tower3IsSelected = false;
+        this.carriersMade = 0;
+        this.currentConfig = {};
+        this.firstRoundStarted = false;
+        this.firstSave = true;
+        this.loggedIn = true; 
     }
 
     /**
@@ -72,6 +79,10 @@ export class GameScene extends Phaser.Scene {
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
         ];
+
+        this.db = firebase.firestore();
+        console.log("DB LOADED IN GAMESCENE: ");
+        console.log(this.db);
     }
 
     /**
@@ -376,6 +387,7 @@ export class GameScene extends Phaser.Scene {
         // On pressed down of start round button (first time).
         this.startRoundButton.once('pointerdown', function () {
             this.startRound(this.roundConfigs[0]);
+            this.firstRoundStarted = true;
         }.bind(this));
         // On pressed down of start round button (after first time).
         this.startRoundButton.setInteractive().on('pointerdown', function () {
@@ -395,7 +407,48 @@ export class GameScene extends Phaser.Scene {
         // Placing ones in the grid cell array in place of the buttons.
         this.placeButtonNumbers();
 
+        // Creates and displays current round
         this.currentRoundText = this.add.text(180, 40, "Current round: " + this.currentRound);
+        
+        // Creates and displays the display name / guest and best round
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                // User is signed in.
+                this.loggedIn = true; 
+                this.status = this.add.text(this.width - 170, 10, "Playing as ");
+                this.status.setFontFamily('Arial');
+                this.status.setFontSize(15);
+                this.status.setStroke('black', 3);
+                this.displayName = this.add.text(this.width - 95, 10, user.displayName);
+                this.displayName.setFontFamily('Arial');
+                this.displayName.setFontSize(15);
+                this.displayName.setFill('red');
+                this.displayName.setStroke('black', 3);
+
+                this.bestRound = this.add.text(this.width - 170, 30, "Best: " + user.bestRound);
+                this.bestRound.setFontFamily('Arial');
+                this.bestRound.setFontSize(15);
+                this.bestRound.setStroke('black', 3);
+
+                // Listens for changes in the user's best round and updates screen text
+                this.db.collection("users").doc(user.uid).onSnapshot(function (userDoc) {
+                console.log(userDoc.data());
+                let userBestRound = userDoc.data()["bestRound"];
+                this.bestRound.setText("Best round: " + userBestRound);
+        }.bind(this));
+            } else {
+                // User is not signed in.
+                this.loggedIn = false; 
+                this.status = this.add.text(this.width - 170, 10, "Playing as Guest");
+                this.status.setFontFamily('Arial');
+                this.status.setFontSize(15);
+                this.status.setStroke('black', 3);
+
+            }
+        }.bind(this), function (error) {
+            console.log(error);
+        });        
+
     }
 
     /**
@@ -448,10 +501,24 @@ export class GameScene extends Phaser.Scene {
         this.startRoundButton.alpha = 0;
     }
 
-    /**
-     * Starts the round.
-     */
+    updateBestRound() {
+        let user = firebase.auth().currentUser;
+        this.db.collection("users").doc(user.uid).get().then(function (userDoc) {
+            let savedBest = userDoc.data()["bestRound"];
+            console.log("saved best: " + savedBest);
+            console.log("current round: " + this.currentRound);
+            this.betterRound = Math.max(savedBest, this.currentRound);
+            console.log("better round: " + this.betterRound);
+            this.db.collection("users").doc(user.uid).update({
+                "bestRound": this.betterRound
+            });
+        }.bind(this));
+    }
+
     startRound(config) {
+        this.firstSave = true;
+        this.carriersMade = 0;
+        this.currentConfig = config;
         this.currentRound += 1;
         this.currentRoundText.setText("Current round: " + this.currentRound);
         console.log("Starting round " + this.currentRound);
@@ -463,21 +530,21 @@ export class GameScene extends Phaser.Scene {
         let intervaler = setInterval(function () {
             let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
             this.carriers.add(carrier);
+            this.carriersMade++;
         }.bind(this), config.carrierSpace);
 
         setTimeout(function () {
             clearInterval(intervaler);
-            this.enableStartRoundButton();
         }.bind(this), (config.carrierCount - 1) * config.carrierSpace);
 
-        // Setting the correct round config for next round.
+        // Setting the correct round config for next round 
         this.startRoundButton.once('pointerdown', function () {
-            if (this.currentRound <= this.roundConfigs.length - 1) { // -1, because first round is started manually.
+            if (this.currentRound <= this.roundConfigs.length - 1) { // -1 because first round is started manually
                 this.startRound(this.roundConfigs[this.currentRound]);
             } else {
                 console.log("else block hit");
-                if (this.currentRound >= 4) { // If on round 4 when clicking start round 5+.
-                    // First default config round has passed, begin incrementing.
+                if (this.currentRound >= 4) { // if on round 4 when clicking start round 5+
+                    // First default config round has passed, begin incrementing
                     this.incrementDefaultConfig();
                 }
                 this.startRound(this.rDefaultConfig);
@@ -732,6 +799,29 @@ export class GameScene extends Phaser.Scene {
             this.scene.launch('GameOver');
             this.scene.pause('Game');
         }
+        if (this.firstRoundStarted) {
+            console.log(this.currentConfig.carrierCount - 1);
+            console.log(this.carriersMade);
+            if (this.carriersAllGone() && this.currentConfig.carrierCount - 1 == this.carriersMade) {
+                this.enableStartRoundButton();
+                if (this.loggedIn && this.firstSave) {
+                    this.updateBestRound();
+                    this.firstSave = false;
+                }      
+            } else {
+                this.disableStartRoundButton();
+            }
+        }
+    }
+
+    carriersAllGone() {
+        let carrierArray = this.carriers.getChildren();
+        for (let i = 0; i < this.carriers.getLength(); i++) {
+            if (carrierArray[i].hp != 0 || carrierArray[i].hp != undefined) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
