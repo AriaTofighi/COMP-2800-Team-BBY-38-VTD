@@ -2,19 +2,19 @@ import Turret1 from "../game_objects/Turret1";
 import Turret2 from "../game_objects/Turret2";
 import Turret3 from "../game_objects/Turret3";
 
-export class UIScene extends Phaser.Scene {
+export class ChallengeUIScene extends Phaser.Scene {
     /**
      * Constructor for UIScene object.
      */
     constructor() {
-        super('UI');
+        super('ChallengeUI');
     }
 
     create(){
         this.width = this.sys.canvas.width;
         this.height = this.sys.canvas.height;
         this.halfCell = 16; // Used to move objects to center of cells
-        this.game = this.scene.get('Game');
+        this.game = this.scene.get('Challenge');
 
         this.tower1IsSelected = false;
         this.tower2IsSelected = false;
@@ -124,60 +124,6 @@ export class UIScene extends Phaser.Scene {
         this.costText = this.add.text(0, this.descText.getBottomCenter().y + 10, '');
         infoContainer.add(this.descText);
         infoContainer.add(this.costText);
-
-        // Create resource information text
-        this.health = 100;
-        this.healthText = this.add.text(585, 25, "Health: " + this.health);
-        this.healthText.depth = 1;
-        this.healthText.setFill("brown");
-
-        this.money = 400;
-        this.moneyText = this.add.text(585, this.healthText.getBottomCenter().y + 6, 'Money: ' + this.money);
-        this.moneyText.depth = 1;
-        this.moneyText.setFill("brown");
-
-        this.input.keyboard.on('keydown-M', function() {
-            this.money += 100;
-            this.moneyText.setText("Money: " + this.money);
-        }.bind(this));
-
-        // Creating Pause button
-        this.pauseButton = this.add.image(1 * 32, 1 * 32, 'pauseButton');
-        this.pauseButton.setInteractive().on('pointerdown', function () {
-            this.scene.launch('Pause');
-            this.scene.pause('Game');
-        }.bind(this));
-        // On hover of cancel tower button.
-        this.pauseButton.setInteractive().on('pointerover', () => {
-            this.sound.play('buttonHover');
-        });
-        // On pressed down of cancel tower button.
-        this.pauseButton.setInteractive().on('pointerdown', () => {
-            this.sound.play('buttonClick');
-        });
-
-        this.startRoundButton = this.add.image(this.halfCell * 3, this.height - 96 + this.halfCell * 3, 'startRound');
-        this.startRoundButton.setDisplaySize(96, 96);
-        this.startRoundButton.setInteractive();
-        this.startRoundButton.once('pointerdown', function() {
-            this.game.startRound(this.game.roundConfigs[0]);
-        }.bind(this));
-
-        this.currentRoundText = this.add.text(570, this.moneyText.getBottomCenter().y + 6, "Current round: " + this.game.currentRound);
-        this.currentRoundText.depth = 1;
-        this.currentRoundText.setFill("brown");
-
-        // Switching the game mode when dragging the current round text
-        this.currentRoundText.setInteractive();
-        this.input.setDraggable(this.currentRoundText);
-        this.currentRoundText.on('drag', function () {
-            this.scene.stop('UI');
-            this.scene.start('Challenge');
-        }.bind(this));
-
-        this.resourceBorder = this.add.image(630, 55, 'resourceBorder');
-        // this.resourceBorder.setOrigin(0, 0);
-        this.resourceBorder.setDisplaySize(320, 135);
     }
 
     toggleSidebar() {
@@ -317,25 +263,19 @@ export class UIScene extends Phaser.Scene {
         let i = Math.floor(pointer.y / 32); // row index
         let j = Math.floor(pointer.x / 32); // col index
 
-        if (this.tower1IsSelected && !this.game.isPathTile(i, j) && this.money >= 100) {
+        if (this.tower1IsSelected && !this.game.isPathTile(i, j)) {
             let turret = new Turret1(this.game, j, i);
             this.game.placeTower(turret, i, j);
-            this.money -= turret.price;
-            this.moneyText.setText('Money: ' + this.money);
             this.toggleSidebar();
             this.cancelSelection();
-        } else if (this.tower2IsSelected && !this.game.isPathTile(i, j) && this.money >= 200) {
+        } else if (this.tower2IsSelected && !this.game.isPathTile(i, j)) {
             let turret = new Turret2(this.game, j, i);
             this.game.placeTower(turret, i, j);
-            this.money -= turret.price;
-            this.moneyText.setText('Money: ' + this.money);
             this.toggleSidebar();
             this.cancelSelection();
-        } else if (this.tower3IsSelected && !this.game.isPathTile(i, j) && this.money >= 300) {
+        } else if (this.tower3IsSelected && !this.game.isPathTile(i, j)) {
             let turret = new Turret3(this.game, j, i);
             this.game.placeTower(turret, i, j);
-            this.money -= turret.price;
-            this.moneyText.setText('Money: ' + this.money);
             this.toggleSidebar();
             this.cancelSelection();
         }
