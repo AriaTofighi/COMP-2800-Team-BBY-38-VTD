@@ -17,12 +17,12 @@ export class GameOverScene extends Phaser.Scene {
         this.gameOver.setOrigin(0, 0);
         this.gameOver.setDisplaySize(800, 608);
         this.anims.create({
-            key: 'start',
+            key: 'startGameOver',
             duration: 8320,
             frames: this.anims.generateFrameNames('gameOver', {start: 0, end: 200}),
             repeat: -1
         });
-        this.gameOver.play('start');
+        this.gameOver.play('startGameOver');
 
         // Creating the restart button
         this.restartButton = this.add.image(400, 500, "restartButton");
@@ -33,14 +33,11 @@ export class GameOverScene extends Phaser.Scene {
         this.restartButton.on('pointerup', function () {
             this.sound.play('buttonClick');
             this.restartButton.setTexture('restartPressButton');
-
-            // TODO: what the restart button does
             this.scene.start('Game');
         }.bind(this));
 
         this.input.on('pointerup', function () {
-            this.restartButton.setTexture('restartButton');
-            
+            this.restartButton.setTexture('restartButton');   
         }.bind(this));
     }
 }

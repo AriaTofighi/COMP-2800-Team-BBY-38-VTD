@@ -6,35 +6,27 @@ import Turret1 from "../game_objects/Turret1";
 import Turret2 from "../game_objects/Turret2";
 import Turret3 from "../game_objects/Turret3";
 import Bullet from "../game_objects/Bullet";
-import {default as r1Config} from "../round_configs/r1Config.json";
-import {default as r2Config} from "../round_configs/r2Config.json";
-import {default as r3Config} from "../round_configs/r3Config.json";
-import {default as rDefaultConfig} from "../round_configs/rDefaultConfig.json";
+import {default as ChallengeConfig} from "../round_configs/ChallegeConfig.json";
 
-
-export class GameScene extends Phaser.Scene {
+export class ChallengeScene extends Phaser.Scene {
 
     /**
-     * Constructor for GameScene object.
+     * Constructor for ChallengeScene object.
      */
     constructor() {
-        super('Game');
+        super('Challenge');
     }
 
     /**
      * Initializes the game.
      */
     init() {
-        // Initializes round configurations
-        this.r1Config = r1Config;
-        this.r2Config = r2Config;
-        this.r3Config = r3Config;
-        this.rDefaultConfig = rDefaultConfig; 
-        this.roundConfigs = [this.r1Config, this.r2Config, this.r3Config];
-        this.currentRound = 0;
+        this.ChallengeConfig = ChallengeConfig;
         this.tower1IsSelected = false;
         this.tower2IsSelected = false;
         this.tower3IsSelected = false;
+        this.firstTime = true;
+        this.challengeEnded = false;
     }
 
     /**
@@ -66,10 +58,11 @@ export class GameScene extends Phaser.Scene {
         ];
     }
 
-    /**
-     * Creates the grid, background images, path tiles, carriers, menu, and sidebar.
-     */
+    
+
     create() {
+        this.timeStarted = new Date();
+
         // Create grid variables
         this.width = this.sys.canvas.width;
         this.height = this.sys.canvas.height; 
@@ -295,39 +288,22 @@ export class GameScene extends Phaser.Scene {
         // this.bullet.setInteractive();
 
         // Create resource information text
-        this.health = 100;
+        this.health = 1;
         this.healthText = this.add.text(585, 25, "Health: " + this.health);
         this.healthText.depth = 1;
         this.healthText.setFill("brown");
-
-        this.money = 400;
-        this.moneyText = this.add.text(585, this.healthText.getBottomCenter().y + 6, 'Money: ' + this.money);
+        
+        this.money = Infinity;
+        this.moneyText = this.add.text(585, this.healthText.getBottomCenter().y + 6, 'Money: ∞');
         this.moneyText.depth = 1;
         this.moneyText.setFill("brown");
-
-        this.input.keyboard.on('keydown-M', function() {
-            this.money += 100;
-            this.moneyText.setText("Money: " + this.money);
-        }.bind(this));
-
-        // Creating Pause button
-        this.pauseButton = this.add.image(1 * 32, 1 * 32, 'pauseButton');
-        this.pauseButton.setInteractive().on('pointerdown', function () {
-            this.scene.launch('Pause');
-            this.scene.pause('Game');
-        }.bind(this));
 
         this.startRoundButton = this.add.image(this.halfCell * 3, this.height - 96 + this.halfCell * 3, 'startRound');
         this.startRoundButton.setDisplaySize(96, 96);
         this.startRoundButton.setInteractive();
-        this.startRoundButton.once('pointerdown', function() {
-            this.startRound(this.roundConfigs[0]);
-        }.bind(this));
-
-        // Pause the game when clicking escape
-        this.input.keyboard.on('keydown-ESC', function () {
-            this.scene.launch('Pause');
-            this.scene.pause('Game');
+        this.startRoundButton.on('pointerdown', function() {
+            this.startRoundButton.alpha = 0;
+            this.startRound(this.ChallengeConfig);
         }.bind(this));
 
         // Creating the game objects groups
@@ -336,26 +312,68 @@ export class GameScene extends Phaser.Scene {
         // Placing ones in the grid cell array in place of the buttons
         this.placeButtonNumbers();
 
-        this.currentRoundText = this.add.text(570, this.moneyText.getBottomCenter().y + 6, "Current round: " + this.currentRound);
+        this.currentRoundText = this.add.text(570, this.moneyText.getBottomCenter().y + 6, "Challenge mode");
         this.currentRoundText.depth = 1;
         this.currentRoundText.setFill("brown");
-
-        this.resourceBorder = this.add.image(630, 55, 'resourceBorder');
-        // this.resourceBorder.setOrigin(0, 0);
-        this.resourceBorder.setDisplaySize(320, 135);
 
         // Switching the game mode when dragging the current round text
         this.currentRoundText.setInteractive();
         this.input.setDraggable(this.currentRoundText);
         this.currentRoundText.on('drag', function () {
-            this.startChallengeAnimation();
+            this.switchBackground = this.add.rectangle(0, 0, 800, 608, 0x000000);
+            this.switchBackground.setOrigin(0, 0);
+            let backgroundAlpha = 1;
+            let interval = setInterval(function () {
+                backgroundAlpha -= 0.05;
+                this.switchBackground.alpha = backgroundAlpha;
+            }.bind(this), 100);
+
+            setTimeout(function () {
+                clearInterval(interval);
+                this.scene.start('Game');
+            }.bind(this), 2000);
         }.bind(this));
 
-        // Switching the game mode typing 'test'
+        // Switching the game mode when type 'test'
         this.combo = this.input.keyboard.createCombo('test', { resetOnMatch: true});
         this.input.keyboard.on('keycombomatch', function () {
-            this.startChallengeAnimation();
+            this.switchBackground = this.add.rectangle(0, 0, 800, 608, 0x000000);
+            this.switchBackground.setOrigin(0, 0);
+            let backgroundAlpha = 1;
+            let interval = setInterval(function () {
+                backgroundAlpha -= 0.05;
+                this.switchBackground.alpha = backgroundAlpha;
+            }.bind(this), 100);
+
+            setTimeout(function () {
+                clearInterval(interval);
+                this.scene.start('Game');
+            }.bind(this), 2000);
         }.bind(this));
+
+        this.resourceBorder = this.add.image(630, 55, 'resourceBorder');
+        // this.resourceBorder.setOrigin(0, 0);
+        this.resourceBorder.setDisplaySize(320, 135);
+    }
+
+    lostGame() {
+        this.firstTime = false;
+        this.challengeEnded = true;
+        this.timeEnded = new Date();
+        this.timeSurvived = this.timeEnded - this.timeStarted;
+        this.timeSurvived /= 1000;
+        this.timeSurvived = Math.round(this.timeSurvived);
+        this.newBackground = this.add.rectangle(0, 0, 800, 608, 0x000000);
+        this.newBackground.setOrigin(0, 0);
+        this.newBackground.depth = 2;
+        this.newText = this.add.text(120, 270, 'You survived for ' + this.timeSurvived + " seconds");
+        this.newText.setFill('red');
+        this.newText.setFontSize(35);
+        this.newText.depth = 3;
+
+        setTimeout(function () {
+            this.scene.start('Menu1');
+        }.bind(this), 4000);
     }
 
     createGroups() {
@@ -376,45 +394,20 @@ export class GameScene extends Phaser.Scene {
         });
     }
 
-    incrementDefaultConfig() {
-        this.rDefaultConfig.duration -= 1000; 
-        this.rDefaultConfig.carrierHP += 5;
-        this.rDefaultConfig.carrierCount += 5;
-        this.rDefaultConfig.carrierSpace -= 25;
-        console.log("default config adjusted");
-    }
-
     startRound(config) {
-            this.currentRound += 1;
-            this.currentRoundText.setText("Current round: " + this.currentRound);
-            console.log("Starting round " + this.currentRound);
-            console.log("Config for this round: " + JSON.stringify(config));
-            this.startRoundButton.disableInteractive();
             // Start directly for first time in order to give carrier group an active number immediately
             let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
             this.carriers.add(carrier);
             let intervaler = setInterval(function () {
-                let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
-                this.carriers.add(carrier);
+                if (!this.challengeEnded) {
+                    let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
+                    this.carriers.add(carrier);
+                }
             }.bind(this), config.carrierSpace);
     
             setTimeout(function () {
                 clearInterval(intervaler);
             }.bind(this), (config.carrierCount - 1) * config.carrierSpace); 
-            
-            // Setting the correct round config for next round 
-            this.startRoundButton.once('pointerdown', function() {
-                if (this.currentRound <= this.roundConfigs.length - 1) { // -1 because first round is started manually
-                     this.startRound(this.roundConfigs[this.currentRound]);   
-                } else {
-                    console.log("else block hit");
-                    if (this.currentRound >= 4) { // if on round 4 when clicking start round 5+
-                        // First default config round has passed, begin incrementing
-                        this.incrementDefaultConfig();
-                    }
-                    this.startRound(this.rDefaultConfig);   
-                }
-            }.bind(this));
     }
 
     // Retracts or expands sidebar
@@ -555,27 +548,21 @@ export class GameScene extends Phaser.Scene {
         let i = Math.floor(pointer.y / 32); // row index
         let j = Math.floor(pointer.x / 32); // col index
 
-        if (this.tower1IsSelected && !this.isPathTile(i, j) && this.money >= 100) {
+        if (this.tower1IsSelected && !this.isPathTile(i, j)) {
             this.turret = new Turret1(this, j, i);
             this.turrets.add(this.turret);
-            this.money -= this.turret.price;
-            this.moneyText.setText('Money: ' + this.money);
             this.gridCells[i][j] = 1;
             this.toggleSidebar();
             this.cancelSelection();
-        } else if (this.tower2IsSelected && !this.isPathTile(i, j) && this.money >= 200) {
+        } else if (this.tower2IsSelected && !this.isPathTile(i, j)) {
             this.turret = new Turret2(this, j, i);
             this.turrets.add(this.turret);
-            this.money -= this.turret.price;
-            this.moneyText.setText('Money: ' + this.money);
             this.gridCells[i][j] = 1;
             this.toggleSidebar();
             this.cancelSelection();
-        } else if (this.tower3IsSelected && !this.isPathTile(i, j) && this.money >= 300) {
+        } else if (this.tower3IsSelected && !this.isPathTile(i, j)) {
             this.turret = new Turret3(this, j, i);
             this.turrets.add(this.turret);
-            this.money -= this.turret.price;
-            this.moneyText.setText('Money: ' + this.money);
             this.gridCells[i][j] = 1;
             this.toggleSidebar();
             this.cancelSelection();
@@ -631,51 +618,15 @@ export class GameScene extends Phaser.Scene {
         // return null;
     }
 
-    startChallengeAnimation() {
-        // Creating the background for the challenge animation
-        this.background = this.add.rectangle(0, 0, 800, 608, 0x8DFF7D);
-        this.background.setOrigin(0, 0);
-        this.background.depth = 1
-
-        // Removing the background after 4 seconds
-        setTimeout(function () {
-            this.background.alpha = 0;
-            this.challenge.alpha = 0;
-            this.scene.start('Challenge');
-        }.bind(this), 4000);
-
-        // Creating the challenge mode animation
-        this.challenge = this.add.sprite(-45, 0, 'challengeMode');
-        this.challenge.setOrigin(0, 0);
-        this.challenge.setDisplaySize(800, 608);
-        this.challenge.depth = 1;
-        this.anims.create({
-            key: 'startChallenge',
-            duration: 2400,
-            frames: this.anims.generateFrameNames('challengeMode', {start: 0, end: 60}),
-            repeat: 1
-        });
-        this.challenge.play('startChallenge');
-    }
-
     /**
      * Update the physics.
      */
     update() {
         this.physics.overlap(this.carriers, this.turrets, this.fire.bind(this));
         this.physics.overlap(this.carriers, this.bullets, this.carrierHit.bind(this));
-        if (this.health <= 0) {
-            this.scene.launch('GameOver');
-            this.scene.pause('Game');
-        }
-
-        // Disables/enables the round start button if there are/aren't active carriers
-        if (this.carriers.countActive() == 0) {
-            this.startRoundButton.setInteractive();
-            this.startRoundButton.alpha = 1;
-        } else {
-            this.startRoundButton.disableInteractive();
-            this.startRoundButton.alpha = 0;
+        if (this.health <= 0 && this.firstTime) {
+            // Starting the lost game animation
+            this.lostGame();
         }
     }
 
@@ -721,8 +672,6 @@ export class GameScene extends Phaser.Scene {
         if (newWidth >= 0) {
             carrier.healthRect.width = newWidth;
         } else {
-            this.money += 25;
-            this.moneyText.setText("Money: " + this.money);
             carrier.clearTint();
             carrier.clean = true;
             this.carriers.remove(carrier);

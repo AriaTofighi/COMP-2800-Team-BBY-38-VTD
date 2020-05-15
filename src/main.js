@@ -6,6 +6,7 @@ import { PauseScene } from "./scenes/PauseScene";
 import { GameOverScene } from "./scenes/GameOverScene";
 import {MenuScene1} from "./scenes/MenuScene1";
 import {MenuScene2} from "./scenes/MenuScene2";
+import { ChallengeScene } from "./scenes/ChallengeScene";
 import phaser from '../node_modules/phaser';
 
 
@@ -36,5 +37,6 @@ game.scene.add('Pause', PauseScene);
 game.scene.add('GameOver', GameOverScene);
 game.scene.add('Menu1', MenuScene1);
 game.scene.add('Menu2', MenuScene2);
+game.scene.add('Challenge', ChallengeScene);
 game.scene.start('Boot');
 

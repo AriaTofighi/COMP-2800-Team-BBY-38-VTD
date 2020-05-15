@@ -36,6 +36,8 @@ import newGamePress from "../../assets/menu2/new_game_press.png";
 import loadGame from "../../assets/menu2/load_game.png";
 import loadGamePress from "../../assets/menu2/load_game_press.png";
 import buttonClick from "../../assets/audio/button-click.mp3";
+import challenge from "../../assets/ingame/challenge.png";
+import resourceBorder from "../../assets/ingame/resource-border.png"
 import { BlendModes } from "phaser";
 import 'phaser';
 
@@ -121,6 +123,16 @@ export class LoadScene extends Phaser.Scene {
             }
         });
 
+        // Load challenge mode sprite
+        this.load.spritesheet({
+            key: 'challengeMode',
+            url: challenge,
+            frameConfig: {
+                frameWidth: 1920,
+                frameHeight: 1080
+            }
+        });
+
         // Add logo
         this.add.image(logo);
 
@@ -137,6 +149,7 @@ export class LoadScene extends Phaser.Scene {
         this.load.image('noTurret1', noTurret1);
         this.load.image('noTurret2', noTurret2);
         this.load.image('noTurret3', noTurret3);
+        this.load.image('resourceBorder', resourceBorder);
 
         // Load button images
         this.load.image("cancelButton", cancelButton);

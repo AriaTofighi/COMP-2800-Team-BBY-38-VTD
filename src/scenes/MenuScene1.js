@@ -28,7 +28,7 @@ export class MenuScene1 extends Phaser.Scene {
         this.login = this.add.image(width / 2, height / 2, 'login');
         this.login.setInteractive({cursor: 'pointer'});
         this.login.on('pointerover', () => {
-            this.sound.play('hover');
+            // this.sound.play('hover');
         });
         this.login.on('pointerdown', () => {
             this.login.setTexture('loginPress');
