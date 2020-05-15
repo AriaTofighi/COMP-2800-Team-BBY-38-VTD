@@ -1,6 +1,9 @@
 import Bullet from "../game_objects/Bullet";
 
 export default class Turret2 extends Phaser.GameObjects.Image {
+    /**
+     * Constructor for turret 2 object.
+     */
     constructor(scene, j, i) {
         super(scene, j, i, 'tower2');
         this.x = j * 32 + this.scene.halfCell;
@@ -44,6 +47,9 @@ export default class Turret2 extends Phaser.GameObjects.Image {
         this.scene.add.existing(this);
     }
 
+    /**
+     * Updates the turret 2 object.
+     */
     update(time, delta) {
         this.delta += delta;
         // console.log('Delta: ' + this.delta);

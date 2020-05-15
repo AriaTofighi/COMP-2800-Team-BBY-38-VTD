@@ -635,7 +635,7 @@ export class GameScene extends Phaser.Scene {
         let j = Math.floor(pointer.x / 32); // Col index.
 
         if (this.tower1IsSelected && !this.isPathTile(i, j) && this.money >= 100) {
-            this.sound.play('towerBuildOne');
+            this.sound.play('towerBuild');
             this.turret = new Turret1(this, j, i);
             this.turrets.add(this.turret);
             this.money -= this.turret.price;
@@ -644,7 +644,7 @@ export class GameScene extends Phaser.Scene {
             this.toggleSidebar();
             this.cancelSelection();
         } else if (this.tower2IsSelected && !this.isPathTile(i, j) && this.money >= 200) {
-            this.sound.play('towerBuildTwo');
+            this.sound.play('towerBuild');
             this.turret = new Turret2(this, j, i);
             this.turrets.add(this.turret);
             this.money -= this.turret.price;
@@ -653,7 +653,7 @@ export class GameScene extends Phaser.Scene {
             this.toggleSidebar();
             this.cancelSelection();
         } else if (this.tower3IsSelected && !this.isPathTile(i, j) && this.money >= 300) {
-            this.sound.play('towerBuildTwo');
+            this.sound.play('towerBuild');
             this.turret = new Turret3(this, j, i);
             this.turrets.add(this.turret);
             this.money -= this.turret.price;

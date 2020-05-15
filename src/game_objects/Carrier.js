@@ -1,6 +1,9 @@
 import 'phaser';
 
 export default class Carrier extends Phaser.GameObjects.PathFollower {
+    /**
+     * Constructor for the carrier object.
+     */
     constructor(scene, path, x, y, texture, duration, hp) {
         super(scene, path, x, y, texture);
         this.duration = duration;
@@ -68,7 +71,7 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
         this.startFollow({
             rotateToPath: true,
             duration: this.duration,
-            yoyo: false, // switches directions when end of path is reached
+            yoyo: false, // Switches directions when end of path is reached
             repeat: 0, // infinite
         });
 
@@ -83,10 +86,13 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
 
     }
 
+    /**
+     * Updates the carrier object
+     */
     update() {
         // Destroys this carrier and makes the health bar invisible if reaches end of path
         if (this.reachedEndPath()) {
-            if (!this.clean){
+            if (!this.clean) {
                 this.scene.health -= 5;
                 this.scene.healthText.setText("Health: " + this.scene.health);
             }
@@ -96,6 +102,9 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
         }
     }
 
+    /**
+     * Carrier reaches end of path
+     */
     reachedEndPath() {
         return this.x == this.scene.cellWidth * 16 + this.scene.halfCell && this.y == this.scene.cellWidth * 19 + this.scene.halfCell;
     }

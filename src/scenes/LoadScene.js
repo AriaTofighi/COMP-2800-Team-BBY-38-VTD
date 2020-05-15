@@ -40,9 +40,11 @@ import aboutPress from "../../assets/menu/about_button_press.png";
 import buttonHover from "../../assets/audio/button_hover.mp3";
 import buttonClick from "../../assets/audio/button_click.mp3";
 import towerButtonClick from "../../assets/audio/tower_button_click.mp3";
-import towerBuildOne from "../../assets/audio/tower_build_1.mp3";
-import towerBuildTwo from "../../assets/audio/tower_build_2.mp3";
+import towerBuild from "../../assets/audio/tower_build.mp3";
+import towerDestroy from "../../assets/audio/tower_destroy.mp3";
 import gameOverAudio from "../../assets/audio/game_over.mp3";
+import soap from "../../assets/audio/soap.mp3";
+import waterStream from "../../assets/audio/water_stream.mp3";
 
 import { BlendModes } from "phaser";
 import 'phaser';
@@ -182,9 +184,11 @@ export class LoadScene extends Phaser.Scene {
         this.load.audio('buttonHover', buttonHover);
         this.load.audio('buttonClick', buttonClick);
         this.load.audio('towerButtonClick', towerButtonClick);
-        this.load.audio('towerBuildOne', towerBuildOne);
-        this.load.audio('towerBuildTwo', towerBuildTwo);
+        this.load.audio('towerBuild', towerBuild);
+        this.load.audio('towerDestroy', towerDestroy);
         this.load.audio('gameOverAudio', gameOverAudio);
+        this.load.audio('soap', soap);
+        this.load.audio('waterStream', waterStream);
         // Uncomment to test loading visuals
         // for (let i = 0; i < 600; i ++) {
         //     this.load.image('bullet' + i, bullet);
