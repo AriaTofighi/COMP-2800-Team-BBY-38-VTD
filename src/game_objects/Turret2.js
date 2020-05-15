@@ -1,5 +1,3 @@
-import Bullet from "../game_objects/Bullet";
-
 export default class Turret2 extends Phaser.GameObjects.Image {
     constructor(scene, j, i) {
         super(scene, j, i, 'tower2');

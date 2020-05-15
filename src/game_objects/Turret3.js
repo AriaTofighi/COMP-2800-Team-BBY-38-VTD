@@ -1,4 +1,4 @@
-import Bullet from "../game_objects/Bullet";
+import Bullet from "./Bullet1";
 
 export default class Turret3 extends Phaser.GameObjects.Image {
     constructor(scene, j, i) {
@@ -24,6 +24,16 @@ export default class Turret3 extends Phaser.GameObjects.Image {
         this.radius.alpha = 0;
         this.radius.setPosition((j + 0.5) * 32, (i + 0.5) * 32);
         this.radius.setStrokeStyle(3, 0x046307, 0);
+
+        this.scene.anims.create({
+            key: 'tower3loaded',
+            frames: [{key: 'tower3', frame: 0}],
+        });
+
+        this.scene.anims.create({
+            key: 'tower3empty',
+            frames: [{key: 'tower3', frame: 1}]
+        });
 
         this.scene.physics.world.enable(this);
         this.body.setCircle(200, -167, -167);
