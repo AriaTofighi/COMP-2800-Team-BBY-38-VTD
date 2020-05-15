@@ -34,7 +34,9 @@ export class MenuScene1 extends Phaser.Scene {
             if (user) {
                 // User is signed in.       
                 this.logout = this.add.image(width / 2, height / 2, 'logout');
-                this.logout.setInteractive({cursor: 'pointer'});
+                this.logout.setInteractive({
+                    cursor: 'pointer'
+                });
                 this.status = this.add.text(10, 40, "Playing as ");
                 this.status.setFontFamily('Arial');
                 this.status.setFontSize(25);
@@ -45,13 +47,15 @@ export class MenuScene1 extends Phaser.Scene {
                 this.displayName.setFill('red');
                 this.displayName.setStroke('black', 5);
                 this.displayName.setOrigin(0, 1);
-                // On hover of login button
+                // On hover of logout button
                 this.logout.on('pointerover', () => {
                     this.sound.play('buttonHover');
                 });
+                // On pressed down of logout button
                 this.logout.on('pointerdown', () => {
                     this.logout.setTexture('logoutPress');
                 });
+                // On release of logout button
                 this.logout.on('pointerup', () => {
                     this.sound.play('buttonClick');
                     this.logout.setTexture('logout');
@@ -63,7 +67,9 @@ export class MenuScene1 extends Phaser.Scene {
             } else {
                 // User is not signed in.
                 this.login = this.add.image(width / 2, height / 2, 'login');
-                this.login.setInteractive({cursor: 'pointer'});
+                this.login.setInteractive({
+                    cursor: 'pointer'
+                });
                 this.status = this.add.text(10, 40, "Playing as Guest");
                 this.status.setFontFamily('Arial');
                 this.status.setFontSize(25);
@@ -72,9 +78,11 @@ export class MenuScene1 extends Phaser.Scene {
                 this.login.on('pointerover', () => {
                     this.sound.play('buttonHover');
                 });
+                // On pressed down of login button
                 this.login.on('pointerdown', () => {
                     this.login.setTexture('loginPress');
                 });
+                // On release of login button
                 this.login.on('pointerup', () => {
                     this.sound.play('buttonClick');
                     this.login.setTexture('login');
@@ -87,15 +95,22 @@ export class MenuScene1 extends Phaser.Scene {
         }.bind(this), function (error) {
             console.log(error);
         });
-        
 
-        // Display lay button
+
+        // Display play button
         this.play = this.add.image(width / 2, height / 2 + 70, 'play');
-        this.play.setInteractive({cursor: 'pointer'});      
+        this.play.setInteractive({
+            cursor: 'pointer'
+        });
+        // On release of logout button
+        this.play.on('pointerover', () => {
+            this.sound.play('buttonHover');
+        });
+        // On release of logout button
         this.play.on('pointerdown', () => {
-
             this.play.setTexture('playPress');
         });
+        // On release of logout button
         this.play.on('pointerup', () => {
             this.sound.play('buttonClick');
             this.play.setTexture('play');
@@ -106,8 +121,10 @@ export class MenuScene1 extends Phaser.Scene {
         });
 
         // Display About button
-        this.about = this.add.image(width / 2, height / 2 + 70*2, 'about');
-        this.about.setInteractive({cursor: 'pointer'});      
+        this.about = this.add.image(width / 2, height / 2 + 70 * 2, 'about');
+        this.about.setInteractive({
+            cursor: 'pointer'
+        });
         // On hover of about button
         this.about.on('pointerover', () => {
             this.sound.play('buttonHover');
@@ -127,12 +144,20 @@ export class MenuScene1 extends Phaser.Scene {
         });
 
         // Display leaderboard button
-        this.leaderboard = this.add.image(width / 2, height / 2 + 70*3, 'leaderboard');
-        this.leaderboard.setInteractive({cursor: 'pointer'});      
+        this.leaderboard = this.add.image(width / 2, height / 2 + 70 * 3, 'leaderboard');
+        this.leaderboard.setInteractive({
+            cursor: 'pointer'
+        });
+        // On hover of leaderboard button
+        this.leaderboard.on('pointerover', () => {
+            this.sound.play('buttonHover');
+        });
+        // On pressed down of leaderboard button
         this.leaderboard.on('pointerdown', () => {
-
+            this.sound.play('buttonClick');
             this.leaderboard.setTexture('leaderboardPress');
         });
+        // On release of leaderboard button
         this.leaderboard.on('pointerup', () => {
             this.sound.play('buttonClick');
             this.leaderboard.setTexture('leaderboard');
