@@ -16,6 +16,9 @@ export class PauseScene extends Phaser.Scene {
         // Creating the resume button
         this.resumeButton = this.add.image(400, 150, "resumeButton");
         this.resumeButton.setInteractive({cursor: 'pointer'});
+        this.resumeButton.on('pointerover', function () {
+            this.sound.play('buttonHover');
+        }.bind(this));
         this.resumeButton.on('pointerdown', function () {
             this.resumeButton.setTexture('resumePressButton');
         }.bind(this));
@@ -29,19 +32,23 @@ export class PauseScene extends Phaser.Scene {
         // Creating the save button
         this.saveButton = this.add.image(400, 250, "saveButton");
         this.saveButton.setInteractive({cursor: 'pointer'});
+        this.saveButton.on('pointerover', function () {
+            this.sound.play('buttonHover');
+        }.bind(this));
         this.saveButton.on('pointerdown', function () {
             this.saveButton.setTexture('savePressButton');
         }.bind(this));
         this.saveButton.on('pointerup', function () {
             this.sound.play('buttonClick');
             this.saveButton.setTexture('savePressButton');
-
-            // TODO: what the save button does
         }.bind(this));
 
         // Creating the end button
         this.endButton = this.add.image(400, 350, 'endButton');
         this.endButton.setInteractive({cursor: 'pointer'});
+        this.endButton.on('pointerover', function () {
+            this.sound.play('buttonHover');
+        }.bind(this));
         this.endButton.on('pointerdown', function () {
             this.endButton.setTexture('endPressButton');
         }.bind(this));
@@ -50,14 +57,11 @@ export class PauseScene extends Phaser.Scene {
             this.endButton.setTexture('endPressButton');
             this.scene.stop('Game');
             this.scene.start('Menu2');
-            // TODO: what the end button does
         }.bind(this));
-
         this.input.on('pointerup', function () {
             this.resumeButton.setTexture('resumeButton');
             this.saveButton.setTexture('saveButton');
             this.endButton.setTexture('endButton');
-            
         }.bind(this));
 
         // Resume the game when clicking escape

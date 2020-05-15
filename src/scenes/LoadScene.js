@@ -35,9 +35,15 @@ import newGame from "../../assets/menu2/new_game.png";
 import newGamePress from "../../assets/menu2/new_game_press.png";
 import loadGame from "../../assets/menu2/load_game.png";
 import loadGamePress from "../../assets/menu2/load_game_press.png";
-import buttonClick from "../../assets/audio/button-click.mp3";
 import about from "../../assets/menu/about_button.png";
 import aboutPress from "../../assets/menu/about_button_press.png";
+
+import buttonHover from "../../assets/audio/button_hover.mp3";
+import buttonClick from "../../assets/audio/button_click.mp3";
+import towerButtonClick from "../../assets/audio/tower_button_click.mp3";
+import towerBuildOne from "../../assets/audio/tower_build_1.mp3";
+import towerBuildTwo from "../../assets/audio/tower_build_2.mp3";
+import gameOverAudio from "../../assets/audio/game_over.mp3";
 
 import { BlendModes } from "phaser";
 import 'phaser';
@@ -173,7 +179,12 @@ export class LoadScene extends Phaser.Scene {
         this.load.image('about', about);
         this.load.image('aboutPress', aboutPress);
 
+        this.load.audio('buttonHover', buttonHover);
         this.load.audio('buttonClick', buttonClick);
+        this.load.audio('towerButtonClick', towerButtonClick);
+        this.load.audio('towerBuildOne', towerBuildOne);
+        this.load.audio('towerBuildTwo', towerBuildTwo);
+        this.load.audio('gameOverAudio', gameOverAudio);
         // Uncomment to test loading visuals
         // for (let i = 0; i < 600; i ++) {
         //     this.load.image('bullet' + i, bullet);

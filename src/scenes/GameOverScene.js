@@ -24,17 +24,24 @@ export class GameOverScene extends Phaser.Scene {
         });
         this.gameOver.play('start');
 
+        //Creating the game over sound effect
+        this.sound.play('gameOverAudio');
+
         // Creating the restart button
         this.restartButton = this.add.image(400, 500, "restartButton");
         this.restartButton.setInteractive({cursor: 'pointer'});
+
+        this.restartButton.on('pointerover', function () {
+            this.sound.play('buttonHover');
+        }.bind(this));
+        
         this.restartButton.on('pointerdown', function () {
             this.restartButton.setTexture('restartPressButton');
         }.bind(this));
+
         this.restartButton.on('pointerup', function () {
             this.sound.play('buttonClick');
             this.restartButton.setTexture('restartPressButton');
-
-            // TODO: what the restart button does
             this.scene.start('Game');
         }.bind(this));
 

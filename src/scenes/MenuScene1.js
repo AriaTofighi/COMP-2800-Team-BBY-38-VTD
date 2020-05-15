@@ -28,12 +28,13 @@ export class MenuScene1 extends Phaser.Scene {
         this.login = this.add.image(width / 2, height / 2, 'login');
         this.login.setInteractive({cursor: 'pointer'});
         this.login.on('pointerover', () => {
-            this.sound.play('hover');
+            this.sound.play('buttonHover');
         });
         this.login.on('pointerdown', () => {
             this.login.setTexture('loginPress');
         });
         this.login.on('pointerup', () => {
+            this.sound.play('buttonClick');
             this.login.setTexture('login');
             window.location.href = "../../login.html";
         });
@@ -51,12 +52,17 @@ export class MenuScene1 extends Phaser.Scene {
         //     this.sound.play('buttonClick');
         //     this.signup.setTexture('signup');
         // });
+        // this.signup.on('pointerover', () => {
+        //     this.sound.play('buttonHover');
+        // });
 
         // Display Guest button
         this.guest = this.add.image(width / 2, height / 2 + 70, 'guest');
-        this.guest.setInteractive({cursor: 'pointer'});      
+        this.guest.setInteractive({cursor: 'pointer'});
+        this.guest.on('pointerover', () => {
+            this.sound.play('buttonHover');
+        });
         this.guest.on('pointerdown', () => {
-
             this.guest.setTexture('guestPress');
         });
         this.guest.on('pointerup', () => {
@@ -70,7 +76,10 @@ export class MenuScene1 extends Phaser.Scene {
 
         // Display About button
         this.about = this.add.image(width / 2, height / 2 + 140, 'about');
-        this.about.setInteractive({cursor: 'pointer'});      
+        this.about.setInteractive({cursor: 'pointer'});
+        this.about.on('pointerover', () => {
+            this.sound.play('buttonHover');
+        });
         this.about.on('pointerdown', () => {
 
             this.about.setTexture('aboutPress');

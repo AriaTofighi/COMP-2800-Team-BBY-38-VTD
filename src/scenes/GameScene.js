@@ -6,10 +6,18 @@ import Turret1 from "../game_objects/Turret1";
 import Turret2 from "../game_objects/Turret2";
 import Turret3 from "../game_objects/Turret3";
 import Bullet from "../game_objects/Bullet";
-import {default as r1Config} from "../round_configs/r1Config.json";
-import {default as r2Config} from "../round_configs/r2Config.json";
-import {default as r3Config} from "../round_configs/r3Config.json";
-import {default as rDefaultConfig} from "../round_configs/rDefaultConfig.json";
+import {
+    default as r1Config
+} from "../round_configs/r1Config.json";
+import {
+    default as r2Config
+} from "../round_configs/r2Config.json";
+import {
+    default as r3Config
+} from "../round_configs/r3Config.json";
+import {
+    default as rDefaultConfig
+} from "../round_configs/rDefaultConfig.json";
 
 
 export class GameScene extends Phaser.Scene {
@@ -29,7 +37,7 @@ export class GameScene extends Phaser.Scene {
         this.r1Config = r1Config;
         this.r2Config = r2Config;
         this.r3Config = r3Config;
-        this.rDefaultConfig = rDefaultConfig; 
+        this.rDefaultConfig = rDefaultConfig;
         this.roundConfigs = [this.r1Config, this.r2Config, this.r3Config];
         this.currentRound = 0;
         this.tower1IsSelected = false;
@@ -72,20 +80,20 @@ export class GameScene extends Phaser.Scene {
     create() {
         // Create grid variables
         this.width = this.sys.canvas.width;
-        this.height = this.sys.canvas.height; 
+        this.height = this.sys.canvas.height;
         this.cellWidth = 32;
         this.cellHeight = 32;
         this.halfCell = 16; // Used to move objects to center of cells
         const colCount = this.width / this.cellWidth; // 25 columns; use this.cellWidth * 24 for last column
         const rowCount = this.height / this.cellWidth; // 19 rows; use this.cellWidth * 18 for last row
-        
+
         // Create and draw grid
         let grid = this.add.grid(0, 0, this.cellWidth * colCount, this.cellWidth * rowCount, this.cellWidth, this.cellWidth, 0x000000, 0, 0x222222, 0); // change last param to 1 to see grid lines
         grid.setDepth(1);
         grid.setOrigin(0, 0);
 
         //Create background image.
-        let bg = this.add.tileSprite(this.width/2, this.height/2, this.width, this.height, 'bg');
+        let bg = this.add.tileSprite(this.width / 2, this.height / 2, this.width, this.height, 'bg');
         //let bg = this.add.image(this.width/2, this.height/2, 'bg');
         //bg.setDisplaySize(this.width, this.height);
 
@@ -117,25 +125,28 @@ export class GameScene extends Phaser.Scene {
                         // Not a corner tile AKA regular tile
                         pathTile = this.add.image(tileX, tileY, 'road');
                         pathTile.setRotation(Math.PI / 2);
-                        if (i == 10 && j >= 4 && j <= 5 || 
+                        if (i == 10 && j >= 4 && j <= 5 ||
                             i == 5 && j != 3 && j <= 5 && j >= 2 ||
                             i == 15 && j >= 2 && j <= 12 ||
                             i == 2 && j >= 10 && j <= 12 ||
                             i == 7 && j != 13 && j >= 10 && j <= 21 ||
                             i == 11 && j >= 17 && j <= 20) {
-                                pathTile.setRotation();
+                            pathTile.setRotation();
                         }
                     }
                     pathTile.setDisplaySize(this.halfCell * 2, this.halfCell * 2);
-                } 
+                }
             }
         }
 
         let walkCycle = this.anims.create({
             key: 'walk',
-            frames: this.anims.generateFrameNumbers('carrier', {start: 0, end: 7}),
+            frames: this.anims.generateFrameNumbers('carrier', {
+                start: 0,
+                end: 7
+            }),
             frameRate: 12,
-            repeat: -1 
+            repeat: -1
         });
 
         // Create and draw path
@@ -188,7 +199,7 @@ export class GameScene extends Phaser.Scene {
         //         color: '#FFFFFF'
         //     })
         // }.bind(this));
-     
+
         //Create sidebar
         this.sidebar = this.add.container(this.width, this.height / 2 - 200);
         let sidebox = this.add.graphics();
@@ -199,6 +210,9 @@ export class GameScene extends Phaser.Scene {
 
         //Create first tower in menu
         let menuTower1 = this.add.image(50, 72, 'tower1');
+        menuTower1.setInteractive({
+            cursor: 'pointer'
+        });
         menuTower1.setInteractive().on('pointerdown', () => {
             // Tower1 has been selected
             // this.toggleSidebar();
@@ -218,6 +232,9 @@ export class GameScene extends Phaser.Scene {
 
         // Create second tower in menu
         let menuTower2 = this.add.image(50, 176, 'tower2');
+        menuTower2.setInteractive({
+            cursor: 'pointer'
+        });
         menuTower2.setInteractive().on('pointerdown', () => {
             // Tower2 has been selected
             this.tower1IsSelected = false;
@@ -236,6 +253,9 @@ export class GameScene extends Phaser.Scene {
 
         // Create third tower in menu
         let menuTower3 = this.add.image(50, 280, 'tower3');
+        menuTower3.setInteractive({
+            cursor: 'pointer'
+        });
         menuTower3.setInteractive().on("pointerdown", () => {
             // Tower3 has been selected
             this.tower1IsSelected = false;
@@ -256,6 +276,17 @@ export class GameScene extends Phaser.Scene {
         this.cancelButton = this.add.image(this.width - 32, this.height - 96, 'cancelButton');
         this.cancelButton.setDisplaySize(64, 64);
         this.cancelButton.alpha = 0;
+        this.cancelButton.setInteractive({
+            cursor: 'pointer'
+        });
+        // On hover of cancel tower button
+        this.cancelButton.setInteractive().on('pointerover', () => {
+            this.sound.play('buttonHover');
+        });
+        // On-click of cancel tower button
+        this.cancelButton.setInteractive().on('pointerdown', () => {
+            this.sound.play('buttonClick');
+        });
         this.cancelButton.setInteractive().on('pointerdown', this.cancelSelection.bind(this));
 
         // Add all the buttons to the sidebar
@@ -275,8 +306,16 @@ export class GameScene extends Phaser.Scene {
         this.menuShowing = false;
         this.menuButton = this.add.image(this.width - 32, this.height - 32, 'menuButton');
         this.menuButton.setDisplaySize(64, 64);
+        this.menuButton.setInteractive({
+            cursor: 'pointer'
+        });
+        // On hover of menu toggle button
+        this.menuButton.setInteractive().on('pointerover', () => {
+            this.sound.play('buttonHover');
+        });
         // On-click of menu toggle button
         this.menuButton.setInteractive().on('pointerdown', () => {
+            this.sound.play('buttonClick');
             this.toggleSidebar();
         });
 
@@ -300,27 +339,40 @@ export class GameScene extends Phaser.Scene {
         this.money = 400;
         this.moneyText = this.add.text(this.width / 2, this.healthText.getBottomCenter().y + 10, 'Money: ' + this.money);
 
-        this.input.keyboard.on('keydown-M', function() {
+        this.input.keyboard.on('keydown-M', function () {
             this.money += 100;
             this.moneyText.setText("Money: " + this.money);
         }.bind(this));
 
         // Creating Pause button
         this.pauseButton = this.add.image(1 * 32, 1 * 32, 'pauseButton');
+        this.pauseButton.setInteractive({
+            cursor: 'pointer'
+        });
+        this.pauseButton.setInteractive().on('pointerover', function () {
+            this.sound.play('buttonHover');
+        }.bind(this));
         this.pauseButton.setInteractive().on('pointerdown', function () {
+            this.sound.play('buttonClick');
             this.scene.launch('Pause');
             this.scene.pause('Game');
         }.bind(this));
 
         this.startRoundButton = this.add.image(this.halfCell * 3, this.height - 96 + this.halfCell * 3, 'startRound');
         this.startRoundButton.setDisplaySize(96, 96);
-        this.startRoundButton.setInteractive();
-        this.startRoundButton.once('pointerdown', function() {
+        this.startRoundButton.setInteractive({
+            cursor: 'pointer'
+        });
+        this.startRoundButton.setInteractive().on('pointerover', function () {
+            this.sound.play('buttonHover');
+        }.bind(this));
+        this.startRoundButton.once('pointerdown', function () {
             this.startRound(this.roundConfigs[0]);
         }.bind(this));
 
         // Pause the game when clicking escape
         this.input.keyboard.on('keydown-ESC', function () {
+            this.sound.play('buttonClick');
             this.scene.launch('Pause');
             this.scene.pause('Game');
         }.bind(this));
@@ -353,7 +405,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     incrementDefaultConfig() {
-        this.rDefaultConfig.duration -= 1000; 
+        this.rDefaultConfig.duration -= 1000;
         this.rDefaultConfig.carrierHP += 5;
         this.rDefaultConfig.carrierCount += 5;
         this.rDefaultConfig.carrierSpace -= 25;
@@ -361,7 +413,9 @@ export class GameScene extends Phaser.Scene {
     }
 
     enableStartRoundButton() {
-        this.startRoundButton.setInteractive();
+        this.startRoundButton.setInteractive({
+            cursor: 'pointer'
+        });
         this.startRoundButton.alpha = 1;
     }
 
@@ -371,37 +425,38 @@ export class GameScene extends Phaser.Scene {
     }
 
     startRound(config) {
-            this.currentRound += 1;
-            this.currentRoundText.setText("Current round: " + this.currentRound);
-            console.log("Starting round " + this.currentRound);
-            console.log("Config for this round: " + JSON.stringify(config));
-            this.disableStartRoundButton();
-            // Start directly for first time in order to give carrier group an active number immediately
+        this.sound.play('buttonClick');
+        this.currentRound += 1;
+        this.currentRoundText.setText("Current round: " + this.currentRound);
+        console.log("Starting round " + this.currentRound);
+        console.log("Config for this round: " + JSON.stringify(config));
+        this.disableStartRoundButton();
+        // Start directly for first time in order to give carrier group an active number immediately
+        let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
+        this.carriers.add(carrier);
+        let intervaler = setInterval(function () {
             let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
             this.carriers.add(carrier);
-            let intervaler = setInterval(function () {
-                let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
-                this.carriers.add(carrier);
-            }.bind(this), config.carrierSpace);
-    
-            setTimeout(function () {
-                clearInterval(intervaler);
-                this.enableStartRoundButton();
-            }.bind(this), (config.carrierCount - 1) * config.carrierSpace);
-            
-            // Setting the correct round config for next round 
-            this.startRoundButton.once('pointerdown', function() {
-                if (this.currentRound <= this.roundConfigs.length - 1) { // -1 because first round is started manually
-                     this.startRound(this.roundConfigs[this.currentRound]);   
-                } else {
-                    console.log("else block hit");
-                    if (this.currentRound >= 4) { // if on round 4 when clicking start round 5+
-                        // First default config round has passed, begin incrementing
-                        this.incrementDefaultConfig();
-                    }
-                    this.startRound(this.rDefaultConfig);   
+        }.bind(this), config.carrierSpace);
+
+        setTimeout(function () {
+            clearInterval(intervaler);
+            this.enableStartRoundButton();
+        }.bind(this), (config.carrierCount - 1) * config.carrierSpace);
+
+        // Setting the correct round config for next round 
+        this.startRoundButton.once('pointerdown', function () {
+            if (this.currentRound <= this.roundConfigs.length - 1) { // -1 because first round is started manually
+                this.startRound(this.roundConfigs[this.currentRound]);
+            } else {
+                console.log("else block hit");
+                if (this.currentRound >= 4) { // if on round 4 when clicking start round 5+
+                    // First default config round has passed, begin incrementing
+                    this.incrementDefaultConfig();
                 }
-            }.bind(this));
+                this.startRound(this.rDefaultConfig);
+            }
+        }.bind(this));
     }
 
     // Retracts or expands sidebar
@@ -431,6 +486,7 @@ export class GameScene extends Phaser.Scene {
 
     showTurretExample() {
         if (this.tower1IsSelected) {
+            this.sound.play('towerButtonClick');
             // showing the turret example with its radius
             this.turretExampleRadius = this.add.circle(-1000, -1000, 60, 0xECDBDB);
             this.turretExampleRadius.alpha = 0.8;
@@ -447,6 +503,7 @@ export class GameScene extends Phaser.Scene {
             this.noTurretHere.setOrigin(0, 0);
             this.noTurretHere.alpha = 0;
         } else if (this.tower2IsSelected) {
+            this.sound.play('towerButtonClick');
             // showing the turret example with its radius
             this.turretExampleRadius = this.add.circle(-1000, -1000, 85, 0xECDBDB);
             this.turretExampleRadius.alpha = 0.8;
@@ -463,6 +520,7 @@ export class GameScene extends Phaser.Scene {
             this.noTurretHere.setOrigin(0, 0);
             this.noTurretHere.alpha = 0;
         } else if (this.tower3IsSelected) {
+            this.sound.play('towerButtonClick');
             // showing the turret example with its radius
             this.turretExampleRadius = this.add.circle(-1000, -1000, 100, 0xECDBDB);
             this.turretExampleRadius.alpha = 0.8;
@@ -543,6 +601,7 @@ export class GameScene extends Phaser.Scene {
         let j = Math.floor(pointer.x / 32); // col index
 
         if (this.tower1IsSelected && !this.isPathTile(i, j) && this.money >= 100) {
+            this.sound.play('towerBuildOne');
             this.turret = new Turret1(this, j, i);
             this.turrets.add(this.turret);
             this.money -= this.turret.price;
@@ -551,6 +610,7 @@ export class GameScene extends Phaser.Scene {
             this.toggleSidebar();
             this.cancelSelection();
         } else if (this.tower2IsSelected && !this.isPathTile(i, j) && this.money >= 200) {
+            this.sound.play('towerBuildTwo');
             this.turret = new Turret2(this, j, i);
             this.turrets.add(this.turret);
             this.money -= this.turret.price;
@@ -559,6 +619,7 @@ export class GameScene extends Phaser.Scene {
             this.toggleSidebar();
             this.cancelSelection();
         } else if (this.tower3IsSelected && !this.isPathTile(i, j) && this.money >= 300) {
+            this.sound.play('towerBuildTwo');
             this.turret = new Turret3(this, j, i);
             this.turrets.add(this.turret);
             this.money -= this.turret.price;
@@ -666,8 +727,8 @@ export class GameScene extends Phaser.Scene {
         // Updating the health bar
         carrier.barHealth.clear();
         carrier.barHealth.fillStyle(0xffffff);
-        var newWidth =  Math.floor(30 * (carrier.hp / carrier.maxhp));
-        
+        var newWidth = Math.floor(30 * (carrier.hp / carrier.maxhp));
+
         // Checking if the virus is still alive
         if (newWidth >= 0) {
             carrier.healthRect.width = newWidth;
