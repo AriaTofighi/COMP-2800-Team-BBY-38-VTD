@@ -2,19 +2,19 @@ import Turret1 from "../game_objects/Turret1";
 import Turret2 from "../game_objects/Turret2";
 import Turret3 from "../game_objects/Turret3";
 
-export class UIScene extends Phaser.Scene {
+export class ChallengeUIScene extends Phaser.Scene {
     /**
      * Constructor for UIScene object.
      */
     constructor() {
-        super('UI');
+        super('ChallengeUI');
     }
 
-    create() {
+    create(){
         this.width = this.sys.canvas.width;
         this.height = this.sys.canvas.height;
         this.halfCell = 16; // Used to move objects to center of cells
-        this.game = this.scene.get('Game');
+        this.game = this.scene.get('Challenge');
 
         this.tower1IsSelected = false;
         this.tower2IsSelected = false;
@@ -33,23 +33,19 @@ export class UIScene extends Phaser.Scene {
         this.menuButton = this.add.image(this.width - 32, this.height - 32, 'menuButton');
         this.menuButton.setDisplaySize(64, 64);
         // On-click of menu toggle button
-        this.menuButton.setInteractive({
-            cursor: 'pointer'
+        this.menuButton.setInteractive().on('pointerdown', () => {
+            this.toggleSidebar();
         });
-        // On hover of menu toggle button.
+        // On hover of cancel tower button.
         this.menuButton.setInteractive().on('pointerover', () => {
             this.sound.play('buttonHover');
         });
-        // On pressed down of menu toggle button.
+        // On pressed down of cancel tower button.
         this.menuButton.setInteractive().on('pointerdown', () => {
             this.sound.play('buttonClick');
-            this.toggleSidebar();
         });
 
         let menuTower1 = this.add.image(50, 72, 'tower1');
-        menuTower1.setInteractive({
-            cursor: 'pointer'
-        });
         menuTower1.setInteractive().on('pointerdown', () => {
             // Tower1 has been selected
             // this.toggleSidebar();
@@ -69,9 +65,6 @@ export class UIScene extends Phaser.Scene {
 
         // Create second tower in menu
         let menuTower2 = this.add.image(50, 176, 'tower2');
-        menuTower2.setInteractive({
-            cursor: 'pointer'
-        });
         menuTower2.setInteractive().on('pointerdown', () => {
             // Tower2 has been selected
             this.tower1IsSelected = false;
@@ -90,10 +83,7 @@ export class UIScene extends Phaser.Scene {
 
         // Create third tower in menu
         let menuTower3 = this.add.sprite(50, 280, 'tower3', 'tower3loaded');
-        menuTower3.setInteractive({
-            cursor: 'pointer'
-        });
-        menuTower3.setDisplaySize(32, 32);
+        menuTower3.setDisplaySize(32,32);
         menuTower3.setInteractive().on("pointerdown", () => {
             // Tower3 has been selected
             this.tower1IsSelected = false;
@@ -114,9 +104,6 @@ export class UIScene extends Phaser.Scene {
         this.cancelButton = this.add.image(this.width - 32, this.height - 96, 'cancelButton');
         this.cancelButton.setDisplaySize(64, 64);
         this.cancelButton.alpha = 0;
-        this.cancelButton.setInteractive({
-            cursor: 'pointer'
-        });
         // On hover of cancel tower button.
         this.cancelButton.setInteractive().on('pointerover', () => {
             this.sound.play('buttonHover');
@@ -125,8 +112,7 @@ export class UIScene extends Phaser.Scene {
         this.cancelButton.setInteractive().on('pointerdown', () => {
             this.sound.play('buttonClick');
         });
-        // Cancel selection of tower on pressed down of cancel tower button.
-        this.cancelButton.setInteractive().on('pointerdown', this.cancelSelection.bind(this));
+        //this.cancelButton.setInteractive().on('pointerdown', this.cancelSelection.bind(this));
 
         // Add all the buttons to the sidebar
         this.sidebar.add(menuTower1);
@@ -138,73 +124,6 @@ export class UIScene extends Phaser.Scene {
         this.costText = this.add.text(0, this.descText.getBottomCenter().y + 10, '');
         infoContainer.add(this.descText);
         infoContainer.add(this.costText);
-
-        // Create resource information text
-        this.health = 100;
-        this.healthText = this.add.text(585, 25, "Health: " + this.health);
-        this.healthText.depth = 1;
-        this.healthText.setFill("brown");
-
-        this.money = 400;
-        this.moneyText = this.add.text(585, this.healthText.getBottomCenter().y + 6, 'Money: ' + this.money);
-        this.moneyText.depth = 1;
-        this.moneyText.setFill("brown");
-
-        this.input.keyboard.on('keydown-M', function () {
-            this.money += 100;
-            this.moneyText.setText("Money: " + this.money);
-        }.bind(this));
-
-        // Creating Pause button
-        this.pauseButton = this.add.image(1 * 32, 1 * 32, 'pauseButton');
-        this.pauseButton.setInteractive({
-            cursor: 'pointer'
-        });
-        // On hover of pause button.
-        this.pauseButton.setInteractive().on('pointerover', function () {
-            this.sound.play('buttonHover');
-        }.bind(this));
-        // On pressed down of pause button.
-        this.pauseButton.setInteractive().on('pointerdown', function () {
-            this.sound.play('buttonClick');
-            this.scene.launch('Pause');
-            this.scene.pause('Game');
-        }.bind(this));
-
-        this.startRoundButton = this.add.image(this.halfCell * 3, this.height - 96 + this.halfCell * 3, 'startRound');
-        this.startRoundButton.setDisplaySize(96, 96);
-        this.startRoundButton.setInteractive({
-            cursor: 'pointer'
-        });
-        // On hover of start round button.
-        this.startRoundButton.setInteractive().on('pointerover', function () {
-            this.sound.play('buttonHover');
-        }.bind(this));
-        // On pressed down of start round button (first time).
-        this.startRoundButton.once('pointerdown', function () {
-            this.game.startRound(this.game.roundConfigs[0]);
-            this.firstRoundStarted = true;
-        }.bind(this));
-        // On pressed down of start round button (after first time).
-        this.startRoundButton.setInteractive().on('pointerdown', function () {
-            this.sound.play('buttonClick');
-        }.bind(this));
-
-        this.currentRoundText = this.add.text(570, this.moneyText.getBottomCenter().y + 6, "Current round: " + this.game.currentRound);
-        this.currentRoundText.depth = 1;
-        this.currentRoundText.setFill("brown");
-
-        // Switching the game mode when dragging the current round text
-        this.currentRoundText.setInteractive();
-        this.input.setDraggable(this.currentRoundText);
-        this.currentRoundText.on('drag', function () {
-            this.scene.stop('UI');
-            this.scene.start('Challenge');
-        }.bind(this));
-
-        this.resourceBorder = this.add.image(630, 55, 'resourceBorder');
-        // this.resourceBorder.setOrigin(0, 0);
-        this.resourceBorder.setDisplaySize(320, 135);
     }
 
     toggleSidebar() {
@@ -233,7 +152,6 @@ export class UIScene extends Phaser.Scene {
 
     showTurretExample() {
         if (this.tower1IsSelected) {
-            this.sound.play('towerButtonClick');
             // showing the turret example with its radius
             this.turretExampleRadius = this.add.circle(-1000, -1000, 60, 0xECDBDB);
             this.turretExampleRadius.alpha = 0.8;
@@ -250,7 +168,6 @@ export class UIScene extends Phaser.Scene {
             this.noTurretHere.setOrigin(0, 0);
             this.noTurretHere.alpha = 0;
         } else if (this.tower2IsSelected) {
-            this.sound.play('towerButtonClick');
             // showing the turret example with its radius
             this.turretExampleRadius = this.add.circle(-1000, -1000, 85, 0xECDBDB);
             this.turretExampleRadius.alpha = 0.8;
@@ -267,7 +184,6 @@ export class UIScene extends Phaser.Scene {
             this.noTurretHere.setOrigin(0, 0);
             this.noTurretHere.alpha = 0;
         } else if (this.tower3IsSelected) {
-            this.sound.play('towerButtonClick');
             // showing the turret example with its radius
             this.turretExampleRadius = this.add.circle(-1000, -1000, 100, 0xECDBDB);
             this.turretExampleRadius.alpha = 0.8;
@@ -347,28 +263,19 @@ export class UIScene extends Phaser.Scene {
         let i = Math.floor(pointer.y / 32); // row index
         let j = Math.floor(pointer.x / 32); // col index
 
-        if (this.tower1IsSelected && !this.game.isPathTile(i, j) && this.money >= 100) {
-            this.sound.play('towerBuild');
+        if (this.tower1IsSelected && !this.game.isPathTile(i, j)) {
             let turret = new Turret1(this.game, j, i);
             this.game.placeTower(turret, i, j);
-            this.money -= turret.price;
-            this.moneyText.setText('Money: ' + this.money);
             this.toggleSidebar();
             this.cancelSelection();
-        } else if (this.tower2IsSelected && !this.game.isPathTile(i, j) && this.money >= 200) {
-            this.sound.play('towerBuild');
+        } else if (this.tower2IsSelected && !this.game.isPathTile(i, j)) {
             let turret = new Turret2(this.game, j, i);
             this.game.placeTower(turret, i, j);
-            this.money -= turret.price;
-            this.moneyText.setText('Money: ' + this.money);
             this.toggleSidebar();
             this.cancelSelection();
-        } else if (this.tower3IsSelected && !this.game.isPathTile(i, j) && this.money >= 300) {
-            this.sound.play('towerBuild');
+        } else if (this.tower3IsSelected && !this.game.isPathTile(i, j)) {
             let turret = new Turret3(this.game, j, i);
             this.game.placeTower(turret, i, j);
-            this.money -= turret.price;
-            this.moneyText.setText('Money: ' + this.money);
             this.toggleSidebar();
             this.cancelSelection();
         }

@@ -51,6 +51,8 @@ import leaderboardPress from "../../assets/menu/leaderboard_press.png";
 // import buttonClick from "../../assets/audio/button-click.mp3";
 import city from "../../assets/ingame/city.png";
 import water from "../../assets/ingame/waterstream.png";
+import challenge from "../../assets/ingame/challenge.png";
+import resourceBorder from "../../assets/ingame/resource-border.png"
 import { BlendModes } from "phaser";
 import 'phaser';
 
@@ -136,6 +138,16 @@ export class LoadScene extends Phaser.Scene {
             }
         });
 
+        // Load challenge mode sprite
+        this.load.spritesheet({
+            key: 'challengeMode',
+            url: challenge,
+            frameConfig: {
+                frameWidth: 1920,
+                frameHeight: 1080
+            }
+        });
+
         // Add logo
         this.add.image(logo);
 
@@ -154,6 +166,7 @@ export class LoadScene extends Phaser.Scene {
         this.load.image('noTurret3', noTurret3);
         this.load.image('city', city);
         this.load.spritesheet('water', water, {frameWidth: 196, frameHeight: 334});
+        this.load.image('resourceBorder', resourceBorder);
 
         // Load button images
         this.load.image("cancelButton", cancelButton);

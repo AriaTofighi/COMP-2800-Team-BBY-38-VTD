@@ -1,55 +1,46 @@
 import {
     Grid
 } from "matter";
-import Carrier from "../game_objects/Carrier";
+import Carrier from "../game_objects/ChallengeCarrier";
 // import Turret1 from "../game_objects/Turret1";
 // import Turret2 from "../game_objects/Turret2";
 // import Turret3 from "../game_objects/Turret3";
 import Bullet from "../game_objects/Bullet";
-import {
-    default as r1Config
-} from "../round_configs/r1Config.json";
-import {
-    default as r2Config
-} from "../round_configs/r2Config.json";
-import {
-    default as r3Config
-} from "../round_configs/r3Config.json";
-import {
-    default as rDefaultConfig
-} from "../round_configs/rDefaultConfig.json";
+import {default as ChallengeConfig} from "../round_configs/ChallegeConfig.json";
+import ChallengeCarrier from "../game_objects/ChallengeCarrier";
 
 
 
 
-export class GameScene extends Phaser.Scene {
+export class ChallengeScene extends Phaser.Scene {
 
     /**
      * Constructor for GameScene object.
      */
     constructor() {
-        super('Game');
+        super('Challenge');
     }
 
     /**
      * Initializes the game.
      */
     init() {
-        // Initializes round configurations
-        this.r1Config = r1Config;
-        this.r2Config = r2Config;
-        this.r3Config = r3Config;
-        this.rDefaultConfig = rDefaultConfig;
-        this.roundConfigs = [this.r1Config, this.r2Config, this.r3Config];
-        this.currentRound = 0;
-        //this.tower1IsSelected = false;
-        //this.tower2IsSelected = false;
-        //this.tower3IsSelected = false;
-        this.carriersMade = 0;
-        this.currentConfig = {};
-        this.firstRoundStarted = false;
-        this.firstSave = true;
-        this.loggedIn = true; 
+        this.startChallengeAnimation();
+        this.loggedIn = true;
+        this.ChallengeConfig = ChallengeConfig;
+        this.firstTime = true;
+        this.challengeEnded = false;
+        this.firstSpawn = true;
+
+        // Starting the challenge after the five seconds
+        setTimeout(function () {
+            if (this.firstSpawn) {
+                console.log('lol')
+                this.firstSpawn = false;
+                this.timeStarted = new Date();
+                this.startRound(this.ChallengeConfig);
+            }
+        }.bind(this), 8000);
     }
 
     /**
@@ -81,8 +72,6 @@ export class GameScene extends Phaser.Scene {
         ];
 
         this.db = firebase.firestore();
-        console.log("DB LOADED IN GAMESCENE: ");
-        console.log(this.db);
     }
 
     /**
@@ -92,14 +81,14 @@ export class GameScene extends Phaser.Scene {
         // Create grid variables.
         this.width = this.sys.canvas.width;
         this.height = this.sys.canvas.height;
-        this.ui = this.scene.get('UI');
+        this.ui = this.scene.get('ChallengeUI');
         this.cellWidth = 32;
         this.cellHeight = 32;
         this.halfCell = 16; // Used to move objects to center of cells
         const colCount = this.width / this.cellWidth; // 25 columns; use this.cellWidth * 24 for last column
         const rowCount = this.height / this.cellWidth; // 19 rows; use this.cellWidth * 18 for last row
 
-        this.scene.launch('UI');
+        this.scene.launch('ChallengeUI');
         
         // Create and draw grid
         let grid = this.add.grid(0, 0, this.cellWidth * colCount, this.cellWidth * rowCount, this.cellWidth, this.cellWidth, 0x000000, 0, 0x222222, 0); // change last param to 1 to see grid lines
@@ -201,37 +190,6 @@ export class GameScene extends Phaser.Scene {
 
         // this.path.draw(graphics);
 
-        // // Creates carrier on A keyboard press.
-        // this.input.keyboard.on('keydown-A', function () {
-        //     // console.log("A pressed");
-        //     // let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', this.round1Duration, this.round1CarrierHP);
-        //     // this.carriers.add(carrier);
-
-        //     // Making the bullet follow this carrier.
-        //     // setInterval(function() {
-        //     //     this.physics.moveToObject(this.bullet, this.carrier, 230);
-        //     // }.bind(this), 100);
-
-        // }.bind(this));
-
-        // // Start round text button.
-        // // this.startRoundText = this.add.text(180, 20, "Start Round");
-        // // this.startRoundText.setInteractive({cursor: 'pointer'});
-        // // this.startRoundText.once('pointerdown', function() {
-        // //     this.startRound(this.roundConfigs[0]);
-        // // }.bind(this));
-        // // this.startRoundText.on('pointerover', function() {
-        // //     this.startRoundText.setStyle({
-        // //         color: '#0C0F12'
-        // //     })
-        // //     this.startRoundText.setColor(0x0c0f12);
-        // // }.bind(this));
-        // // this.startRoundText.on('pointerout', function() {
-        // //     this.startRoundText.setStyle({
-        // //         color: '#FFFFFF'
-        // //     })
-        // // }.bind(this));
-
         // //Create sidebar.
         // this.sidebar = this.add.container(this.width, this.height / 2 - 200);
         // let sidebox = this.add.graphics();
@@ -317,10 +275,16 @@ export class GameScene extends Phaser.Scene {
         // this.bullet.body.debugShowBody = false;
         // this.bullet.setInteractive();
 
-        this.input.keyboard.on('keydown-M', function() {
-            this.money += 100;
-            this.moneyText.setText("Money: " + this.money);
-        }.bind(this));
+        // Create resource information text
+        this.health = 1;
+        this.healthText = this.add.text(585, 25, "Health: " + this.health);
+        this.healthText.depth = 1;
+        this.healthText.setFill("brown");
+
+        this.money = Infinity;
+        this.money = Infinity;this.moneyText = this.add.text(585, this.healthText.getBottomCenter().y + 6, 'Money: ∞');
+        this.moneyText.depth = 1;
+        this.moneyText.setFill("brown");
 
         // // Creating the cancel button.
         // this.cancelButton = this.add.image(this.width - 32, this.height - 96, 'cancelButton');
@@ -376,68 +340,7 @@ export class GameScene extends Phaser.Scene {
         // this.costText = this.add.text(0, this.descText.getBottomCenter().y + 10, '');
         // infoContainer.add(this.descText);
         // infoContainer.add(this.costText);
-
-        // // Create and draw bullet.
-        // // this.bullet = this.physics.add.image(this.cellWidth * 15 + this.halfCell, this.cellWidth * 18 + this.halfCell, 'bullet');
-        // // this.bullet.setDisplaySize(32, 32);
-        // // this.bullet.body.debugShowVelocity = false;
-        // // this.bullet.body.debugShowBody = false;
-        // // this.bullet.setInteractive();
-
-        // // Create resource information text.
-        // this.health = 100;
-        // this.healthText = this.add.text(this.width / 2, 10, "Health: " + this.health);
-        // this.money = 400;
-        // this.moneyText = this.add.text(this.width / 2, this.healthText.getBottomCenter().y + 10, 'Money: ' + this.money);
-
-        // this.input.keyboard.on('keydown-M', function () {
-        //     this.money += 100;
-        //     this.moneyText.setText("Money: " + this.money);
-        // }.bind(this));
-
-        // // Creating pause button.
-        // this.pauseButton = this.add.image(1 * 32, 1 * 32, 'pauseButton');
-        // this.pauseButton.setInteractive({
-        //     cursor: 'pointer'
-        // });
-        // // On hover of pause button.
-        // this.pauseButton.setInteractive().on('pointerover', function () {
-        //     this.sound.play('buttonHover');
-        // }.bind(this));
-        // // On pressed down of pause button.
-        // this.pauseButton.setInteractive().on('pointerdown', function () {
-        //     this.sound.play('buttonClick');
-        //     this.scene.launch('Pause');
-        //     this.scene.pause('Game');
-        // }.bind(this));
-
-        // this.startRoundButton = this.add.image(this.halfCell * 3, this.height - 96 + this.halfCell * 3, 'startRound');
-        // this.startRoundButton.setDisplaySize(96, 96);
-        // this.startRoundButton.setInteractive({
-        //     cursor: 'pointer'
-        // });
-        // // On hover of start round button.
-        // this.startRoundButton.setInteractive().on('pointerover', function () {
-        //     this.sound.play('buttonHover');
-        // }.bind(this));
-        // // On pressed down of start round button (first time).
-        // this.startRoundButton.once('pointerdown', function () {
-        //     this.startRound(this.roundConfigs[0]);
-        //     this.firstRoundStarted = true;
-        // }.bind(this));
-        // // On pressed down of start round button (after first time).
-        // this.startRoundButton.setInteractive().on('pointerdown', function () {
-        //     this.sound.play('buttonClick');
-        // }.bind(this));
-        
-
-        // Pause the game when clicking escape.
-        this.input.keyboard.on('keydown-ESC', function () {
-            this.sound.play('buttonClick');
-            this.scene.launch('Pause');
-            this.scene.pause('Game');
-        }.bind(this));
-
+            
         // Creating the game objects groups.
         this.createGroups();
 
@@ -484,14 +387,49 @@ export class GameScene extends Phaser.Scene {
             }
         }.bind(this), function (error) {
             console.log(error);
-        });
+        });        
 
-        // Switching the game mode typing 'test'
-        this.combo = this.input.keyboard.createCombo('test', { resetOnMatch: true});
-        this.input.keyboard.on('keycombomatch', function () {
-            this.scene.stop('UI');
-            this.scene.start('Challenge');
-        }.bind(this));
+        this.currentRoundText = this.add.text(570, this.moneyText.getBottomCenter().y + 6, "Challenge mode");
+        this.currentRoundText.depth = 1;
+        this.currentRoundText.setFill("brown");
+
+        this.resourceBorder = this.add.image(630, 55, 'resourceBorder');
+        // this.resourceBorder.setOrigin(0, 0);
+        this.resourceBorder.setDisplaySize(320, 135);
+
+        // // Switching the game mode when dragging the current round text
+        // this.currentRoundText.setInteractive();
+        // this.input.setDraggable(this.currentRoundText);
+        // this.currentRoundText.on('drag', function () {
+        //     this.endChallengeAnimation()
+        // }.bind(this));
+
+        // // Switching the game mode when type 'test'
+        // this.combo = this.input.keyboard.createCombo('test', { resetOnMatch: true});
+        // this.input.keyboard.on('keycombomatch', function () {
+        //     this.endChallengeAnimation();
+        // }.bind(this));
+
+    }
+
+    lostGame() {
+        this.firstTime = false;
+        this.challengeEnded = true;
+        this.timeEnded = new Date();
+        this.timeSurvived = this.timeEnded - this.timeStarted;
+        this.timeSurvived /= 1000;
+        this.timeSurvived = Math.round(this.timeSurvived);
+        this.newBackground = this.add.rectangle(0, 0, 800, 608, 0x000000);
+        this.newBackground.setOrigin(0, 0);
+        this.newBackground.depth = 2;
+        this.newText = this.add.text(120, 270, 'You survived for ' + this.timeSurvived + " seconds");
+        this.newText.setFill('red');
+        this.newText.setFontSize(35);
+        this.newText.depth = 3;
+
+        setTimeout(function () {
+            location.reload();
+        }, 4000);
     }
 
     /**
@@ -499,11 +437,11 @@ export class GameScene extends Phaser.Scene {
      */
     createGroups() {
         this.carriers = this.physics.add.group({
-            classType: Carrier,
+            classType: ChallengeCarrier,
             runChildUpdate: true
         });
         this.civilians = this.physics.add.group({
-            classType: Carrier,
+            classType: ChallengeCarrier,
             runChildUpdate: true
         });
         this.turrets = this.physics.add.group({
@@ -515,86 +453,22 @@ export class GameScene extends Phaser.Scene {
         });
     }
 
-    /**
-     * Increment the default configuration to set higher difficulty as rounds progress.
-     */
-    incrementDefaultConfig() {
-        this.rDefaultConfig.duration /= 0.99;
-        this.rDefaultConfig.carrierHP += 5;
-        this.rDefaultConfig.carrierCount += 5;
-        this.rDefaultConfig.carrierSpace /= 0.99;
-        console.log("default config adjusted");
-    }
-
-    /**
-     * Enable the start round button.
-     */
-    enableStartRoundButton() {
-        this.ui.startRoundButton.setInteractive({
-            cursor: 'pointer'
-        });
-        this.ui.startRoundButton.alpha = 1;
-    }
-
-    /**
-     * Disable the start round button.
-     */
-    disableStartRoundButton() {
-        this.ui.startRoundButton.disableInteractive();
-        this.ui.startRoundButton.alpha = 0;
-    }
-
-    updateBestRound() {
-        let user = firebase.auth().currentUser;
-        this.db.collection("users").doc(user.uid).get().then(function (userDoc) {
-            let savedBest = userDoc.data()["bestRound"];
-            console.log("saved best: " + savedBest);
-            console.log("current round: " + this.currentRound);
-            this.betterRound = Math.max(savedBest, this.currentRound);
-            console.log("better round: " + this.betterRound);
-            this.db.collection("users").doc(user.uid).update({
-                "bestRound": this.betterRound
-            });
-        }.bind(this));
-    }
-
     startRound(config) {
-        this.firstRoundStarted = true;
-        this.firstSave = true;
-        this.carriersMade = 0;
-        this.currentConfig = config;
-        this.currentRound += 1;
-        this.ui.currentRoundText.setText("Current round: " + this.currentRound);
-        console.log("Starting round " + this.currentRound);
-        console.log("Config for this round: " + JSON.stringify(config));
-        this.disableStartRoundButton();
-        // Start directly for first time in order to give carrier group an active number immediately.
+        // Start directly for first time in order to give carrier group an active number immediately
         let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
         this.carriers.add(carrier);
         let intervaler = setInterval(function () {
-            let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
-            this.carriers.add(carrier);
-            this.carriersMade++;
+            if (!this.challengeEnded) {
+                let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
+                this.carriers.add(carrier);
+            }
         }.bind(this), config.carrierSpace);
 
         setTimeout(function () {
             clearInterval(intervaler);
-        }.bind(this), (config.carrierCount - 1) * config.carrierSpace);
+        }.bind(this), (config.carrierCount - 1) * config.carrierSpace); 
+}
 
-        // Setting the correct round config for next round 
-        this.ui.startRoundButton.once('pointerdown', function () {
-            if (this.currentRound <= this.roundConfigs.length - 1) { // -1 because first round is started manually
-                this.startRound(this.roundConfigs[this.currentRound]);
-            } else {
-                console.log("else block hit");
-                if (this.currentRound >= 4) { // if on round 4 when clicking start round 5+
-                    // First default config round has passed, begin incrementing
-                    this.incrementDefaultConfig();
-                }
-                this.startRound(this.rDefaultConfig);
-            }
-        }.bind(this));
-    }
 
     // /**
     //  * Retracts or expands sidebar.
@@ -834,39 +708,58 @@ export class GameScene extends Phaser.Scene {
         // return null;
     }
 
+    startChallengeAnimation() {
+        // Creating the background for the challenge animation
+        this.background = this.add.rectangle(0, 0, 800, 608, 0x8DFF7D);
+        this.background.setOrigin(0, 0);
+        this.background.depth = 2;
+
+        // Removing the background after 4 seconds
+        setTimeout(function () {
+            this.background.alpha = 0;
+            this.challenge.alpha = 0;
+            
+        }.bind(this), 4000);
+
+        // Creating the challenge mode animation
+        this.challenge = this.add.sprite(-45, 0, 'challengeMode');
+        this.challenge.setOrigin(0, 0);
+        this.challenge.setDisplaySize(800, 608);
+        this.challenge.depth = 2;
+        this.anims.create({
+            key: 'startChallenge',
+            duration: 2400,
+            frames: this.anims.generateFrameNames('challengeMode', {start: 0, end: 60}),
+            repeat: 1
+        });
+        this.challenge.play('startChallenge');
+    }
+
+    // endChallengeAnimation() {
+    //     this.switchBackground = this.add.rectangle(0, 0, 800, 608, 0x000000);
+    //     this.switchBackground.setOrigin(0, 0);
+    //     let backgroundAlpha = 1;
+    //     let interval = setInterval(function () {
+    //         backgroundAlpha -= 0.05;
+    //         this.switchBackground.alpha = backgroundAlpha;
+    //     }.bind(this), 100);
+
+    //     setTimeout(function () {
+    //         clearInterval(interval);
+    //         this.scene.start('Game');
+    //     }.bind(this), 2000);
+    // }
+
     /**
      * Update the physics.
      */
     update() {
         this.physics.overlap(this.carriers, this.turrets, this.fire.bind(this));
         this.physics.overlap(this.carriers, this.bullets, this.carrierHit.bind(this));
-        if (this.ui.health <= 0) {
-            this.scene.launch('GameOver');
-            this.scene.pause('Game');
+        if (this.health <= 0 && this.firstTime) {
+            // Starting the lost game animation
+            this.lostGame();
         }
-        if (this.firstRoundStarted) {
-            console.log(this.currentConfig.carrierCount - 1);
-            console.log(this.carriersMade);
-            if (this.carriersAllGone() && this.currentConfig.carrierCount - 1 == this.carriersMade) {
-                this.enableStartRoundButton();
-                if (this.loggedIn && this.firstSave) {
-                    this.updateBestRound();
-                    this.firstSave = false;
-                }      
-            } else {
-                this.disableStartRoundButton();
-            }
-        }
-    }
-
-    carriersAllGone() {
-        let carrierArray = this.carriers.getChildren();
-        for (let i = 0; i < this.carriers.getLength(); i++) {
-            if (carrierArray[i].hp != 0 || carrierArray[i].hp != undefined) {
-                return false;
-            }
-        }
-        return true;
     }
 
     placeTower(turret, i, j){
