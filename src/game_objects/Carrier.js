@@ -49,6 +49,14 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
             t: 0
         });
 
+        //Create walking animation.
+        this.scene.anims.create({
+            key: 'walk',
+            frames: this.scene.anims.generateFrameNumbers('carrier', {start: 0, end: 7}),
+            frameRate: 16,
+            repeat: -1 
+        });
+
         //Play walking animation
         this.play('walk');
         //Set tint to indicate carrier status
@@ -92,9 +100,9 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
     update() {
         // Destroys this carrier and makes the health bar invisible if reaches end of path
         if (this.reachedEndPath()) {
-            if (!this.clean) {
-                this.scene.health -= 5;
-                this.scene.healthText.setText("Health: " + this.scene.health);
+            if (!this.clean){
+                this.scene.ui.health -= 5;
+                this.scene.ui.healthText.setText("Health: " + this.scene.ui.health);
             }
             this.barBack.alpha = 0;
             this.barHealth.alpha = 0;
@@ -107,5 +115,30 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
      */
     reachedEndPath() {
         return this.x == this.scene.cellWidth * 16 + this.scene.halfCell && this.y == this.scene.cellWidth * 19 + this.scene.halfCell;
+    }
+
+    getHit(bullet){
+        this.hp -= bullet.damage;
+
+        // Updating the health bar
+        this.barHealth.clear();
+        this.barHealth.fillStyle(0xffffff);
+        var newWidth =  Math.floor(30 * (this.hp / this.maxhp));
+        
+        // Checking if the virus is still alive
+        if (newWidth >= 0) {
+            this.healthRect.width = newWidth;
+        } else {
+            this.scene.ui.money += 25;
+            this.scene.ui.moneyText.setText("Money: " + this.scene.ui.money);
+            this.clearTint();
+            this.clean = true;
+            this.scene.carriers.remove(this);
+            this.scene.civilians.add(this);
+            this.barBack.alpha = 0;
+            this.barHealth.alpha = 0;
+        }
+        this.barHealth.fillRectShape(this.healthRect);
+        bullet.destroy();
     }
 }

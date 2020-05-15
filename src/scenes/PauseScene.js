@@ -73,6 +73,7 @@ export class PauseScene extends Phaser.Scene {
             this.sound.play('buttonClick');
             this.endButton.setTexture('endPressButton');
             this.scene.stop('Game');
+            this.scene.stop('UI');
             this.scene.start('Menu1');
             // TODO: what the end button does
         }.bind(this));
