@@ -37,7 +37,6 @@ import loadGame from "../../assets/menu2/load_game.png";
 import loadGamePress from "../../assets/menu2/load_game_press.png";
 import about from "../../assets/menu/about_button.png";
 import aboutPress from "../../assets/menu/about_button_press.png";
-
 import buttonHover from "../../assets/audio/button_hover.mp3";
 import buttonClick from "../../assets/audio/button_click.mp3";
 import towerButtonClick from "../../assets/audio/tower_button_click.mp3";
@@ -179,6 +178,7 @@ export class LoadScene extends Phaser.Scene {
         this.load.image('about', about);
         this.load.image('aboutPress', aboutPress);
 
+        // Load audio
         this.load.audio('buttonHover', buttonHover);
         this.load.audio('buttonClick', buttonClick);
         this.load.audio('towerButtonClick', towerButtonClick);
