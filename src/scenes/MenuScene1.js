@@ -24,52 +24,76 @@ export class MenuScene1 extends Phaser.Scene {
         this.logo = this.add.image(width / 2, height / 2 - 170, 'logo');
         this.logo.setDisplaySize(width / 2, height / 3);
 
-        // Display Login button
-        this.login = this.add.image(width / 2, height / 2, 'login');
-        this.login.setInteractive({cursor: 'pointer'});
-        this.login.on('pointerover', () => {
-            this.sound.play('hover');
-        });
-        this.login.on('pointerdown', () => {
-            this.login.setTexture('loginPress');
-        });
-        this.login.on('pointerup', () => {
-            this.login.setTexture('login');
-            window.location.href = "../../login.html";
-        });
-        this.input.on('pointerup', () => {
-            this.login.setTexture('login');
-        });
+        // Display Login / Logout button
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                // User is signed in.       
+                this.logout = this.add.image(width / 2, height / 2, 'logout');
+                this.logout.setInteractive({cursor: 'pointer'});
+                this.status = this.add.text(10, 40, "Playing as ");
+                this.status.setFontFamily('Arial');
+                this.status.setFontSize(25);
+                this.status.setOrigin(0, 1);
+                this.displayName = this.add.text(134, 42, user.displayName);
+                this.displayName.setFontFamily('Arial');
+                this.displayName.setFontSize(25);
+                this.displayName.setFill('red');
+                this.displayName.setStroke('black', 5);
+                this.displayName.setOrigin(0, 1);
 
-        // // Display Signup button
-        // this.signup = this.add.image(width / 2, height / 2 + 70, 'signup');
-        // this.signup.setInteractive({cursor: 'pointer'});
-        // this.signup.on('pointerdown', () => {
-        //     this.signup.setTexture('signupPress');
-        // });
-        // this.signup.on('pointerup', () => {
-        //     this.sound.play('buttonClick');
-        //     this.signup.setTexture('signup');
-        // });
+                this.logout.on('pointerdown', () => {
+                    this.logout.setTexture('logoutPress');
+                });
+                this.logout.on('pointerup', () => {
+                    this.logout.setTexture('logout');
+                    this.signUserOut();
+                });
+                this.input.on('pointerup', () => {
+                    this.logout.setTexture('logout');
+                });
+            } else {
+                // User is not signed in.
+                this.login = this.add.image(width / 2, height / 2, 'login');
+                this.login.setInteractive({cursor: 'pointer'});
+                this.status = this.add.text(10, 40, "Playing as Guest");
+                this.status.setFontFamily('Arial');
+                this.status.setFontSize(25);
+                this.status.setOrigin(0, 1);
 
-        // Display Guest button
-        this.guest = this.add.image(width / 2, height / 2 + 70, 'guest');
-        this.guest.setInteractive({cursor: 'pointer'});      
-        this.guest.on('pointerdown', () => {
-
-            this.guest.setTexture('guestPress');
+                this.login.on('pointerdown', () => {
+                    this.login.setTexture('loginPress');
+                });
+                this.login.on('pointerup', () => {
+                    this.login.setTexture('login');
+                    window.location.href = "../../login.html";
+                });
+                this.input.on('pointerup', () => {
+                    this.login.setTexture('login');
+                });
+            }
+        }.bind(this), function (error) {
+            console.log(error);
         });
-        this.guest.on('pointerup', () => {
+        
+
+        // Display lay button
+        this.play = this.add.image(width / 2, height / 2 + 70, 'play');
+        this.play.setInteractive({cursor: 'pointer'});      
+        this.play.on('pointerdown', () => {
+
+            this.play.setTexture('playPress');
+        });
+        this.play.on('pointerup', () => {
             this.sound.play('buttonClick');
-            this.guest.setTexture('guest');
-            this.scene.start('Menu2');
+            this.play.setTexture('play');
+            this.scene.start('Game');
         });
         this.input.on('pointerup', () => {
-            this.guest.setTexture('guest');
+            this.play.setTexture('play');
         });
 
         // Display About button
-        this.about = this.add.image(width / 2, height / 2 + 140, 'about');
+        this.about = this.add.image(width / 2, height / 2 + 70*2, 'about');
         this.about.setInteractive({cursor: 'pointer'});      
         this.about.on('pointerdown', () => {
 
@@ -82,6 +106,33 @@ export class MenuScene1 extends Phaser.Scene {
         });
         this.input.on('pointerup', () => {
             this.about.setTexture('about');
+        });
+
+        // Display leaderboard button
+        this.leaderboard = this.add.image(width / 2, height / 2 + 70*3, 'leaderboard');
+        this.leaderboard.setInteractive({cursor: 'pointer'});      
+        this.leaderboard.on('pointerdown', () => {
+
+            this.leaderboard.setTexture('leaderboardPress');
+        });
+        this.leaderboard.on('pointerup', () => {
+            this.sound.play('buttonClick');
+            this.leaderboard.setTexture('leaderboard');
+            window.location.href = "../../leaderboard.html";
+        });
+        this.input.on('pointerup', () => {
+            this.leaderboard.setTexture('leaderboard');
+        });
+
+    }
+
+    signUserOut() {
+        firebase.auth().signOut().then(function () {
+            // Sign-out successful. 
+            console.log("Signed out user.");
+        }).catch(function (error) {
+            // An error happened.
+            console.log(error);
         });
     }
 }
