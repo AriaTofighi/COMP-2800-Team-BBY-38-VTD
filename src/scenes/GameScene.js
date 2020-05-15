@@ -498,10 +498,10 @@ export class GameScene extends Phaser.Scene {
      * Increment the default configuration to set higher difficulty as rounds progress.
      */
     incrementDefaultConfig() {
-        this.rDefaultConfig.duration -= 1000;
+        this.rDefaultConfig.duration /= 0.99;
         this.rDefaultConfig.carrierHP += 5;
         this.rDefaultConfig.carrierCount += 5;
-        this.rDefaultConfig.carrierSpace -= 25;
+        this.rDefaultConfig.carrierSpace /= 0.99;
         console.log("default config adjusted");
     }
 
