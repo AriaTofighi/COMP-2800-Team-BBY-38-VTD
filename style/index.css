@@ -7,19 +7,8 @@ body {
     background-color: black;
 }
 
-#gallery{
-    display: flex;
-    margin-top: 30px;
-}
-
-.portrait{
-    text-align: center;
-    width: 90%;
-}
-
-.portrait img{
-    width: 80%;
-    height: 300px;
+.col img{
+    width: 100%;
     border: 6px solid #bfbfbf;
     border-radius: 4px;
 }
@@ -34,4 +23,28 @@ p{
 
 h3{
     color: #d4d4d4;
+    text-align: center;
+}
+
+@media (max-width: 800px){
+    h3{
+        font-size: 1.4em;
+    }
+}
+
+#firebaseui-auth-container {
+    display: none;
+}
+
+#log-out-btn {
+    display: none;
+
+}
+
+#sign-out-container {
+    height: calc(100vh - 56px);    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

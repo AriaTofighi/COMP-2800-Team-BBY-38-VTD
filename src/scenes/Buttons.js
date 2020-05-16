@@ -17,11 +17,9 @@ export class Buttons extends Phaser.Scene {
     preload() {}
 
     /**
-     * Create the buttons
+     * Create the buttons.
      */
     create() {
-        // Buttons (need proper positioning)
-
         // Cancel button
         const cancelButton = this.add.image(740, 560, 'cancelButton');
         cancelButton.setInteractive();

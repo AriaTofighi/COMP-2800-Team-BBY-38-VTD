@@ -1,72 +1,181 @@
 // This menu is for logging in or playing as a guest
 export class MenuScene1 extends Phaser.Scene {
     /**
-    * Constructor for GameScene object.
-    */
+     * Constructor for GameScene object.
+     */
     constructor() {
         super('Menu1');
     }
 
-    preload() {
-    }
+    /**
+     * Set up the first menu's entities.
+     */
+    preload() {}
 
+    /**
+     * Create the first menu scene.
+     */
     create() {
         // Canvas dimensions
         let width = this.game.renderer.width;
-        let height = this.game.renderer.height; 
+        let height = this.game.renderer.height;
 
         // Display menu background
         this.menuBackground = this.add.image(width / 2, height / 2, 'menuBackground');
         this.menuBackground.setDisplaySize(width, height);
         this.menuBackground.alpha = 0.7;
-        
+
         // Display logo
         this.logo = this.add.image(width / 2, height / 2 - 170, 'logo');
         this.logo.setDisplaySize(width / 2, height / 3);
 
-        // Display Login button
-        this.login = this.add.image(width / 2, height / 2, 'login');
-        this.login.setInteractive({cursor: 'pointer'});
-        this.login.on('pointerover', () => {
-            this.sound.play('hover');
+        // Display Login / Logout button
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                // User is signed in.       
+                this.logout = this.add.image(width / 2, height / 2, 'logout');
+                this.logout.setInteractive({
+                    cursor: 'pointer'
+                });
+                this.status = this.add.text(10, 40, "Playing as ");
+                this.status.setFontFamily('Arial');
+                this.status.setFontSize(25);
+                this.status.setOrigin(0, 1);
+                this.displayName = this.add.text(134, 42, user.displayName);
+                this.displayName.setFontFamily('Arial');
+                this.displayName.setFontSize(25);
+                this.displayName.setFill('red');
+                this.displayName.setStroke('black', 5);
+                this.displayName.setOrigin(0, 1);
+                // On hover of logout button
+                this.logout.on('pointerover', () => {
+                    this.sound.play('buttonHover');
+                });
+                // On pressed down of logout button
+                this.logout.on('pointerdown', () => {
+                    this.logout.setTexture('logoutPress');
+                });
+                // On release of logout button
+                this.logout.on('pointerup', () => {
+                    this.sound.play('buttonClick');
+                    this.logout.setTexture('logout');
+                    this.signUserOut();
+                });
+                this.input.on('pointerup', () => {
+                    this.logout.setTexture('logout');
+                });
+            } else {
+                // User is not signed in.
+                this.login = this.add.image(width / 2, height / 2, 'login');
+                this.login.setInteractive({
+                    cursor: 'pointer'
+                });
+                this.status = this.add.text(10, 40, "Playing as Guest");
+                this.status.setFontFamily('Arial');
+                this.status.setFontSize(25);
+                this.status.setOrigin(0, 1);
+                // On hover of login button
+                this.login.on('pointerover', () => {
+                    this.sound.play('buttonHover');
+                });
+                // On pressed down of login button
+                this.login.on('pointerdown', () => {
+                    this.login.setTexture('loginPress');
+                });
+                // On release of login button
+                this.login.on('pointerup', () => {
+                    this.sound.play('buttonClick');
+                    this.login.setTexture('login');
+                    window.location.href = "../../login.html";
+                });
+                this.input.on('pointerup', () => {
+                    this.login.setTexture('login');
+                });
+            }
+        }.bind(this), function (error) {
+            console.log(error);
         });
-        this.login.on('pointerdown', () => {
-            this.login.setTexture('loginPress');
+
+
+        // Display play button
+        this.play = this.add.image(width / 2, height / 2 + 70, 'play');
+        this.play.setInteractive({
+            cursor: 'pointer'
         });
-        this.login.on('pointerup', () => {
-            this.login.setTexture('login');
-            window.location.href = "../../login.html";
+        // On release of logout button
+        this.play.on('pointerover', () => {
+            this.sound.play('buttonHover');
+        });
+        // On release of logout button
+        this.play.on('pointerdown', () => {
+            this.play.setTexture('playPress');
+        });
+        // On release of logout button
+        this.play.on('pointerup', () => {
+            this.sound.play('buttonClick');
+            this.play.setTexture('play');
+            this.scene.start('Game');
         });
         this.input.on('pointerup', () => {
-            this.login.setTexture('login');
+            this.play.setTexture('play');
         });
 
-        // // Display Signup button
-        // this.signup = this.add.image(width / 2, height / 2 + 70, 'signup');
-        // this.signup.setInteractive({cursor: 'pointer'});
-        // this.signup.on('pointerdown', () => {
-        //     this.signup.setTexture('signupPress');
-        // });
-        // this.signup.on('pointerup', () => {
-        //     this.signup.setTexture('signup');
-        // });
-
-        // Display Guest button
-        this.guest = this.add.image(width / 2, height / 2 + 70, 'guest');
-        this.guest.setInteractive({cursor: 'pointer'});
-        this.guest.on('pointerover', () => {
-            this.sound.play('hover');
+        // Display About button
+        this.about = this.add.image(width / 2, height / 2 + 70 * 2, 'about');
+        this.about.setInteractive({
+            cursor: 'pointer'
         });
-        this.guest.on('pointerdown', () => {            
-            this.guest.setTexture('guestPress');
+        // On hover of about button
+        this.about.on('pointerover', () => {
+            this.sound.play('buttonHover');
         });
-
-        this.guest.on('pointerup', () => {
-            this.guest.setTexture('guest');
-            this.scene.start('Menu2');
+        // On pressed down of about button
+        this.about.on('pointerdown', () => {
+            this.about.setTexture('aboutPress');
+        });
+        // On release of about button
+        this.about.on('pointerup', () => {
+            this.sound.play('buttonClick');
+            this.about.setTexture('about');
+            window.location.href = "../../about.html";
         });
         this.input.on('pointerup', () => {
-            this.guest.setTexture('guest');
+            this.about.setTexture('about');
+        });
+
+        // Display leaderboard button
+        this.leaderboard = this.add.image(width / 2, height / 2 + 70 * 3, 'leaderboard');
+        this.leaderboard.setInteractive({
+            cursor: 'pointer'
+        });
+        // On hover of leaderboard button
+        this.leaderboard.on('pointerover', () => {
+            this.sound.play('buttonHover');
+        });
+        // On pressed down of leaderboard button
+        this.leaderboard.on('pointerdown', () => {
+            this.sound.play('buttonClick');
+            this.leaderboard.setTexture('leaderboardPress');
+        });
+        // On release of leaderboard button
+        this.leaderboard.on('pointerup', () => {
+            this.sound.play('buttonClick');
+            this.leaderboard.setTexture('leaderboard');
+            window.location.href = "../../leaderboard.html";
+        });
+        this.input.on('pointerup', () => {
+            this.leaderboard.setTexture('leaderboard');
+        });
+
+    }
+
+    signUserOut() {
+        firebase.auth().signOut().then(function () {
+            // Sign-out successful. 
+            console.log("Signed out user.");
+        }).catch(function (error) {
+            // An error happened.
+            console.log(error);
         });
     }
 }
