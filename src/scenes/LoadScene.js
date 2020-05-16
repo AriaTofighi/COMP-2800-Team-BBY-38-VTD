@@ -1,6 +1,5 @@
 import bullet from "../../assets/ingame/soapbullet.png";
 import carrier from "../../assets/ingame/carrier.png";
-//import tile from "../../assets/ingame/tile.png";
 import tower1 from "../../assets/ingame/tower1.png";
 import tower2 from "../../assets/ingame/tower2.png";
 import tower3 from "../../assets/ingame/tower3.png";
@@ -29,13 +28,31 @@ import login from "../../assets/menu/login.png";
 import loginPress from "../../assets/menu/login_press.png";
 import signup from "../../assets/menu/signup.png";
 import signupPress from "../../assets/menu/signup_press.png";
-import guest from "../../assets/menu/guest.png";
-import guestPress from "../../assets/menu/guest_press.png";
+import play from "../../assets/menu/play.png";
+import playPress from "../../assets/menu/play_press.png";
 import newGame from "../../assets/menu2/new_game.png";
 import newGamePress from "../../assets/menu2/new_game_press.png";
 import loadGame from "../../assets/menu2/load_game.png";
 import loadGamePress from "../../assets/menu2/load_game_press.png";
-import hover from "../../assets/audio/button-hover.mp3";
+import about from "../../assets/menu/about_button.png";
+import aboutPress from "../../assets/menu/about_button_press.png";
+import buttonHover from "../../assets/audio/button_hover.mp3";
+import buttonClick from "../../assets/audio/button_click.mp3";
+import towerButtonClick from "../../assets/audio/tower_button_click.mp3";
+import towerBuild from "../../assets/audio/tower_build.mp3";
+import towerDestroy from "../../assets/audio/tower_destroy.mp3";
+import gameOverAudio from "../../assets/audio/game_over.mp3";
+import soap from "../../assets/audio/soap.mp3";
+import waterStream from "../../assets/audio/water_stream.mp3";
+import logout from "../../assets/menu/logout.png";
+import logoutPress from "../../assets/menu/logout_press.png";
+import leaderboard from "../../assets/menu/leaderboard.png";
+import leaderboardPress from "../../assets/menu/leaderboard_press.png";
+// import buttonClick from "../../assets/audio/button-click.mp3";
+import city from "../../assets/ingame/city.png";
+import water from "../../assets/ingame/waterstream.png";
+import challenge from "../../assets/ingame/challenge.png";
+import resourceBorder from "../../assets/ingame/resource-border.png"
 import { BlendModes } from "phaser";
 import 'phaser';
 
@@ -121,6 +138,16 @@ export class LoadScene extends Phaser.Scene {
             }
         });
 
+        // Load challenge mode sprite
+        this.load.spritesheet({
+            key: 'challengeMode',
+            url: challenge,
+            frameConfig: {
+                frameWidth: 1920,
+                frameHeight: 1080
+            }
+        });
+
         // Add logo
         this.add.image(logo);
 
@@ -130,13 +157,16 @@ export class LoadScene extends Phaser.Scene {
         //this.load.image('tile', tile);
         this.load.image('tower1', tower1);
         this.load.image('tower2', tower2);
-        this.load.image('tower3', tower3);
+        this.load.spritesheet('tower3', tower3, {frameWidth: 64});
         this.load.image('bg', grass);
         this.load.image('corner', corner);
         this.load.image('road', road);;
         this.load.image('noTurret1', noTurret1);
         this.load.image('noTurret2', noTurret2);
         this.load.image('noTurret3', noTurret3);
+        this.load.image('city', city);
+        this.load.spritesheet('water', water, {frameWidth: 196, frameHeight: 334});
+        this.load.image('resourceBorder', resourceBorder);
 
         // Load button images
         this.load.image("cancelButton", cancelButton);
@@ -161,14 +191,28 @@ export class LoadScene extends Phaser.Scene {
         this.load.image('loginPress', loginPress);
         this.load.image('signup', signup);
         this.load.image('signupPress', signupPress);
-        this.load.image('guest', guest);
-        this.load.image('guestPress', guestPress);
+        this.load.image('play', play);
+        this.load.image('playPress', playPress);
         this.load.image('newGame', newGame);
         this.load.image('newGamePress', newGamePress);
         this.load.image('loadGame', loadGame);
         this.load.image('loadGamePress', loadGamePress);
+        this.load.image('about', about);
+        this.load.image('aboutPress', aboutPress);
+        this.load.image('logout', logout);
+        this.load.image('logoutPress', logoutPress);
+        this.load.image('leaderboard', leaderboard);
+        this.load.image('leaderboardPress', leaderboardPress);
 
-        this.load.audio('hover', hover);
+        // Load audio
+        this.load.audio('buttonHover', buttonHover);
+        this.load.audio('buttonClick', buttonClick);
+        this.load.audio('towerButtonClick', towerButtonClick);
+        this.load.audio('towerBuild', towerBuild);
+        this.load.audio('towerDestroy', towerDestroy);
+        this.load.audio('gameOverAudio', gameOverAudio);
+        this.load.audio('soap', soap);
+        this.load.audio('waterStream', waterStream);
         // Uncomment to test loading visuals
         // for (let i = 0; i < 600; i ++) {
         //     this.load.image('bullet' + i, bullet);
@@ -184,7 +228,36 @@ export class LoadScene extends Phaser.Scene {
      * Create the load scene.
      */
     create() {   
-        // TODO: check if user is logged in, if so, take them straight to Menu2
-        this.scene.start('Menu1');
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyC5esnkaw9-wOcFU1qaeA7__AEoCNawBuY",
+            authDomain: "virustd-8fdd6.firebaseapp.com",
+            databaseURL: "https://virustd-8fdd6.firebaseio.com",
+            projectId: "virustd-8fdd6",
+            storageBucket: "virustd-8fdd6.appspot.com",
+            messagingSenderId: "819193398890",
+            appId: "1:819193398890:web:393570d53dc05c5eeaec13"
+        };
+        // Initialize Firebase
+        this.app = firebase.initializeApp(firebaseConfig);
+        this.db = firebase.firestore();
+        console.log(this.db);
+
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                // User is signed in.       
+                this.scene.start('Menu1');
+            } else {
+                // User is not signed in.
+                this.scene.start('Menu1');
+            }
+        }.bind(this), function (error) {
+            console.log(error);
+        });
     }
+    
 }
+
+
+
+

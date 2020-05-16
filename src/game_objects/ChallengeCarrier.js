@@ -1,6 +1,6 @@
 import 'phaser';
 
-export default class Carrier extends Phaser.GameObjects.PathFollower {
+export default class ChallengeCarrier extends Phaser.GameObjects.PathFollower {
     /**
      * Constructor for the carrier object.
      */
@@ -100,9 +100,8 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
     update() {
         // Destroys this carrier and makes the health bar invisible if reaches end of path
         if (this.reachedEndPath()) {
-            if (!this.clean){
-                this.scene.ui.health -= 5;
-                this.scene.ui.healthText.setText("Health: " + this.scene.ui.health);
+            if (!this.clean & this.scene.firstTime){
+                this.scene.health -= 5;
             }
             this.barBack.alpha = 0;
             this.barHealth.alpha = 0;
@@ -129,8 +128,6 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
         if (newWidth >= 0) {
             this.healthRect.width = newWidth;
         } else {
-            this.scene.ui.money += 25;
-            this.scene.ui.moneyText.setText("Money: " + this.scene.ui.money);
             this.clearTint();
             this.clean = true;
             this.scene.carriers.remove(this);

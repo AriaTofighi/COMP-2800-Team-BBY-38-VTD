@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "bootstrap": "^4.4.1",
+    "firebase": "^7.14.3",
+    "firebaseui": "^4.5.0",
     "matter": "^0.2.0",
     "phaser": "^3.23.0"
   },

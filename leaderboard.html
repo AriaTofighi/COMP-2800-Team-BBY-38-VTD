@@ -15,32 +15,72 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    
+
     <!-- External CSS -->
     <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.5.0/firebase-ui-auth.css" />
     <!-- Personal CSS -->
-    <link type="text/css" href="style/login.css" rel="stylesheet">
+    <link type="text/css" href="style/leaderboard.css" rel="stylesheet">
     <link rel="icon" href="assets/logo/favicon.png" type="image/png" sizes="32x32">
 </head>
 
 <body>
-    
-
-    <div id="loader-container">
-        <h1 id="loader">Loading...</h1>
-    </div>
-    <!-- Sign out section -->
-    <div id="sign-out-container">
-        <h1 id="sign-in-status"></h1>
-        <button id="log-out-btn">Log Out</button>
-    </div>
-    
-    <!-- Sign in section -->
-    <div id="sign-in-container">
-        <div id="firebaseui-auth-container"></div>
+    <div class="container">
+        <table class="table table-hover table-bordered table-sm">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Best Round</th>
+                </tr>
+            </thead>
+            <tbody id="table-data">
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <a id="back-to-vtd" href="index.html" class="btn btn-default" disabled>Back to VTD</a>
+
+
+
 
     <!-- Insert scripts here -->
     <!-- The core Firebase JS SDK is always required and must be listed first -->
@@ -48,7 +88,7 @@
     <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/ui/4.5.0/firebase-ui-auth.js"></script>
-    <script src="src/login.js"></script>
+    <script src="src/leaderboard.js"></script>
 </body>
 
 </html>
