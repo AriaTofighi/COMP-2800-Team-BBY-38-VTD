@@ -192,9 +192,9 @@ export class UIScene extends Phaser.Scene {
             this.sound.play('buttonClick');
         }.bind(this));
 
-        this.currentRoundText = this.add.text(570, this.moneyText.getBottomCenter().y + 6, "Current round: " + this.game.currentRound);
-        this.currentRoundText.depth = 1;
-        this.currentRoundText.setFill("brown");
+        this.currentRoundText = this.add.text(this.healthText.getBottomRight().x + 20, 0, "Current round: " + this.game.currentRound);
+        this.currentRoundText.setStyle({fontFamily: 'Odibee Sans'});
+        infoContainer.add(this.currentRoundText);
 
         // Switching the game mode when dragging the current round text
         this.currentRoundText.setInteractive();
@@ -206,8 +206,6 @@ export class UIScene extends Phaser.Scene {
                 this.scene.start('Challenge');
             }
         }.bind(this));
-
-        this.currentRoundText = this.add.text(180, 40, "Current round: " + this.game.currentRound, {fontFamily: 'Odibee Sans'});
     }
 
     toggleSidebar() {
