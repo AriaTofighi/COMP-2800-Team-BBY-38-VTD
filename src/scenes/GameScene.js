@@ -565,18 +565,29 @@ export class GameScene extends Phaser.Scene {
         console.log("Starting round " + this.currentRound);
         console.log("Config for this round: " + JSON.stringify(config));
         this.disableStartRoundButton();
+
         // Start directly for first time in order to give carrier group an active number immediately.
         let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
         this.carriers.add(carrier);
-        let intervaler = setInterval(function () {
-            let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
-            this.carriers.add(carrier);
-            this.carriersMade++;
-        }.bind(this), config.carrierSpace);
+        
+        for (let i = 0; i < config.carrierCount - 1; i++) {
+            setTimeout(function() {
+                let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
+                this.carriers.add(carrier);
+                this.carriersMade++;
 
-        setTimeout(function () {
-            clearInterval(intervaler);
-        }.bind(this), (config.carrierCount - 1) * config.carrierSpace);
+            }.bind(this), config.carrierSpace * (i + 1));
+        }
+
+        // let intervaler = setInterval(function () {
+        //     let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
+        //     this.carriers.add(carrier);
+        //     this.carriersMade++;
+        // }.bind(this), config.carrierSpace);
+
+        // setTimeout(function () {
+        //     clearInterval(intervaler);
+        // }.bind(this), (config.carrierCount - 1) * config.carrierSpace);
 
         // Setting the correct round config for next round 
         this.ui.startRoundButton.once('pointerdown', function () {

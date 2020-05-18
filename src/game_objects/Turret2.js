@@ -17,7 +17,7 @@ export default class Turret2 extends Phaser.GameObjects.Image {
         this.bulletSpeed = 4;
 
         // Setting the price of the turret
-        this.price = 200;
+        this.price = 800;
 
         this.setDisplaySize(32, 32);
         this.setPosition(this.x, this.y);
