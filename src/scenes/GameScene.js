@@ -32,9 +32,6 @@ export class GameScene extends Phaser.Scene {
         this.rDefaultConfig = rDefaultConfig; 
         this.roundConfigs = [this.r1Config, this.r2Config, this.r3Config];
         this.currentRound = 0;
-        //this.tower1IsSelected = false;
-        //this.tower2IsSelected = false;
-        //this.tower3IsSelected = false;
     }
 
     /**
@@ -76,6 +73,7 @@ export class GameScene extends Phaser.Scene {
         this.ui = this.scene.get('UI');
         this.cellWidth = 32;
         this.cellHeight = 32;
+        this.speed = 1;
         this.halfCell = 16; // Used to move objects to center of cells
         const colCount = this.width / this.cellWidth; // 25 columns; use this.cellWidth * 24 for last column
         const rowCount = this.height / this.cellWidth; // 19 rows; use this.cellWidth * 18 for last row
@@ -89,8 +87,6 @@ export class GameScene extends Phaser.Scene {
 
         //Create background image.
         let bg = this.add.tileSprite(this.width/2, this.height/2, this.width, this.height, 'bg');
-        //let bg = this.add.image(this.width/2, this.height/2, 'bg');
-        //bg.setDisplaySize(this.width, this.height);
 
         //Create path tiles.
         let tileX, tileY;
@@ -135,21 +131,6 @@ export class GameScene extends Phaser.Scene {
         }
         //Place city.
         this.add.image((this.cellWidth * 16)+20, this.cellWidth * rowCount - 1, 'city').setScale(0.9);
-
-        //Create frames from spritesheets
-
-        this.anims.create({
-            key: 'waterstart',
-            frames: this.anims.generateFrameNumbers('water', {start: 0, end: 2}),
-            frameRate: 15
-        });
-
-        this.anims.create({
-            key: 'watershoot',
-            frames: this.anims.generateFrameNumbers('water', {start: 3, end: 5}),
-            repeat: -1,
-            frameRate: 20
-        });
         
         // Create and draw path
         let graphics = this.add.graphics();
@@ -176,6 +157,7 @@ export class GameScene extends Phaser.Scene {
         // Pause the game when clicking escape
         this.input.keyboard.on('keydown-ESC', function () {
             this.scene.launch('Pause');
+            this.scene.pause('UI');
             this.scene.pause('Game');
         }.bind(this));
 
@@ -313,8 +295,6 @@ export class GameScene extends Phaser.Scene {
     placeTower(turret, i, j){
         this.turrets.add(turret);
         this.gridCells[i][j] = 1;
-        console.log(turret);
-        console.log(this.turrets);
     }
 
     fire(carrier, turret){

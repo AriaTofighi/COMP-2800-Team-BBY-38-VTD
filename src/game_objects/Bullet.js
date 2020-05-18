@@ -1,5 +1,5 @@
-export default class Bullet extends Phaser.GameObjects.Image {
-    constructor(scene, x, y) {
-        super(scene, x, y, 'bullet');
+export default class Bullet extends Phaser.GameObjects.Sprite {
+    constructor(scene, x, y, bulletSprite) {
+        super(scene, x, y, bulletSprite);
     }
 }

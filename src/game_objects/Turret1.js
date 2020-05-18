@@ -46,7 +46,6 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         if (!(this.delta >= 1000 / this.fireRate)) {
             return;
         }
-        // console.log("fire");
 
         // Rotating the turret towards the carrier when firing
         var angle = Phaser.Math.Angle.Between(this.x, this.y, carrier.x, carrier.y);
@@ -59,11 +58,6 @@ export default class Turret1 extends Phaser.GameObjects.Image {
 
         // Shoots at the carrier
         this.scene.physics.moveToObject(this.bullet, carrier, this.bulletSpeed * 100);
-
-        // Follows the carrier all the time
-        // setInterval(function() {
-        //     this.physics.moveToObject(this.bullet, carrier, 230);
-        // }.bind(this), 100);
 
         this.delta = 0;
 

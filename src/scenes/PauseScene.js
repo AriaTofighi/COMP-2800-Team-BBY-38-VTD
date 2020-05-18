@@ -23,6 +23,7 @@ export class PauseScene extends Phaser.Scene {
             this.sound.play('buttonClick');
             this.resumeButton.setTexture('resumePressButton');
             this.scene.resume('Game');
+            this.scene.resume('UI');
             this.scene.stop();
         }.bind(this));
 
