@@ -22,11 +22,10 @@ export class UIScene extends Phaser.Scene {
 
         //Create sidebar
         this.sidebar = this.add.container(this.width, this.height / 2 - 200);
-        let sidebox = this.add.graphics();
+        let sidebox = this.add.image(0, 0, 'box');
+        sidebox.setOrigin(0,0);
         this.sidebar.depth = 1;
         this.sidebar.add(sidebox);
-        sidebox.fillStyle(0xff0000);
-        sidebox.fillRect(4, -9, 96, 384);
 
         // Create menu toggle button
         this.menuShowing = false;
@@ -133,22 +132,25 @@ export class UIScene extends Phaser.Scene {
         this.sidebar.add(menuTower2);
         this.sidebar.add(menuTower3);
 
-        let infoContainer = this.add.container(this.width - 250, 10);
-        this.descText = this.add.text(0, 0, '');
-        this.costText = this.add.text(0, this.descText.getBottomCenter().y + 10, '');
+        let infoContainer = this.add.container(this.width/2 - 10, 10);
+        this.infobox = this.add.image(0, 60, 'box');
+        this.infobox.setOrigin(0,0);
+        this.infobox.setScale(0.7, 1);
+        this.infobox.setRotation(-Math.PI/2);
+        this.descText = this.add.text(230, 0, '', {fontFamily: 'Odibee Sans'});
+        this.costText = this.add.text(230, this.descText.getBottomCenter().y + 10, '', {fontFamily: 'Odibee Sans'});
+        infoContainer.add(this.infobox);
         infoContainer.add(this.descText);
         infoContainer.add(this.costText);
 
         // Create resource information text
         this.health = 100;
-        this.healthText = this.add.text(585, 25, "Health: " + this.health);
-        this.healthText.depth = 1;
-        this.healthText.setFill("brown");
-
+        this.healthText = this.add.text(10, 0, "Health: " + this.health, {fontFamily: 'Odibee Sans'});
         this.money = 400;
-        this.moneyText = this.add.text(585, this.healthText.getBottomCenter().y + 6, 'Money: ' + this.money);
-        this.moneyText.depth = 1;
-        this.moneyText.setFill("brown");
+        this.moneyText = this.add.text(10, this.healthText.getBottomCenter().y + 10, 'Money: ' + this.money, {fontFamily: 'Odibee Sans'});
+
+        infoContainer.add(this.healthText);
+        infoContainer.add(this.moneyText);
 
         this.input.keyboard.on('keydown-M', function () {
             this.money += 100;
@@ -205,9 +207,7 @@ export class UIScene extends Phaser.Scene {
             }
         }.bind(this));
 
-        this.resourceBorder = this.add.image(630, 55, 'resourceBorder');
-        // this.resourceBorder.setOrigin(0, 0);
-        this.resourceBorder.setDisplaySize(320, 135);
+        this.currentRoundText = this.add.text(180, 40, "Current round: " + this.game.currentRound, {fontFamily: 'Odibee Sans'});
     }
 
     toggleSidebar() {

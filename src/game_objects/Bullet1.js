@@ -10,7 +10,8 @@ export default class Bullet1 extends Bullet {
         // Setting the damage of the bullet
         this.damage = 5;
 
-        this.setDisplaySize(8, 8);
+        this.setSize(16, 16);
+        this.setDisplaySize(16,16);
         this.setPosition(x + this.scene.halfCell / 2, y + this.scene.halfCell / 2);
 
         this.scene.physics.world.enable(this);
