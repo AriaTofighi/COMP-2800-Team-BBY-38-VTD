@@ -198,8 +198,11 @@ export class UIScene extends Phaser.Scene {
         this.currentRoundText.setInteractive();
         this.input.setDraggable(this.currentRoundText);
         this.currentRoundText.on('drag', function () {
-            this.scene.stop('UI');
-            this.scene.start('Challenge');
+            if(this.game.firstSwitch) {
+                this.game.firstSwitch = false;
+                this.scene.stop('UI');
+                this.scene.start('Challenge');
+            }
         }.bind(this));
 
         this.resourceBorder = this.add.image(630, 55, 'resourceBorder');

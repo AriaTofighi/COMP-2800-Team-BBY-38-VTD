@@ -50,6 +50,7 @@ export class GameScene extends Phaser.Scene {
         this.firstRoundStarted = false;
         this.firstSave = true;
         this.loggedIn = true; 
+        this.firstSwitch = true;
     }
 
     /**
@@ -302,14 +303,7 @@ export class GameScene extends Phaser.Scene {
 
         //     // Once a turret is selected, close the sidebar.
         //     this.toggleSidebar();
-
-        // Create description area.
-        let infoContainer = this.add.container(this.width - 250, 10);
-        this.descText = this.add.text(0, 0, '');
-        this.costText = this.add.text(0, this.descText.getBottomCenter().y + 10, '');
-        infoContainer.add(this.descText);
-        infoContainer.add(this.costText);
-
+        
         // Create and draw bullet
         // this.bullet = this.physics.add.image(this.cellWidth * 15 + this.halfCell, this.cellWidth * 18 + this.halfCell, 'bullet');
         // this.bullet.setDisplaySize(32, 32);
@@ -489,8 +483,11 @@ export class GameScene extends Phaser.Scene {
         // Switching the game mode typing 'test'
         this.combo = this.input.keyboard.createCombo('test', { resetOnMatch: true});
         this.input.keyboard.on('keycombomatch', function () {
-            this.scene.stop('UI');
-            this.scene.start('Challenge');
+            if (this.firstSwitch) {
+                this.firstSwitch = false;
+                this.scene.stop('UI');
+                this.scene.start('Challenge');
+            }
         }.bind(this));
     }
 
