@@ -35,7 +35,6 @@ export class ChallengeScene extends Phaser.Scene {
         // Starting the challenge after the five seconds
         setTimeout(function () {
             if (this.firstSpawn) {
-                console.log('lol')
                 this.firstSpawn = false;
                 this.timeStarted = new Date();
                 this.startRound(this.ChallengeConfig);
@@ -422,7 +421,9 @@ export class ChallengeScene extends Phaser.Scene {
         this.newBackground = this.add.rectangle(0, 0, 800, 608, 0x000000);
         this.newBackground.setOrigin(0, 0);
         this.newBackground.depth = 2;
-        this.newText = this.add.text(120, 270, 'You survived for ' + this.timeSurvived + " seconds");
+        this.newText = this.add.text(120, 270, "You survived for " + this.timeSurvived + " seconds");
+        var msg = new SpeechSynthesisUtterance("You survived for " + this.timeSurvived + " seconds");
+        window.speechSynthesis.speak(msg);
         this.newText.setFill('red');
         this.newText.setFontSize(35);
         this.newText.depth = 3;
