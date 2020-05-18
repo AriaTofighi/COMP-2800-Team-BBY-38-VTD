@@ -1,6 +1,6 @@
 {
-    "duration": 10000, 
-    "carrierHP": 70,
+    "duration": 7500, 
+    "carrierHP": 200,
     "carrierCount": 10000,
-    "carrierSpace": 350
+    "carrierSpace": 200
 }

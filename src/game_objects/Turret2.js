@@ -1,4 +1,5 @@
-import Bullet1 from "./Bullet1";
+import Bullet2 from "../game_objects/Bullet2";
+import Bullet from "./Bullet";
 
 export default class Turret2 extends Phaser.GameObjects.Image {
     /**
@@ -15,6 +16,8 @@ export default class Turret2 extends Phaser.GameObjects.Image {
         this.delta = 0;
         this.fireRate = 20;
         this.bulletSpeed = 4;
+        this.shooting = false;
+        this.bullet = new Bullet2(this.scene, this.x, this.y, 1);
 
         // Setting the price of the turret
         this.price = 800;
@@ -74,11 +77,42 @@ export default class Turret2 extends Phaser.GameObjects.Image {
 
     }
 
+    // Fires a turret shot at a carrier
+    fire(carrier) {
+        // Rotating the turret towards the carrier when firing
+        var angle = Phaser.Math.Angle.Between(this.x, this.y, carrier.x, carrier.y);
+        this.setRotation(angle);
+
+        // Creating a bullet
+        if (!this.shooting) {
+            this.bullet.setVisible(true);
+            this.bullet.hitbox.iterate((hBox) =>{
+                this.scene.bullets.add(hBox);
+            })
+            this.bullet.setOrigin(0.5, 1);
+            this.shooting = true;
+        }
+
+        let offset = 20;
+        this.bullet.hitbox.iterate((hBox) => {
+            hBox.setPosition(this.x + offset * Math.cos(angle), this.y + offset * Math.sin(angle));
+            offset+=20;
+        });
+
+        this.bullet.setPosition(this.x + this.scene.halfCell * Math.cos(angle), this.y + this.scene.halfCell * Math.sin(angle));
+        this.bullet.setRotation(angle + Math.PI/2);
+
+        this.delta = 0;
+    }
+
     /**
      * Updates the turret 2 object.
      */
     update(time, delta) {
         this.delta += delta;
-        // console.log('Delta: ' + this.delta);
+        if(this.delta >= 20){
+            this.shooting = false;
+            this.bullet.setVisible(false);
+        }
     }
 }

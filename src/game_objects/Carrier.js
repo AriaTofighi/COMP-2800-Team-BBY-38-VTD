@@ -74,7 +74,7 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
         this.setDisplaySize(24, 24);
         this.scene.physics.world.enable(this);
         this.body.debugShowBody = false;
-        this.body.setCircle(16, 16, 16);
+        this.body.setCircle(16);
         this.setRotation(1.5708);
         this.startFollow({
             rotateToPath: true,
@@ -114,6 +114,7 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
      * Carrier reaches end of path
      */
     reachedEndPath() {
+        
         return this.x == this.scene.cellWidth * 16 + this.scene.halfCell && this.y == this.scene.cellWidth * 19 + this.scene.halfCell;
     }
 

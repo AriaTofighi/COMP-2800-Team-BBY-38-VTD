@@ -719,7 +719,6 @@ export class ChallengeScene extends Phaser.Scene {
         setTimeout(function () {
             this.background.alpha = 0;
             this.challenge.alpha = 0;
-            
         }.bind(this), 4000);
 
         // Creating the challenge mode animation
