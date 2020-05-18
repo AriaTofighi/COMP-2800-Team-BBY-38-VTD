@@ -573,6 +573,7 @@ export class GameScene extends Phaser.Scene {
         let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
         this.carriers.add(carrier);
         
+        // Spawns the specified number of carriers in config object
         for (let i = 0; i < config.carrierCount - 1; i++) {
             setTimeout(function() {
                 let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
