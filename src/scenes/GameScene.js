@@ -164,10 +164,10 @@ export class GameScene extends Phaser.Scene {
         this.path.lineTo(this.cellWidth * 16 + this.halfCell, this.cellWidth * 11 + this.halfCell);
         this.path.lineTo(this.cellWidth * 16 + this.halfCell, this.cellWidth * 19 + this.halfCell); // 19 to end off screen.
 
-        this.input.keyboard.on('keydown-M', function() {
-            this.money += 100;
-            this.moneyText.setText("Money: " + this.money);
-        }.bind(this));  
+        // this.input.keyboard.on('keydown-M', function() {
+        //     this.money += 100;
+        //     this.moneyText.setText("Money: " + this.money);
+        // }.bind(this));  
 
         // Pause the game when clicking escape.
         this.input.keyboard.on('keydown-ESC', function () {
@@ -393,8 +393,6 @@ export class GameScene extends Phaser.Scene {
             this.scene.pause('Game');
         }
         if (this.firstRoundStarted) {
-            console.log(this.currentConfig.carrierCount - 1);
-            console.log(this.carriersMade);
             if (this.carriersAllGone() && this.currentConfig.carrierCount - 1 == this.carriersMade) {
                 this.enableStartRoundButton();
                 if (this.loggedIn && this.firstSave) {

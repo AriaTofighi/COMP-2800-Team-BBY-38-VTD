@@ -235,6 +235,12 @@ export class UIScene extends Phaser.Scene {
     }
 
     showTurretExample() {
+        // showing no turret is allowed
+        this.noTurret = this.add.image(0, 0, 'noTurret');
+        this.noTurret.setDisplaySize(32, 32);
+        this.noTurret.setOrigin(0, 0);
+        this.noTurret.alpha = 0;
+
         if (this.tower1IsSelected) {
             this.sound.play('towerButtonClick');
             // showing the turret example with its radius
@@ -246,12 +252,6 @@ export class UIScene extends Phaser.Scene {
             this.turretExample.setOrigin(0, 0);
             this.turretExample.setDisplaySize(32, 32);
             this.turretExample.alpha = 0;
-
-            // showing no turret is allowed here
-            this.noTurretHere = this.add.image(0, 0, 'noTurret1');
-            this.noTurretHere.setDisplaySize(32, 32);
-            this.noTurretHere.setOrigin(0, 0);
-            this.noTurretHere.alpha = 0;
         } else if (this.tower2IsSelected) {
             this.sound.play('towerButtonClick');
             // showing the turret example with its radius
@@ -263,12 +263,6 @@ export class UIScene extends Phaser.Scene {
             this.turretExample.setOrigin(0, 0);
             this.turretExample.setDisplaySize(32, 32);
             this.turretExample.alpha = 0;
-
-            // showing no turret is allowed here
-            this.noTurretHere = this.add.image(0, 0, 'noTurret2');
-            this.noTurretHere.setDisplaySize(32, 32);
-            this.noTurretHere.setOrigin(0, 0);
-            this.noTurretHere.alpha = 0;
         } else if (this.tower3IsSelected) {
             this.sound.play('towerButtonClick');
             // showing the turret example with its radius
@@ -280,12 +274,6 @@ export class UIScene extends Phaser.Scene {
             this.turretExample.setOrigin(0, 0);
             this.turretExample.setDisplaySize(32, 32);
             this.turretExample.alpha = 0;
-
-            // showing no turret is allowed here
-            this.noTurretHere = this.add.image(0, 0, 'noTurret3');
-            this.noTurretHere.setDisplaySize(32, 32);
-            this.noTurretHere.setOrigin(0, 0);
-            this.noTurretHere.alpha = 0;
         }
 
         // Determines if the cursor is over a valid tile for tower placement
@@ -294,7 +282,7 @@ export class UIScene extends Phaser.Scene {
             let j = Math.floor(pointer.x / 32); // Column index
 
             this.turretExample.setPosition(j * 32, i * 32);
-            this.noTurretHere.setPosition(j * 32, i * 32);
+            this.noTurret.setPosition(j * 32, i * 32);
             this.turretExampleRadius.setPosition((j + 0.5) * 32, (i + 0.5) * 32);
 
             if (this.tower1IsSelected) {
@@ -302,42 +290,42 @@ export class UIScene extends Phaser.Scene {
                     this.turretExample.alpha = 0;
                     this.turretExampleRadius.alpha = 0;
                     this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0);
-                    this.noTurretHere.alpha = 1;
+                    this.noTurret.alpha = 1;
                 } else {
                     this.turretExample.alpha = 1;
                     this.turretExampleRadius.alpha = 0.8;
                     this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0.8);
-                    this.noTurretHere.alpha = 0;
+                    this.noTurret.alpha = 0;
                 }
             } else if (this.tower2IsSelected) {
                 if (this.game.isPathTile(i, j)) {
                     this.turretExample.alpha = 0;
                     this.turretExampleRadius.alpha = 0;
                     this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0);
-                    this.noTurretHere.alpha = 1;
+                    this.noTurret.alpha = 1;
                 } else {
                     this.turretExample.alpha = 1;
                     this.turretExampleRadius.alpha = 0.8;
                     this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0.8);
-                    this.noTurretHere.alpha = 0;
+                    this.noTurret.alpha = 0;
                 }
             } else if (this.tower3IsSelected) {
                 if (this.game.isPathTile(i, j)) {
                     this.turretExample.alpha = 0;
                     this.turretExampleRadius.alpha = 0;
                     this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0);
-                    this.noTurretHere.alpha = 1;
+                    this.noTurret.alpha = 1;
                 } else {
                     this.turretExample.alpha = 1;
                     this.turretExampleRadius.alpha = 0.8;
                     this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0.8);
-                    this.noTurretHere.alpha = 0;
+                    this.noTurret.alpha = 0;
                 }
             } else {
                 this.turretExample.alpha = 0;
                 this.turretExampleRadius.alpha = 0;
                 this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0);
-                this.noTurretHere.alpha = 0;
+                this.noTurret.alpha = 0;
             }
 
         }.bind(this));

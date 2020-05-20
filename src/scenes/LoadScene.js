@@ -8,9 +8,7 @@ import pauseButton from "../../assets/buttons/pause.png";
 import grass from "../../assets/ingame/grass.png";
 import corner from "../../assets/ingame/corner.png";
 import road from "../../assets/ingame/road.png";
-import noTurret1 from "../../assets/ingame/noTurret1.png";
-import noTurret2 from "../../assets/ingame/noTurret2.png";
-import noTurret3 from "../../assets/ingame/noTurret3.png";
+import noTurret from "../../assets/ingame/noTurret.png";
 import menuButton from "../../assets/buttons/menuButton.png"
 import resumeButton from "../../assets/pauseMenu/resume.png";
 import resumePressButton from "../../assets/pauseMenu/resume_press.png";
@@ -159,10 +157,8 @@ export class LoadScene extends Phaser.Scene {
         this.load.spritesheet('tower3', tower3, {frameWidth: 50});
         this.load.image('bg', grass);
         this.load.image('corner', corner);
-        this.load.image('road', road);;
-        this.load.image('noTurret1', noTurret1);
-        this.load.image('noTurret2', noTurret2);
-        this.load.image('noTurret3', noTurret3);
+        this.load.image('road', road);
+        this.load.image('noTurret', noTurret);
         this.load.image('city', city);
         this.load.spritesheet('water', water, {frameWidth: 196, frameHeight: 336});
         this.load.image('mask', mask);
@@ -257,7 +253,3 @@ export class LoadScene extends Phaser.Scene {
     }
     
 }
-
-
-
-
