@@ -130,7 +130,7 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
         if (newWidth >= 0) {
             this.healthRect.width = newWidth;
         } else {
-            this.scene.ui.money += 25;
+            this.scene.ui.money += 15;
             this.scene.ui.moneyText.setText("Money: " + this.scene.ui.money);
             this.clearTint();
             this.clean = true;

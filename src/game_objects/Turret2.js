@@ -19,20 +19,17 @@ export default class Turret2 extends Phaser.GameObjects.Image {
         this.shooting = false;
         this.bullet = new Bullet2(this.scene, this.x, this.y, 1);
 
-        // Setting the price of the turret
-        this.price = 800;
-
         this.setDisplaySize(32, 32);
         this.setPosition(this.x, this.y);
 
         // Creating the radius of the turret
-        this.radius = this.scene.add.circle(0, 0, 85, 0xECDBDB);
+        this.radius = this.scene.add.circle(0, 0, Turret2.getHitRadius(), 0xECDBDB);
         this.radius.alpha = 0;
         this.radius.setPosition((j + 0.5) * 32, (i + 0.5) * 32);
         this.radius.setStrokeStyle(3, 0x046307, 0);
 
         this.scene.physics.world.enable(this);
-        this.body.setCircle(170, -139, -139);
+        this.body.setCircle(Turret2.getHitRadius() * 2, -139, -139);
         this.body.debugShowBody = false;
 
         // Showing the radius of the turret when hovering
@@ -49,33 +46,42 @@ export default class Turret2 extends Phaser.GameObjects.Image {
 
         this.scene.add.existing(this);
     }
-    // Fires a turret shot at a carrier (must be here, NOT Turret.js for access to groups)
-    fire(carrier) {
-        if (!(this.delta >= 1000 / this.fireRate)) {
-            return;
-        }
-        // console.log("fire");
 
-        // Rotating the turret towards the carrier when firing
-        var angle = Phaser.Math.Angle.Between(this.x, this.y, carrier.x, carrier.y);
-        this.setRotation(angle);
-
-        // Creating a bullet
-        this.bullet = new Bullet1(this.scene, this.x + this.scene.halfCell * Math.cos(angle), this.y + this.scene.halfCell * Math.sin(angle));
-        this.scene.bullets.add(this.bullet);
-        this.bullet.body.debugShowVelocity = false;
-
-        // Shoots at the carrier
-        this.scene.physics.moveToObject(this.bullet, carrier, this.bulletSpeed * 100);
-
-        // Follows the carrier all the time
-        // setInterval(function() {
-        //     this.physics.moveToObject(this.bullet, carrier, 230);
-        // }.bind(this), 100);
-
-        this.delta = 0;
-
+    static getPrice() {
+        return this.price;
     }
+
+    static getHitRadius() {
+        return this.hitRadius;
+    }
+
+    // // Fires a turret shot at a carrier (must be here, NOT Turret.js for access to groups)
+    // fire(carrier) {
+    //     if (!(this.delta >= 1000 / this.fireRate)) {
+    //         return;
+    //     }
+    //     // console.log("fire");
+
+    //     // Rotating the turret towards the carrier when firing
+    //     var angle = Phaser.Math.Angle.Between(this.x, this.y, carrier.x, carrier.y);
+    //     this.setRotation(angle);
+
+    //     // Creating a bullet
+    //     this.bullet = new Bullet1(this.scene, this.x + this.scene.halfCell * Math.cos(angle), this.y + this.scene.halfCell * Math.sin(angle));
+    //     this.scene.bullets.add(this.bullet);
+    //     this.bullet.body.debugShowVelocity = false;
+
+    //     // Shoots at the carrier
+    //     this.scene.physics.moveToObject(this.bullet, carrier, this.bulletSpeed * 100);
+
+    //     // Follows the carrier all the time
+    //     // setInterval(function() {
+    //     //     this.physics.moveToObject(this.bullet, carrier, 230);
+    //     // }.bind(this), 100);
+
+    //     this.delta = 0;
+
+    // }
 
     // Fires a turret shot at a carrier
     fire(carrier) {
@@ -116,3 +122,8 @@ export default class Turret2 extends Phaser.GameObjects.Image {
         }
     }
 }
+
+// Static variable
+Turret2.price = 300;
+Turret2.hitRadius = 85;
+

@@ -42,6 +42,7 @@ export class GameScene extends Phaser.Scene {
         this.firstSave = true;
         this.loggedIn = true; 
         this.firstSwitch = true;
+        this.delta = 0;
     }
 
     /**
@@ -164,11 +165,6 @@ export class GameScene extends Phaser.Scene {
         this.path.lineTo(this.cellWidth * 16 + this.halfCell, this.cellWidth * 11 + this.halfCell);
         this.path.lineTo(this.cellWidth * 16 + this.halfCell, this.cellWidth * 19 + this.halfCell); // 19 to end off screen.
 
-        this.input.keyboard.on('keydown-M', function() {
-            this.money += 100;
-            this.moneyText.setText("Money: " + this.money);
-        }.bind(this));  
-
         // Pause the game when clicking escape.
         this.input.keyboard.on('keydown-ESC', function () {
             this.sound.play('buttonClick');
@@ -198,7 +194,7 @@ export class GameScene extends Phaser.Scene {
                 this.displayName.setFill('red');
                 this.displayName.setStroke('black', 3);
 
-                this.bestRound = this.add.text(170, 30, "Best: " + user.bestRound);
+                this.bestRound = this.add.text(170, 30, "Best Round: ");
                 this.bestRound.setFontFamily('Arial');
                 this.bestRound.setFontSize(15);
                 this.bestRound.setStroke('black', 3);
@@ -207,7 +203,7 @@ export class GameScene extends Phaser.Scene {
                 this.db.collection("users").doc(user.uid).onSnapshot(function (userDoc) {
                 console.log(userDoc.data());
                 let userBestRound = userDoc.data()["bestRound"];
-                this.bestRound.setText("Best round: " + userBestRound);
+                this.bestRound.setText("Best Round: " + userBestRound);
         }.bind(this));
             } else {
                 // User is not signed in.
@@ -231,6 +227,36 @@ export class GameScene extends Phaser.Scene {
                 this.scene.start('Challenge');
             }
         }.bind(this));
+
+        // Toggles fast-forward
+        this.input.keyboard.on('keydown-F', function () {
+            if (!this.fastForwarding) {
+                this.tweens.timeScale = 2; // tweens
+                this.physics.world.timeScale = 2; // physics
+                this.time.timeScale = 2; // time events
+                this.turrets.tweens.timeScale = 2; // tweens
+                this.turrets.physics.world.timeScale = 2; // physics
+                this.turrets.time.timeScale = 2; // time events   
+                this.fastForwarding = true;
+            } else {
+                this.tweens.timeScale = 1; // tweens
+                this.physics.world.timeScale = 1; // physics
+                this.time.timeScale = 1; // time events
+                this.turrets.tweens.timeScale = 2; // tweens
+                this.turrets.physics.world.timeScale = 2; // physics
+                this.turrets.time.timeScale = 2; // time events   
+                this.fastForwarding = false;
+            }
+        }.bind(this));
+
+        this.input.keyboard.on('keydown-T', function () {
+            this.tweetScore();
+        }.bind(this));
+
+        // Display info box that explains the game 
+        this.scene.pause('UI');
+        this.scene.pause();
+        this.scene.launch('Info');
     }
 
     /**
@@ -255,13 +281,24 @@ export class GameScene extends Phaser.Scene {
     }
 
     /**
+     * @src https://www.html5gamedevs.com/topic/6970-phaser-js-share-score-on-twitter/ by user Nambiar
+     */
+    tweetScore() {        
+        //share score on twitter       
+         var tweetbegin = 'http://twitter.com/home?status=';        
+         var tweetTxt = 'I scored '+ 10 + ' at this game -' + window.location.href + '.';        
+         var finalTweet = tweetbegin + encodeURIComponent(tweetTxt);        
+         window.open(finalTweet,'_blank');    
+    }
+
+    /**
      * Increment the default configuration to set higher difficulty as rounds progress.
      */
     incrementDefaultConfig() {
-        this.rDefaultConfig.duration -= 1000;
+        this.rDefaultConfig.duration *= 0.95;
         this.rDefaultConfig.carrierHP += 5;
         this.rDefaultConfig.carrierCount += 5;
-        this.rDefaultConfig.carrierSpace -= 25;
+        this.rDefaultConfig.carrierSpace *= 0.9;
         console.log("default config adjusted");
     }
 
@@ -303,6 +340,7 @@ export class GameScene extends Phaser.Scene {
         this.carriersMade = 0;
         this.currentConfig = config;
         this.currentRound += 1;
+        this.delta = 0;
         this.ui.currentRoundText.setText("Current round: " + this.currentRound);
         console.log("Starting round " + this.currentRound);
         console.log("Config for this round: " + JSON.stringify(config));
@@ -313,14 +351,14 @@ export class GameScene extends Phaser.Scene {
         this.carriers.add(carrier);
         
         // Spawns the specified number of carriers in config object
-        for (let i = 0; i < config.carrierCount - 1; i++) {
-            setTimeout(function() {
-                let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
-                this.carriers.add(carrier);
-                this.carriersMade++;
+        // for (let i = 0; i < config.carrierCount - 1; i++) {
+        //     setTimeout(function() {
+        //         let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
+        //         this.carriers.add(carrier);
+        //         this.carriersMade++;
 
-            }.bind(this), config.carrierSpace * (i + 1));
-        }
+        //     }.bind(this), config.carrierSpace * (i + 1));
+        // }
 
         // Setting the correct round config for next round 
         this.ui.startRoundButton.once('pointerdown', function () {
@@ -383,19 +421,36 @@ export class GameScene extends Phaser.Scene {
         // return null;
     }
 
+    
+    // Spawns a carrier if enough time has elapsed since the last spawn and the number of carriers made for the round isn't reached yet
+    spawnCarrier() {
+        if (this.carriersMade < this.currentConfig.carrierCount - 1 && this.delta >= this.currentConfig.carrierSpace) {
+            this.spawnStarted = true;
+            let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', this.currentConfig.duration, this.currentConfig.carrierHP);
+            this.carriers.add(carrier);
+            this.carriersMade++;
+            this.delta = 0;
+        }
+    }
+
     /**
      * Update the physics.
      */
-    update() {
+    update(time, delta) {
         this.physics.overlap(this.carriers, this.turrets, this.fire.bind(this));
         this.physics.overlap(this.carriers, this.bullets, this.carrierHit.bind(this));
+        this.delta += delta;
+
+        // Starts GameOver scene if player health has hit zero.
         if (this.ui.health <= 0) {
-            this.scene.launch('GameOver');
+            this.scene.launch('GameOver', {
+                roundReached: this.currentRound
+            });
             this.scene.pause('Game');
         }
+
         if (this.firstRoundStarted) {
-            console.log(this.currentConfig.carrierCount - 1);
-            console.log(this.carriersMade);
+            this.spawnCarrier();
             if (this.carriersAllGone() && this.currentConfig.carrierCount - 1 == this.carriersMade) {
                 this.enableStartRoundButton();
                 if (this.loggedIn && this.firstSave) {

@@ -14,6 +14,11 @@ const db = firebase.firestore();
 const rowCount = 10;
 const colCount = 2;
 
+/**
+ * Gets user names and scores then sorts them by score in an array. 
+ * 
+ * @param callback fills the leaderboard with data
+ */
 function getScores(callback) {
     db.collection("users").onSnapshot(function (usersCollection) {
         let userBestRounds = [];
@@ -30,7 +35,10 @@ function getScores(callback) {
     });
 }
 
+// Get user scores, then fill leaderboard with data.
 getScores(function (userBestRounds) {
+    $('.container').attr('style', 'display: flex');
+    $('#loader-container').attr('style', 'display: none');
     for (let i = 0; i < rowCount; i++) {
         for (let j = 0; j < colCount; j++) {
             if (j == 0) {
