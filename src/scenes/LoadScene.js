@@ -53,6 +53,7 @@ import water from "../../assets/ingame/waterstream.png";
 import challenge from "../../assets/ingame/challenge.png";
 import mask from "../../assets/ingame/mask.png";
 import box from "../../assets/ingame/menubox.png";
+import building from "../../assets/ingame/building.png";
 import { BlendModes } from "phaser";
 import 'phaser';
 
@@ -156,7 +157,7 @@ export class LoadScene extends Phaser.Scene {
         this.load.spritesheet('carrier', carrier, {frameWidth: 37, frameHeight: 37});
         this.load.image('tower1', tower1);
         this.load.image('tower2', tower2);
-        this.load.spritesheet('tower3', tower3, {frameWidth: 50});
+        this.load.spritesheet('tower3', tower3, {frameWidth: 64});
         this.load.image('bg', grass);
         this.load.image('corner', corner);
         this.load.image('road', road);;
@@ -167,6 +168,7 @@ export class LoadScene extends Phaser.Scene {
         this.load.spritesheet('water', water, {frameWidth: 196, frameHeight: 336});
         this.load.image('mask', mask);
         this.load.image('box', box);
+        this.load.image('building', building);
 
         // Load button images
         this.load.image("cancelButton", cancelButton);

@@ -8,8 +8,7 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         this.scene = scene;
         this.delta = 0;
         this.fireRate = 2;
-        this.bulletSpeed = 6;
-        this.hitRadius = 180;
+        this.bulletSpeed = 230;
 
         this.scene.anims.create({
             key: 'loaded',
@@ -24,19 +23,19 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         // Setting the price of the turret
         this.price = 100;
 
-        this.setDisplaySize(20, 20);
+        this.setDisplaySize(25, 25);
         this.setPosition(this.x, this.y);
 
         // Creating the radius of the turret
-        this.radius = this.scene.add.circle(0, 0, 60, 0xECDBDB);
+        this.radius = this.scene.add.circle(0, 0, 100, 0xECDBDB);
         this.radius.alpha = 0;
         this.radius.setPosition((j + 0.5) * 32, (i + 0.5) * 32);
         this.radius.setStrokeStyle(3, 0x046307, 0);
 
         this.scene.physics.world.enable(this);
-        let offset = -this.hitRadius + 24;
-        this.body.setCircle(this.hitRadius, offset, offset);
-        this.body.debugShowBody = true;
+        let hitRadius = 270;
+        let offset = -hitRadius + 35;
+        this.body.setCircle(hitRadius, offset, offset);
 
         // Showing the radius of the turret when hovering
         this.setInteractive().on('pointerover', function () {
@@ -60,23 +59,26 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         }
         
         this.play('empty');
+
+        let rotationFix = Math.PI/2
         // Rotating the turret towards the carrier when firing
-        var angle = Phaser.Math.Angle.Between(this.x, this.y, carrier.x, carrier.y) + Math.PI/2;
+        var angle = Phaser.Math.Angle.Between(this.x, this.y, carrier.x, carrier.y) + rotationFix;
         this.setRotation(angle);
 
         // Creating a bullet
-        this.bullet = new Bullet3(this.scene, this.x + this.scene.halfCell * Math.cos(angle), this.y + this.scene.halfCell * Math.sin(angle));
+        this.bullet = new Bullet3(this.scene, this.x, this.y);
         this.bullet.target = carrier;
         this.scene.bullets.add(this.bullet);
         this.bullet.body.debugShowVelocity = false;
 
         // Shoots at the carrier
-        this.scene.physics.moveToObject(this.bullet, carrier, this.bulletSpeed * 100);
+        this.scene.physics.moveToObject(this.bullet, carrier, this.bulletSpeed);
 
         //Follows the carrier all the time
         setInterval(function() {
-            this.scene.physics.moveToObject(this.bullet, this.bullet.target, 230);
-        }.bind(this), 100);
+            this.scene.physics.moveToObject(this.bullet, this.bullet.target, this.bulletSpeed);
+            this.bullet.setRotation(Phaser.Math.Angle.Between(this.bullet.x, this.bullet.y, this.bullet.target.x, this.bullet.target.y) + rotationFix);
+        }.bind(this), 300);
 
         this.delta = 0;
     }

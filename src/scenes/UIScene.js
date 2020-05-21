@@ -37,33 +37,33 @@ export class UIScene extends Phaser.Scene {
         });
         // On hover of menu toggle button.
         this.menuButton.setInteractive().on('pointerover', () => {
-            this.sound.play('buttonHover');
+                this.sound.play('buttonHover');
         });
         // On pressed down of menu toggle button.
         this.menuButton.setInteractive().on('pointerdown', () => {
-            this.sound.play('buttonClick');
-            this.toggleSidebar();
+                this.sound.play('buttonClick');
+                this.toggleSidebar();
         });
 
         let menuTower1 = this.add.image(50, 72, 'tower1');
+        menuTower1.setDisplaySize(80, 80);
         menuTower1.setInteractive({
             cursor: 'pointer'
         });
         menuTower1.setInteractive().on('pointerdown', () => {
             // Tower1 has been selected
-            // this.toggleSidebar();
-            this.tower1IsSelected = true;
-            this.tower2IsSelected = false;
-            this.tower3IsSelected = false;
-            this.descText.setText("Description: Water Tower");
-            this.costText.setText("Cost: 100");
-            this.cancelButton.alpha = 1;
+                this.tower1IsSelected = true;
+                this.tower2IsSelected = false;
+                this.tower3IsSelected = false;
+                this.descText.setText("Description: Water Tower");
+                this.costText.setText("Cost: 100");
+                this.cancelButton.alpha = 1;
 
-            // Once a turret is selected, close the sidebar
-            this.toggleSidebar();
+                // Once a turret is selected, close the sidebar
+                this.toggleSidebar();
 
-            // Create cursor grid cell hover image
-            this.showTurretExample();
+                // Create cursor grid cell hover image
+                this.showTurretExample();
         });
 
         // Create second tower in menu
@@ -118,11 +118,11 @@ export class UIScene extends Phaser.Scene {
         });
         // On hover of cancel tower button.
         this.cancelButton.setInteractive().on('pointerover', () => {
-            this.sound.play('buttonHover');
+                this.sound.play('buttonHover');
         });
         // On pressed down of cancel tower button.
         this.cancelButton.setInteractive().on('pointerdown', () => {
-            this.sound.play('buttonClick');
+                this.sound.play('buttonClick');
         });
         // Cancel selection of tower on pressed down of cancel tower button.
         this.cancelButton.setInteractive().on('pointerdown', this.cancelSelection.bind(this));
@@ -164,13 +164,14 @@ export class UIScene extends Phaser.Scene {
         });
         // On hover of pause button.
         this.pauseButton.setInteractive().on('pointerover', function () {
-            this.sound.play('buttonHover');
+                this.sound.play('buttonHover');
         }.bind(this));
         // On pressed down of pause button.
         this.pauseButton.setInteractive().on('pointerdown', function () {
             this.sound.play('buttonClick');
             this.scene.launch('Pause');
             this.scene.pause('Game');
+            this.scene.pause('UI');
         }.bind(this));
 
         this.startRoundButton = this.add.image(this.halfCell * 3, this.height - 96 + this.halfCell * 3, 'startRound');
