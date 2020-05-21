@@ -29,6 +29,9 @@ export class MenuScene1 extends Phaser.Scene {
         this.logo = this.add.image(width / 2, height / 2 - 170, 'logo');
         this.logo.setDisplaySize(width / 2, height / 3);
 
+        // Create status text
+        this.status = this.add.text(10, 40, "");
+
         // Display Login / Logout button
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
@@ -37,7 +40,8 @@ export class MenuScene1 extends Phaser.Scene {
                 this.logout.setInteractive({
                     cursor: 'pointer'
                 });
-                this.status = this.add.text(10, 40, "Playing as ");
+                this.status.setText("Playing as ");
+                // this.status = this.add.text(10, 40, "Playing as ");
                 this.status.setFontFamily('Arial');
                 this.status.setFontSize(25);
                 this.status.setOrigin(0, 1);
@@ -70,7 +74,8 @@ export class MenuScene1 extends Phaser.Scene {
                 this.login.setInteractive({
                     cursor: 'pointer'
                 });
-                this.status = this.add.text(10, 40, "Playing as Guest");
+                this.status.setText("Playing as Guest");
+                // this.status = this.add.text(10, 40, "Playing as Guest");
                 this.status.setFontFamily('Arial');
                 this.status.setFontSize(25);
                 this.status.setOrigin(0, 1);

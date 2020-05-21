@@ -36,7 +36,7 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
 
         this.scene.physics.world.enable(this);
         let offset = -Turret3.getHitRadius() * 2.2;
-        this.body.setCircle(Turret3.getHitRadius() * 2.45, offset, offset);
+        this.body.setCircle(Turret3.getHitRadius() * 2.55, offset, offset);
 
         // Showing the radius of the turret when hovering
         this.setInteractive().on('pointerover', function () {
@@ -110,7 +110,11 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
 
     CreateContainer() {
         // The edit container
-        this.editContainer = this.scene.add.container(this.x + 20, this.y - 25);
+        if (this.x < 600) {
+            this.editContainer = this.scene.add.container(this.x + 20, this.y - 25);
+        } else {
+            this.editContainer = this.scene.add.container(this.x - 194, this.y - 25);
+        }
         this.editContainer.alpha = 0;
         this.editBack = this.scene.add.graphics();
 
