@@ -9,6 +9,8 @@ export default class Turret1 extends Phaser.GameObjects.Image {
      */
     constructor(scene, j, i) {
         super(scene, j, i, 'tower1');
+        this.i = i;
+        this.j = j;
         this.x = j * 32 + this.scene.halfCell;
         this.y = i * 32 + this.scene.halfCell;
         this.scene = scene;
@@ -18,8 +20,8 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         this.showingContainer = false;
         this.tier = 1;
         this.upgradePrice = 30;
-
-        this.setDisplaySize(32, 32);
+        
+        this.setDisplaySize(45, 45);
         this.setPosition(this.x, this.y);
 
         // Creating the radius of the turret
@@ -29,8 +31,8 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         this.radius.setStrokeStyle(3, 0x046307, 0);
 
         this.scene.physics.world.enable(this);
-        this.body.setCircle(Turret1.getHitRadius() * 2, -88.5, -88.5);
-        this.body.debugShowBody = false;
+        let offset = -Turret1.getHitRadius()*6 + 45; 
+        this.body.setCircle(Turret1.getHitRadius() * 8.6, offset, offset);
 
         // Showing the radius of the turret when hovering
         this.setInteractive().on('pointerover', function () {
@@ -89,7 +91,6 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         // Creating a bullet
         this.bullet = new Bullet1(this.scene, this.x + this.scene.halfCell * Math.cos(angle), this.y + this.scene.halfCell * Math.sin(angle));
         this.scene.bullets.add(this.bullet);
-        this.bullet.body.debugShowVelocity = false;
 
         // Shoots at the carrier
         this.scene.physics.moveToObject(this.bullet, carrier, this.bulletSpeed * 100);
@@ -105,7 +106,11 @@ export default class Turret1 extends Phaser.GameObjects.Image {
 
     CreateContainer() {
         // The edit container
-        this.editContainer = this.scene.add.container(this.x + 20, this.y - 25);
+        if (this.x < 600) {
+            this.editContainer = this.scene.add.container(this.x + 20, this.y - 25);
+        } else {
+            this.editContainer = this.scene.add.container(this.x - 194, this.y - 25);
+        }
         this.editContainer.alpha = 0;
         this.editBack = this.scene.add.graphics();
 
@@ -155,6 +160,7 @@ export default class Turret1 extends Phaser.GameObjects.Image {
             this.scene.sound.play('towerDestroy');
             this.scene.ui.money += Turret1.getPrice() / 2;
             this.scene.ui.moneyText.setText('Money: ' + this.scene.ui.money);
+            this.scene.gridCells[this.i][this.j] = 0;
             this.editContainer.destroy();
             this.tierContainer.destroy();
             this.destroy();

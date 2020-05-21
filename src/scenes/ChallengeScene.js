@@ -83,8 +83,6 @@ export class ChallengeScene extends Phaser.Scene {
         this.halfCell = 16; // Used to move objects to center of cells
         const colCount = this.width / this.cellWidth; // 25 columns; use this.cellWidth * 24 for last column
         const rowCount = this.height / this.cellWidth; // 19 rows; use this.cellWidth * 18 for last row
-
-        this.scene.launch('ChallengeUI');
         
         // Create and draw grid
         let grid = this.add.grid(0, 0, this.cellWidth * colCount, this.cellWidth * rowCount, this.cellWidth, this.cellWidth, 0x000000, 0, 0x222222, 0); // change last param to 1 to see grid lines
@@ -230,6 +228,7 @@ export class ChallengeScene extends Phaser.Scene {
     }
 
     lostGame() {
+        this.scene.remove('ChallengeUI');
         this.firstTime = false;
         this.challengeEnded = true;
         this.timeEnded = new Date();
@@ -344,6 +343,7 @@ export class ChallengeScene extends Phaser.Scene {
         setTimeout(function () {
             this.background.alpha = 0;
             this.challenge.alpha = 0;
+            this.scene.launch('ChallengeUI');
         }.bind(this), 4000);
 
         // Creating the challenge mode animation

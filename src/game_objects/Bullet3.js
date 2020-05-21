@@ -14,8 +14,11 @@ export default class Bullet2 extends Bullet {
         this.setDisplaySize(8,8);
 
         this.scene.physics.world.enable(this);
-        this.body.debugShowBody = false;
 
         this.scene.add.existing(this);
+    }
+
+    kill(){
+        this.destroy();
     }
 }
