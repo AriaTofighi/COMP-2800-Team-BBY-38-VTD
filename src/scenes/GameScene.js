@@ -16,7 +16,6 @@ import {
 let bgm;
 export {bgm};
 
-let turretSoap;
 export class GameScene extends Phaser.Scene {
 
     /**
@@ -314,11 +313,6 @@ export class GameScene extends Phaser.Scene {
         });
         bgm.play();
 
-        // Creating soap sound effect
-        turretSoap = this.sound.add('soap', {
-            volume: 0.3
-        });
-
         // Toggles fast-forward
         this.input.keyboard.on('keydown-F', function () {
             if (!this.fastForwarding) {
@@ -571,10 +565,6 @@ export class GameScene extends Phaser.Scene {
 
     fire(carrier, turret) {
         turret.fire(carrier);
-
-        if (!(turretSoap.isPlaying)) {
-            turretSoap.play();
-        }
     }
 
     carrierHit(carrier, bullet) {

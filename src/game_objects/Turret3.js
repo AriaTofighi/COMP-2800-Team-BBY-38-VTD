@@ -1,5 +1,6 @@
 import Bullet3 from "./Bullet3";
 
+let turretThreeBullet;
 export default class Turret3 extends Phaser.GameObjects.Sprite {
     constructor(scene, j, i) {
         super(scene, j, i, 'tower3');
@@ -17,12 +18,18 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
 
         this.scene.anims.create({
             key: 'loaded',
-            frames: [{key: 'tower3', frame: 0}]
+            frames: [{
+                key: 'tower3',
+                frame: 0
+            }]
         });
 
         this.scene.anims.create({
             key: 'empty',
-            frames: [{key: 'tower3', frame: 1}]
+            frames: [{
+                key: 'tower3',
+                frame: 1
+            }]
         });
 
         this.setDisplaySize(25, 25);
@@ -67,6 +74,11 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         this.CreateContainer();
 
         this.scene.add.existing(this);
+
+        // Creates sound effect for turret three's bullets
+        turretThreeBullet = this.scene.sound.add('maskSnap', {
+            volume: 0.3
+        });
     }
 
     static getPrice() {
@@ -82,7 +94,7 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         if (!(this.delta >= 1000 / this.fireRate)) {
             return;
         }
-        
+
         this.play('empty');
 
         let rotationFix = Math.PI/2
@@ -106,6 +118,11 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         }.bind(this), 300);
 
         this.delta = 0;
+
+        // Plays sound effect for turret three's bullets
+        if (!(turretThreeBullet.isPlaying)) {
+            turretThreeBullet.play();
+        }
     }
 
     CreateContainer() {
@@ -151,16 +168,21 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         let bound1 = new Phaser.Geom.Rectangle(1, 2, 85, 47);
 
         this.leftClickBack.setInteractive(bound1, Phaser.Geom.Rectangle.Contains)
-        this.leftClickBack.on('pointerover', function() {
+        this.leftClickBack.on('pointerover', function () {
             this.leftClickBack.fillStyle(0xffffff, 0.3);
-            this.leftClickBack.fillRoundedRect(1, 2, 85, 47, { tl: 20, tr: 0, bl: 20, br: 0});
+            this.leftClickBack.fillRoundedRect(1, 2, 85, 47, {
+                tl: 20,
+                tr: 0,
+                bl: 20,
+                br: 0
+            });
         }.bind(this));
-        this.leftClickBack.on('pointerout', function() {
+        this.leftClickBack.on('pointerout', function () {
             this.leftClickBack.clear();
         }.bind(this));
 
         // selling the tower
-        this.leftClickBack.on('pointerdown', function() {
+        this.leftClickBack.on('pointerdown', function () {
             this.scene.sound.play('towerDestroy');
             this.scene.ui.money += Turret3.getPrice() / 2;
             this.scene.ui.moneyText.setText('Money: ' + this.scene.ui.money);
@@ -191,17 +213,22 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         let bound2 = new Phaser.Geom.Rectangle(90, 2, 85, 47);
 
         this.rightClickBack.setInteractive(bound2, Phaser.Geom.Rectangle.Contains)
-        this.rightClickBack.on('pointerover', function() {
+        this.rightClickBack.on('pointerover', function () {
             this.rightClickBack.fillStyle(0xffffff, 0.3);
-            this.rightClickBack.fillRoundedRect(90, 2, 85, 47, { tl: 0, tr: 20, bl: 0, br: 20});
+            this.rightClickBack.fillRoundedRect(90, 2, 85, 47, {
+                tl: 0,
+                tr: 20,
+                bl: 0,
+                br: 20
+            });
         }.bind(this));
-        this.rightClickBack.on('pointerout', function() {
+        this.rightClickBack.on('pointerout', function () {
             this.rightClickBack.clear();
         }.bind(this));
 
         // Upgrading the tower
-        this.rightClickBack.on('pointerdown', function() {
-            switch(this.tier) {
+        this.rightClickBack.on('pointerdown', function () {
+            switch (this.tier) {
                 case 1:
                     this.upgradeTurret();
                     this.tierText.setText("**");
@@ -220,12 +247,12 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
                     this.upgradeText.setX(112);
                     this.upgradePriceText.setText("");
                     break;
-              }
+            }
         }.bind(this));
         this.editContainer.add(this.rightClickBack);
 
         // The tier background
-        this.tierContainer = this.scene.add.container(this.x -18, this.y - 25);
+        this.tierContainer = this.scene.add.container(this.x - 18, this.y - 25);
         this.tierContainer.alpha = 0;
 
         // The tier background
@@ -261,13 +288,12 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
     */
     update(time, delta) {
         this.delta += delta;
-        if(this.delta >= 600){
+        if (this.delta >= 600) {
             this.play('loaded');
         }
     }
 }
 
 // Static variables
-Turret3.price = 500; 
+Turret3.price = 500;
 Turret3.hitRadius = 100;
-
