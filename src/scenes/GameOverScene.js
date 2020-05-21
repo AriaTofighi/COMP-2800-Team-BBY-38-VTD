@@ -7,6 +7,14 @@ export class GameOverScene extends Phaser.Scene {
         super('GameOver');
     }
 
+    init(data) {
+        this.roundReached = data.roundReached;
+        this.twitterUrl = 'https://twitter.com/intent/tweet?text=I reached round '
+            + this.roundReached + ' in Virus Tower Defense! Can you do better? '
+            + 'Come and play! https://virustd-8fdd6.web.app/';
+        this.facebookUrl = 'https://facebook.com/share.php?u=http://virustd-8fdd6.web.app';
+    }
+
     /**
      * Create the scene for Game Over.
      */
@@ -58,6 +66,26 @@ export class GameOverScene extends Phaser.Scene {
 
         this.input.on('pointerup', function () {
             this.restartButton.setTexture('restartButton');
+        }.bind(this));
+
+        // Creating the twitter button
+        this.twitter = this.add.image(350, 570, 'twitter');
+        this.twitter.setDisplaySize(87, 32);
+        this.twitter.setInteractive({
+            cursor: 'pointer'
+        });
+        this.twitter.on('pointerdown', function () {
+            window.open(this.twitterUrl, '_blank');
+        }.bind(this));
+
+        // Creating the facebook button
+        this.facebook = this.add.image(450, 570, 'facebook');
+        this.facebook.setDisplaySize(87, 32);
+        this.facebook.setInteractive({
+            cursor: 'pointer'
+        });
+        this.facebook.on('pointerdown', function () {
+            window.open(this.facebookUrl, '_blank');
         }.bind(this));
     }
 }

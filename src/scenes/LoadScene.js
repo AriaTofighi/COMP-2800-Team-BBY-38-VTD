@@ -51,6 +51,8 @@ import water from "../../assets/ingame/waterstream.png";
 import challenge from "../../assets/ingame/challenge.png";
 import mask from "../../assets/ingame/mask.png";
 import box from "../../assets/ingame/menubox.png";
+import twitter from "../../assets/buttons/twitter.png";
+import facebook from "../../assets/buttons/facebook.png";
 import { BlendModes } from "phaser";
 import 'phaser';
 
@@ -171,6 +173,8 @@ export class LoadScene extends Phaser.Scene {
         this.load.image('restartButton', restartButton);
         this.load.image('restartPressButton', restartPressButton);
         this.load.image('startRound', startRound);
+        this.load.image('twitter', twitter);
+        this.load.image('facebook', facebook);
 
         // Load pause menu images
         this.load.image('pauseBackground', pauseBackground);

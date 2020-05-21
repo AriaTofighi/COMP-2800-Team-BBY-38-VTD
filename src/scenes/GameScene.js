@@ -342,7 +342,7 @@ export class GameScene extends Phaser.Scene {
     placeSidebarNumbers(num) {
         return function () {
             for (let i = 3; i <= 14; i++) {
-                for (let j = 23; j <= 25; j++) {
+                for (let j = 22; j <= 25; j++) {
                     this.gridCells[i][j] = num;
                 }
             }
@@ -363,6 +363,13 @@ export class GameScene extends Phaser.Scene {
         // Placing 1s in the place of the cancel button and the menu button.
         for (let i = 15; i <= 18; i++) {
             for (let j = 23; j <= 24; j++) {
+                this.gridCells[i][j] = 1;
+            }
+        }
+
+        // Placing 1s in the place of the start round buttton
+        for (let i = 16; i <= 18; i++) {
+            for (let j = 0; j <= 2; j++) {
                 this.gridCells[i][j] = 1;
             }
         }
@@ -389,7 +396,9 @@ export class GameScene extends Phaser.Scene {
         this.physics.overlap(this.carriers, this.turrets, this.fire.bind(this));
         this.physics.overlap(this.carriers, this.bullets, this.carrierHit.bind(this));
         if (this.ui.health <= 0) {
-            this.scene.launch('GameOver');
+            this.scene.launch('GameOver', {
+                roundReached: this.currentRound
+            });
             this.scene.pause('Game');
         }
         if (this.firstRoundStarted) {
