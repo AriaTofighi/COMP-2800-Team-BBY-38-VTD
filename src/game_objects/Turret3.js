@@ -9,7 +9,6 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         this.delta = 0;
         this.fireRate = 2;
         this.bulletSpeed = 6;
-        this.hitRadius = 180;
 
         this.scene.anims.create({
             key: 'loaded',
@@ -21,22 +20,19 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
             frames: [{key: 'tower3', frame: 1}]
         });
 
-        // Setting the price of the turret
-        this.price = 100;
-
         this.setDisplaySize(20, 20);
         this.setPosition(this.x, this.y);
 
         // Creating the radius of the turret
-        this.radius = this.scene.add.circle(0, 0, 60, 0xECDBDB);
+        this.radius = this.scene.add.circle(0, 0, Turret3.getHitRadius(), 0xECDBDB);
         this.radius.alpha = 0;
         this.radius.setPosition((j + 0.5) * 32, (i + 0.5) * 32);
         this.radius.setStrokeStyle(3, 0x046307, 0);
 
         this.scene.physics.world.enable(this);
-        let offset = -this.hitRadius + 24;
-        this.body.setCircle(this.hitRadius, offset, offset);
-        this.body.debugShowBody = true;
+        let offset = -Turret3.getHitRadius() * 2.2;
+        this.body.setCircle(Turret3.getHitRadius() * 2.45, offset, offset);
+        this.body.debugShowBody = false;
 
         // Showing the radius of the turret when hovering
         this.setInteractive().on('pointerover', function () {
@@ -51,6 +47,14 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         }.bind(this));
 
         this.scene.add.existing(this);
+    }
+
+    static getPrice() {
+        return this.price;
+    }
+
+    static getHitRadius() {
+        return this.hitRadius;
     }
 
     // Fires a turret shot at a carrier (must be here, NOT Turret.js for access to groups)
@@ -74,8 +78,13 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         this.scene.physics.moveToObject(this.bullet, carrier, this.bulletSpeed * 100);
 
         //Follows the carrier all the time
-        setInterval(function() {
-            this.scene.physics.moveToObject(this.bullet, this.bullet.target, 230);
+        let intervaler = setInterval(function() {
+            console.log("bullet status: " + this.bullet.active);
+            if (this.bullet.active == false) {
+                clearInterval(intervaler);
+            } else {
+                this.scene.physics.moveToObject(this.bullet, this.bullet.target, 230);
+            }
         }.bind(this), 100);
 
         this.delta = 0;
@@ -91,3 +100,8 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         }
     }
 }
+
+// Static variables
+Turret3.price = 500; 
+Turret3.hitRadius = 100;
+

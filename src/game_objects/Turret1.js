@@ -10,23 +10,22 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         this.y = i * 32 + this.scene.halfCell;
         this.scene = scene;
         this.delta = 0;
-        this.fireRate = 2;
+        this.fireRate = 1.3;
         this.bulletSpeed = 6;
-
-        // Setting the price of the turret
-        this.price = 100;
 
         this.setDisplaySize(32, 32);
         this.setPosition(this.x, this.y);
 
+        console.log("Tower 1 hit radius: " + this.hitRadius);
+
         // Creating the radius of the turret
-        this.radius = this.scene.add.circle(0, 0, 60, 0xECDBDB);
+        this.radius = this.scene.add.circle(0, 0, Turret1.getHitRadius(), 0xECDBDB);
         this.radius.alpha = 0;
         this.radius.setPosition((j + 0.5) * 32, (i + 0.5) * 32);
         this.radius.setStrokeStyle(3, 0x046307, 0);
 
         this.scene.physics.world.enable(this);
-        this.body.setCircle(120, -88.5, -88.5);
+        this.body.setCircle(Turret1.getHitRadius() * 2, -88.5, -88.5);
         this.body.debugShowBody = false;
 
         // Showing the radius of the turret when hovering
@@ -42,6 +41,14 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         }.bind(this));
 
         this.scene.add.existing(this);
+    }
+
+    static getPrice() {
+        return this.price;
+    }
+
+    static getHitRadius() {
+        return this.hitRadius;
     }
 
     // Fires a turret shot at a carrier (must be here, NOT Turret.js for access to groups)
@@ -71,3 +78,7 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         // console.log('Delta: ' + this.delta);
     }
 }
+
+// Static variable
+Turret1.price = 100;
+Turret1.hitRadius = 60;

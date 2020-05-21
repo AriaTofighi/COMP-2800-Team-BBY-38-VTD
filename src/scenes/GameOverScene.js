@@ -7,10 +7,18 @@ export class GameOverScene extends Phaser.Scene {
         super('GameOver');
     }
 
+    init(data) {
+        this.roundReached = data.roundReached;
+    }
+
     /**
      * Create the scene for Game Over.
      */
     create() {
+        // Get canvas width and height
+        this.width = this.sys.canvas.width;
+        this.height = this.sys.canvas.height;
+
         // Make background for the game over scene.
         this.background = this.add.rectangle(0, 0, 800, 608, 0x000000, 0.53);
         this.background.setOrigin(0, 0);
@@ -59,5 +67,10 @@ export class GameOverScene extends Phaser.Scene {
         this.input.on('pointerup', function () {
             this.restartButton.setTexture('restartButton');
         }.bind(this));
+
+        // Displays round reached
+        this.roundReachedText = this.add.text(this.width / 2, this.height / 2 - 150, "YOU REACHED ROUND " + this.roundReached, {fontFamily: 'Odibee Sans', fontSize: 50});
+        this.roundReachedText.setOrigin();
+        this.roundReachedText.setStroke('black', 3);
     }
 }

@@ -9,9 +9,8 @@ import {MenuScene2} from "./scenes/MenuScene2";
 import { ChallengeScene } from "./scenes/ChallengeScene";
 import phaser from '../node_modules/phaser';
 import { UIScene } from "./scenes/UIScene";
-import { ChallengeUIScene} from "./scenes/ChallengeUIScene"
-
-
+import { ChallengeUIScene} from "./scenes/ChallengeUIScene";
+import { InfoScene } from "./scenes/InfoScene";
 
 // Phaser game config
 let config = {
@@ -22,7 +21,6 @@ let config = {
         parent: 'body',
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
-
     },
     roundPixels: true,
     physics: {
@@ -34,7 +32,7 @@ let config = {
     }
 };
 
-//Sets up the game and adds the GameScene, BootScene, LoadScene, PauseScene, and GameOverScene to the game.
+// Creates the game and adds all scenes
 let game = new Phaser.Game(config);
 game.scene.add('Game', GameScene);
 game.scene.add('Boot', BootScene);
@@ -46,5 +44,6 @@ game.scene.add('Menu2', MenuScene2);
 game.scene.add('UI', UIScene);
 game.scene.add('Challenge', ChallengeScene);
 game.scene.add('ChallengeUI', ChallengeUIScene);
+game.scene.add('Info', InfoScene);
 game.scene.start('Boot');
 
