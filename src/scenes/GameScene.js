@@ -97,7 +97,8 @@ export class GameScene extends Phaser.Scene {
         this.scene.launch('UI');
 
         // Create and draw grid
-        let grid = this.add.grid(0, 0, this.cellWidth * colCount, this.cellWidth * rowCount, this.cellWidth, this.cellWidth, 0x000000, 0, 0x222222, 0); // change last param to 1 to see grid lines
+        // Change last param to 1 to see grid lines
+        let grid = this.add.grid(0, 0, this.cellWidth * colCount, this.cellWidth * rowCount, this.cellWidth, this.cellWidth, 0x000000, 0, 0x222222, 0);
         grid.setDepth(1);
         grid.setOrigin(0, 0);
 
@@ -265,17 +266,17 @@ export class GameScene extends Phaser.Scene {
             if (user) {
                 // User is signed in.
                 this.loggedIn = true;
-                this.status = this.add.text(160, 5, "Playing as ");
+                this.status = this.add.text(245, 5, "Playing as ");
                 this.status.setFontFamily('Arial');
                 this.status.setFontSize(15);
                 this.status.setStroke('black', 3);
-                this.displayName = this.add.text(235, 5, user.displayName);
+                this.displayName = this.add.text(320, 5, user.displayName);
                 this.displayName.setFontFamily('Arial');
                 this.displayName.setFontSize(15);
                 this.displayName.setFill('red');
                 this.displayName.setStroke('black', 3);
 
-                this.bestRound = this.add.text(160, 25, "Best Round: ");
+                this.bestRound = this.add.text(245, 25, "Best Round: ");
                 this.bestRound.setFontFamily('Arial');
                 this.bestRound.setFontSize(15);
                 this.bestRound.setStroke('black', 3);
@@ -461,8 +462,8 @@ export class GameScene extends Phaser.Scene {
      */
     placeSidebarNumbers(num) {
         return function () {
-            for (let i = 5; i <= 14; i++) {
-                for (let j = 23; j <= 25; j++) {
+            for (let i = 3; i <= 14; i++) {
+                for (let j = 22; j <= 24; j++) {
                     this.gridCells[i][j] = num;
                 }
             }

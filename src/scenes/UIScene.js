@@ -316,7 +316,7 @@ export class UIScene extends Phaser.Scene {
             this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0.8);
 
             this.turretExample = this.add.image(0, 0, 'tower1');
-            this.turretExample.setDisplaySize(32, 32);
+            this.turretExample.setDisplaySize(45, 45);
             this.turretExample.alpha = 0;
         } else if (this.tower2IsSelected) {
             this.sound.play('towerButtonClick');
@@ -336,7 +336,7 @@ export class UIScene extends Phaser.Scene {
             this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0.8);
 
             this.turretExample = this.add.image(0, 0, 'tower3');
-            this.turretExample.setDisplaySize(20, 20);
+            this.turretExample.setDisplaySize(25, 25);
             this.turretExample.alpha = 0;
         }
 

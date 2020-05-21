@@ -18,8 +18,7 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         this.tier = 1;
         this.upgradePrice = 30;
         
-
-        this.setDisplaySize(64, 64);
+        this.setDisplaySize(45, 45);
         this.setPosition(this.x, this.y);
 
         // Creating the radius of the turret
@@ -29,8 +28,8 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         this.radius.setStrokeStyle(3, 0x046307, 0);
 
         this.scene.physics.world.enable(this);
-        let offset = -Turret1.getHitRadius()*6 + 200; 
-        this.body.setCircle(Turret1.getHitRadius() * 6, offset, offset);
+        let offset = -Turret1.getHitRadius()*6 + 45; 
+        this.body.setCircle(Turret1.getHitRadius() * 8.6, offset, offset);
 
         // Showing the radius of the turret when hovering
         this.setInteractive().on('pointerover', function () {

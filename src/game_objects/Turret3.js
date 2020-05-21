@@ -36,7 +36,7 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
 
         this.scene.physics.world.enable(this);
         let offset = -Turret3.getHitRadius() * 2.2;
-        this.body.setCircle(Turret3.getHitRadius() * 2.45, offset, offset);
+        this.body.setCircle(Turret3.getHitRadius() * 2.55, offset, offset);
 
         // Showing the radius of the turret when hovering
         this.setInteractive().on('pointerover', function () {
