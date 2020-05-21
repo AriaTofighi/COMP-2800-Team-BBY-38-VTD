@@ -2,9 +2,6 @@ import {
     Grid
 } from "matter";
 import Carrier from "../game_objects/ChallengeCarrier";
-// import Turret1 from "../game_objects/Turret1";
-// import Turret2 from "../game_objects/Turret2";
-// import Turret3 from "../game_objects/Turret3";
 import Bullet from "../game_objects/Bullet";
 import {default as ChallengeConfig} from "../round_configs/ChallegeConfig.json";
 import ChallengeCarrier from "../game_objects/ChallengeCarrier";
@@ -181,19 +178,6 @@ export class ChallengeScene extends Phaser.Scene {
         this.costText = this.add.text(0, this.descText.getBottomCenter().y + 10, '');
         infoContainer.add(this.descText);
         infoContainer.add(this.costText);
-
-        // Create resource information text
-        this.health = 1;
-        this.healthText = this.add.text(585, 25, "Health: " + this.health);
-        this.healthText.depth = 1;
-        this.healthText.setFill("brown");
-
-        this.money = Infinity;
-        this.money = Infinity;this.moneyText = this.add.text(585, this.healthText.getBottomCenter().y + 6, 'Money: ∞');
-        this.moneyText.depth = 1;
-        this.moneyText.setFill("brown");
-
-        
             
         // Creating the game objects groups.
         this.createGroups();
@@ -240,13 +224,9 @@ export class ChallengeScene extends Phaser.Scene {
             console.log(error);
         });        
 
-        this.currentRoundText = this.add.text(570, this.moneyText.getBottomCenter().y + 6, "Challenge mode");
-        this.currentRoundText.depth = 1;
-        this.currentRoundText.setFill("brown");
-
-        this.resourceBorder = this.add.image(630, 55, 'resourceBorder');
-        // this.resourceBorder.setOrigin(0, 0);
-        this.resourceBorder.setDisplaySize(320, 135);
+        // this.currentRoundText = this.add.text(570, this.moneyText.getBottomCenter().y + 6, "Challenge mode");
+        // this.currentRoundText.depth = 1;
+        // this.currentRoundText.setFill("brown");
     }
 
     lostGame() {
@@ -307,13 +287,14 @@ export class ChallengeScene extends Phaser.Scene {
             clearInterval(intervaler);
         }.bind(this), (config.carrierCount - 1) * config.carrierSpace); 
 }
+
     /**
      * Place the numbers on the sidebar.
      */
     placeSidebarNumbers(num) {
         return function () {
             for (let i = 3; i <= 14; i++) {
-                for (let j = 23; j <= 25; j++) {
+                for (let j = 22; j <= 25; j++) {
                     this.gridCells[i][j] = num;
                 }
             }
@@ -324,16 +305,16 @@ export class ChallengeScene extends Phaser.Scene {
      * Place the numbers on the buttons.
      */
     placeButtonNumbers() {
-        // Placing 1s in the place of the pause button.
-        for (let i = 0; i <= 1; i++) {
-            for (let j = 0; j <= 1; j++) {
+        // Placing 1s in the place of the cancel button and the menu button.
+        for (let i = 15; i <= 18; i++) {
+            for (let j = 23; j <= 24; j++) {
                 this.gridCells[i][j] = 1;
             }
         }
 
-        // Placing 1s in the place of the cancel button and the menu button.
-        for (let i = 15; i <= 18; i++) {
-            for (let j = 23; j <= 24; j++) {
+        // Placing 1s in the place of the info container
+        for (let i = 0; i <= 1; i++) {
+            for (let j = 13; j <= 24; j++) {
                 this.gridCells[i][j] = 1;
             }
         }
@@ -357,7 +338,7 @@ export class ChallengeScene extends Phaser.Scene {
         // Creating the background for the challenge animation
         this.background = this.add.rectangle(0, 0, 800, 608, 0x8DFF7D);
         this.background.setOrigin(0, 0);
-        this.background.depth = 2;
+        this.background.depth = 3;
 
         // Removing the background after 4 seconds
         setTimeout(function () {
@@ -369,7 +350,7 @@ export class ChallengeScene extends Phaser.Scene {
         this.challenge = this.add.sprite(-45, 0, 'challengeMode');
         this.challenge.setOrigin(0, 0);
         this.challenge.setDisplaySize(800, 608);
-        this.challenge.depth = 2;
+        this.challenge.depth = 3;
         this.anims.create({
             key: 'startChallenge',
             duration: 2400,
@@ -379,28 +360,13 @@ export class ChallengeScene extends Phaser.Scene {
         this.challenge.play('startChallenge');
     }
 
-    // endChallengeAnimation() {
-    //     this.switchBackground = this.add.rectangle(0, 0, 800, 608, 0x000000);
-    //     this.switchBackground.setOrigin(0, 0);
-    //     let backgroundAlpha = 1;
-    //     let interval = setInterval(function () {
-    //         backgroundAlpha -= 0.05;
-    //         this.switchBackground.alpha = backgroundAlpha;
-    //     }.bind(this), 100);
-
-    //     setTimeout(function () {
-    //         clearInterval(interval);
-    //         this.scene.start('Game');
-    //     }.bind(this), 2000);
-    // }
-
     /**
      * Update the physics.
      */
     update() {
         this.physics.overlap(this.carriers, this.turrets, this.fire.bind(this));
         this.physics.overlap(this.carriers, this.bullets, this.carrierHit.bind(this));
-        if (this.health <= 0 && this.firstTime) {
+        if (this.ui.health <= 0 && this.firstTime) {
             // Starting the lost game animation
             this.lostGame();
         }
