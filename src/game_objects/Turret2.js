@@ -7,6 +7,8 @@ export default class Turret2 extends Phaser.GameObjects.Image {
      */
     constructor(scene, j, i) {
         super(scene, j, i, 'tower2');
+        this.i = i;
+        this.j = j;
         this.x = j * 32 + this.scene.halfCell;
         this.y = i * 32 + this.scene.halfCell;
         this.scene = scene;
@@ -182,6 +184,7 @@ export default class Turret2 extends Phaser.GameObjects.Image {
             this.scene.sound.play('towerDestroy');
             this.scene.ui.money += Turret2.getPrice() / 2;
             this.scene.ui.moneyText.setText('Money: ' + this.scene.ui.money);
+            this.scene.gridCells[this.i][this.j] = 0;
             this.editContainer.destroy();
             this.tierContainer.destroy();
             this.destroy();
