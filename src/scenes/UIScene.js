@@ -173,12 +173,13 @@ export class UIScene extends Phaser.Scene {
         this.sidebar.add(menuTower2);
         this.sidebar.add(menuTower3);
 
-        // Create info box
-        let infoContainer = this.add.container(415, 10);
+        // Create resource info box
+        let infoContainer = this.add.container(415, 5);
         this.infobox = this.add.image(0, 60, 'box');
         this.infobox.setOrigin(0,0);
         this.infobox.setScale(0.7, 1);
         this.infobox.setRotation(-Math.PI/2);
+        this.infobox.setDisplaySize(this.halfCell * 4, 384);
         this.descText = this.add.text(230, 0, '', {fontFamily: 'Odibee Sans'});
         this.costText = this.add.text(230, this.descText.getBottomCenter().y + 10, '', {fontFamily: 'Odibee Sans'});
         this.descText.setStroke('black', this.textStrokeThickness);

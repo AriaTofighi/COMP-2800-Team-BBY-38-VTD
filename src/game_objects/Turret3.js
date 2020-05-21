@@ -54,9 +54,11 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
             if (this.showingContainer) {
                 this.showingContainer = false;
                 this.editContainer.alpha = 0;
+                this.tierContainer.alpha = 0;
             } else {
                 this.showingContainer = true;
                 this.editContainer.alpha = 1;
+                this.tierContainer.alpha = 1;
             }
         });
 
@@ -154,6 +156,7 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
 
         // selling the tower
         this.leftClickBack.on('pointerdown', function() {
+            this.scene.sound.play('towerDestroy');
             this.scene.ui.money += Turret3.getPrice() / 2;
             this.scene.ui.moneyText.setText('Money: ' + this.scene.ui.money);
             this.editContainer.destroy();
@@ -195,17 +198,17 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
             switch(this.tier) {
                 case 1:
                     this.upgradeTurret();
-                    this.tierText.setText("++");
+                    this.tierText.setText("**");
                     this.tierText.setX(10);
                     break;
                 case 2:
                     this.upgradeTurret();
-                    this.tierText.setText("+++");
+                    this.tierText.setText("***");
                     this.tierText.setX(5.3);
                     break;
                 case 3:
                     this.upgradeTurret();
-                    this.tierText.setText("++++");
+                    this.tierText.setText("****");
                     this.tierText.setX(0);
                     this.upgradeText.setText("Max");
                     this.upgradeText.setX(112);
@@ -217,6 +220,7 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
 
         // The tier background
         this.tierContainer = this.scene.add.container(this.x -18, this.y - 25);
+        this.tierContainer.alpha = 0;
 
         // The tier background
         this.tierBack = this.scene.add.graphics();
@@ -227,7 +231,7 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         this.tierContainer.add(this.tierBack);
 
         // The tier text
-        this.tierText = this.scene.add.text(14, -1.8, "+");
+        this.tierText = this.scene.add.text(14, 0, "*");
         this.tierText.setFontSize(15);
         this.tierText.setFill("#66c746");
         this.tierText.setStroke('black', 0.35);
@@ -237,6 +241,7 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
 
     upgradeTurret() {
         if (this.scene.ui.money >= this.upgradePrice) {
+            this.scene.sound.play('towerUpgrade');
             this.scene.ui.money -= this.upgradePrice;
             this.scene.ui.moneyText.setText('Money: ' + this.scene.ui.money);
             this.tier++;
