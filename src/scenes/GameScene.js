@@ -15,6 +15,8 @@ import {
 
 let bgm;
 export {bgm};
+
+let turretSoap;
 export class GameScene extends Phaser.Scene {
 
     /**
@@ -222,17 +224,17 @@ export class GameScene extends Phaser.Scene {
             if (user) {
                 // User is signed in.
                 this.loggedIn = true;
-                this.status = this.add.text(170, 10, "Playing as ");
+                this.status = this.add.text(160, 5, "Playing as ");
                 this.status.setFontFamily('Arial');
                 this.status.setFontSize(15);
                 this.status.setStroke('black', 3);
-                this.displayName = this.add.text(245, 10, user.displayName);
+                this.displayName = this.add.text(235, 5, user.displayName);
                 this.displayName.setFontFamily('Arial');
                 this.displayName.setFontSize(15);
                 this.displayName.setFill('red');
                 this.displayName.setStroke('black', 3);
 
-                this.bestRound = this.add.text(170, 30, "Best Round: ");
+                this.bestRound = this.add.text(160, 25, "Best Round: ");
                 this.bestRound.setFontFamily('Arial');
                 this.bestRound.setFontSize(15);
                 this.bestRound.setStroke('black', 3);
@@ -270,22 +272,16 @@ export class GameScene extends Phaser.Scene {
 
         //Creating background music
         bgm = this.sound.add('gameMusic', {
-            volume: 0.3,
+            volume: 0.2,
             loop: true
         });
         bgm.play();
 
-        // this.sound.add('soap');
-        // this.shootSoap = this.time.addEvent({
-        //   duration: 2,
-        //   repeat: -1,
-        //   callbackScope: this,
-        //   callback: function () {
-        //     if(this.turret.isShooting) {
-        //       this.sound.play('soap');
-        //     }
-        //   }
-        // });
+        // Creating soap sound effect
+        turretSoap = this.sound.add('soap', {
+            volume: 0.3
+        });
+
         // Toggles fast-forward
         this.input.keyboard.on('keydown-F', function () {
             if (!this.fastForwarding) {
@@ -479,7 +475,7 @@ export class GameScene extends Phaser.Scene {
         // return null;
     }
 
-    
+
     // Spawns a carrier if enough time has elapsed since the last spawn and the number of carriers made for the round isn't reached yet
     spawnCarrier() {
         if (this.carriersMade < this.currentConfig.carrierCount - 1 && this.delta >= this.currentConfig.carrierSpace) {
@@ -538,24 +534,10 @@ export class GameScene extends Phaser.Scene {
 
     fire(carrier, turret) {
         turret.fire(carrier);
-        // this.sound.play('soap');
-        // setTimeout(this.sound.play('soap'), 450);
-        // setTimeout(this.sound.stopByKey('soap'), 4500);
 
-        // this.turret.isShooting = true;
-
-        // turret.anims.play('watershoot', true);
-        // turret.on('animationrepeat', function () {
-        //     if (turret.anims.currentAnim.key === 'watershoot') {
-        //         this.sound.play('soap');
-        //     }
-        // }.bind(this));
-
-        // var turretSoap = this.sound.add('soap');
-        // turretSoap.on('complete', function () {
-        //     turretSoap.play();
-        // });
-        // turretSoap.play();
+        if (!(turretSoap.isPlaying)) {
+            turretSoap.play();
+        }
     }
 
     carrierHit(carrier, bullet) {

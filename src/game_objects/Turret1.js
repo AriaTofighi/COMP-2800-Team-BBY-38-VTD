@@ -140,6 +140,7 @@ export default class Turret1 extends Phaser.GameObjects.Image {
 
         // selling the tower
         this.leftClickBack.on('pointerdown', function() {
+            this.scene.sound.play('towerDestroy');
             this.scene.ui.money += Turret1.getPrice() / 2;
             this.scene.ui.moneyText.setText('Money: ' + this.scene.ui.money);
             this.editContainer.destroy();
@@ -224,6 +225,7 @@ export default class Turret1 extends Phaser.GameObjects.Image {
 
     upgradeTurret() {
         if (this.scene.ui.money >= this.upgradePrice) {
+            this.scene.sound.play('towerUpgrade');
             this.scene.ui.money -= this.upgradePrice;
             this.scene.ui.moneyText.setText('Money: ' + this.scene.ui.money);
             this.tier++;
@@ -238,6 +240,6 @@ export default class Turret1 extends Phaser.GameObjects.Image {
     }
 }
 
-// Static variable
+// Static variables
 Turret1.price = 100;
 Turret1.hitRadius = 60;
