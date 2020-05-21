@@ -181,6 +181,47 @@ export class GameScene extends Phaser.Scene {
         });
 
         this.add.image((this.cellWidth * 16)+20, this.cellWidth * rowCount - 1, 'city').setScale(0.9);
+
+        //Place decorative elements. This gives a subtle indication of where to not place towers.
+        this.add.image(this.width - 100, 100, 'building').setScale(0.6);
+        this.add.image(this.width - 240, 100, 'building').setScale(0.6, 0.8);
+        this.add.image(210, 60, 'building').setScale(0.3, 0.6);
+        this.add.image(320, 410, 'building').setScale(0.5, 0.4);
+
+        //Make towers unplaceable on bg elements.
+        //Building topleft.
+        for(let x = 5; x <= 7; x++){
+            for(let y = 0; y <= 3; y++)
+                this.gridCells[y][x] = 1;
+        }
+
+        //Building bottom
+        for(let x = 8; x <= 11; x++){
+            for(let y = 12; y <= 13; y++)
+                this.gridCells[y][x] = 1;
+        }
+
+        //Top right buildings
+        for(let x = 15; x <= 23; x++){
+            for(let y = 2; y <= 4; y++)
+                this.gridCells[y][x] = 1;
+        }
+
+        //City row 1
+        for(let x = 11; x <= 21; x++){
+            for(let y = 17; y <= 18; y++)
+                this.gridCells[y][x] = 1;
+        }
+
+        //City row 2
+        for(let x = 13; x <= 21; x++){
+                this.gridCells[16][x] = 1;
+        }
+
+        //City row 3
+        for(let x = 17; x <= 21; x++){
+            this.gridCells[15][x] = 1;
+    }
         
         // Create and draw path
         let graphics = this.add.graphics();
@@ -418,8 +459,8 @@ export class GameScene extends Phaser.Scene {
      */
     placeSidebarNumbers(num) {
         return function () {
-            for (let i = 3; i <= 14; i++) {
-                for (let j = 22; j <= 25; j++) {
+            for (let i = 5; i <= 14; i++) {
+                for (let j = 23; j <= 25; j++) {
                     this.gridCells[i][j] = num;
                 }
             }

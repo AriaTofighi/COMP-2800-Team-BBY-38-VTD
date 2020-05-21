@@ -71,6 +71,10 @@ export default class Turret2 extends Phaser.GameObjects.Image {
     static getHitRadius() {
         return this.hitRadius;
     }
+        
+        // Creating a bullet
+        //this.bullet = new Bullet1(this.scene, this.x + this.scene.halfCell * Math.cos(angle), this.y + this.scene.halfCell * Math.sin(angle));
+        //this.scene.bullets.add(this.bullet);
 
     // // Fires a turret shot at a carrier (must be here, NOT Turret.js for access to groups)
     // fire(carrier) {

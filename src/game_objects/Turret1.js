@@ -17,7 +17,7 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         this.upgradePrice = 30;
         
 
-        this.setDisplaySize(32, 32);
+        this.setDisplaySize(64, 64);
         this.setPosition(this.x, this.y);
 
         // Creating the radius of the turret
