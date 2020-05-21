@@ -15,6 +15,8 @@ import {
 
 let bgm;
 export {bgm};
+
+let turretSoap;
 export class GameScene extends Phaser.Scene {
 
     /**
@@ -275,17 +277,11 @@ export class GameScene extends Phaser.Scene {
         });
         bgm.play();
 
-        // this.sound.add('soap');
-        // this.shootSoap = this.time.addEvent({
-        //   duration: 2,
-        //   repeat: -1,
-        //   callbackScope: this,
-        //   callback: function () {
-        //     if(this.turret.isShooting) {
-        //       this.sound.play('soap');
-        //     }
-        //   }
-        // });
+        // Creating soap sound effect
+        turretSoap = this.sound.add('soap', {
+            volume: 0.3
+        });
+
         // Toggles fast-forward
         this.input.keyboard.on('keydown-F', function () {
             if (!this.fastForwarding) {
@@ -538,24 +534,10 @@ export class GameScene extends Phaser.Scene {
 
     fire(carrier, turret) {
         turret.fire(carrier);
-        // this.sound.play('soap');
-        // setTimeout(this.sound.play('soap'), 450);
-        // setTimeout(this.sound.stopByKey('soap'), 4500);
 
-        // this.turret.isShooting = true;
-
-        // turret.anims.play('watershoot', true);
-        // turret.on('animationrepeat', function () {
-        //     if (turret.anims.currentAnim.key === 'watershoot') {
-        //         this.sound.play('soap');
-        //     }
-        // }.bind(this));
-
-        // var turretSoap = this.sound.add('soap');
-        // turretSoap.on('complete', function () {
-        //     turretSoap.play();
-        // });
-        // turretSoap.play();
+        if (!(turretSoap.isPlaying)) {
+            turretSoap.play();
+        }
     }
 
     carrierHit(carrier, bullet) {

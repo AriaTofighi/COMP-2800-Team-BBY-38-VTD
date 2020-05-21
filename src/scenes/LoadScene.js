@@ -40,6 +40,7 @@ import buttonClick from "../../assets/audio/button_click.mp3";
 import towerButtonClick from "../../assets/audio/tower_button_click.mp3";
 import towerBuild from "../../assets/audio/tower_build.mp3";
 import towerDestroy from "../../assets/audio/tower_destroy.mp3";
+import towerUpgrade from "../../assets/audio/tower_upgrade.mp3";
 import gameOverAudio from "../../assets/audio/game_over.mp3";
 import soap from "../../assets/audio/soap.mp3";
 import waterStream from "../../assets/audio/water_stream.mp3";
@@ -230,6 +231,7 @@ export class LoadScene extends Phaser.Scene {
         this.load.audio('towerButtonClick', towerButtonClick);
         this.load.audio('towerBuild', towerBuild);
         this.load.audio('towerDestroy', towerDestroy);
+        this.load.audio('towerUpgrade', towerUpgrade);
         this.load.audio('gameOverAudio', gameOverAudio);
         this.load.audio('soap', soap);
         this.load.audio('waterStream', waterStream);
