@@ -49,11 +49,12 @@ import logout from "../../assets/menu/logout.png";
 import logoutPress from "../../assets/menu/logout_press.png";
 import leaderboard from "../../assets/menu/leaderboard.png";
 import leaderboardPress from "../../assets/menu/leaderboard_press.png";
-// import buttonClick from "../../assets/audio/button-click.mp3";
 import city from "../../assets/ingame/city.png";
 import water from "../../assets/ingame/waterstream.png";
 import challenge from "../../assets/ingame/challenge.png";
 import resourceBorder from "../../assets/ingame/resource-border.png";
+import mask from "../../assets/ingame/mask.png";
+import box from "../../assets/ingame/menubox.png";
 import { BlendModes } from "phaser";
 import 'phaser';
 
@@ -155,10 +156,9 @@ export class LoadScene extends Phaser.Scene {
         // Load sprites
         this.load.image('bullet', bullet);
         this.load.spritesheet('carrier', carrier, {frameWidth: 37, frameHeight: 37});
-        //this.load.image('tile', tile);
         this.load.image('tower1', tower1);
         this.load.image('tower2', tower2);
-        this.load.spritesheet('tower3', tower3, {frameWidth: 64});
+        this.load.spritesheet('tower3', tower3, {frameWidth: 50});
         this.load.image('bg', grass);
         this.load.image('corner', corner);
         this.load.image('road', road);;
@@ -166,8 +166,9 @@ export class LoadScene extends Phaser.Scene {
         this.load.image('noTurret2', noTurret2);
         this.load.image('noTurret3', noTurret3);
         this.load.image('city', city);
-        this.load.spritesheet('water', water, {frameWidth: 196, frameHeight: 334});
-        this.load.image('resourceBorder', resourceBorder);
+        this.load.spritesheet('water', water, {frameWidth: 196, frameHeight: 336});
+        this.load.image('mask', mask);
+        this.load.image('box', box);
 
         // Load button images
         this.load.image("cancelButton", cancelButton);

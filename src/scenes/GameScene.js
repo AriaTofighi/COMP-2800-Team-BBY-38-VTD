@@ -1,10 +1,4 @@
-import {
-    Grid
-} from "matter";
 import Carrier from "../game_objects/Carrier";
-// import Turret1 from "../game_objects/Turret1";
-// import Turret2 from "../game_objects/Turret2";
-// import Turret3 from "../game_objects/Turret3";
 import Bullet from "../game_objects/Bullet";
 import {
     default as r1Config
@@ -41,14 +35,12 @@ export class GameScene extends Phaser.Scene {
         this.rDefaultConfig = rDefaultConfig;
         this.roundConfigs = [this.r1Config, this.r2Config, this.r3Config];
         this.currentRound = 0;
-        //this.tower1IsSelected = false;
-        //this.tower2IsSelected = false;
-        //this.tower3IsSelected = false;
         this.carriersMade = 0;
         this.currentConfig = {};
         this.firstRoundStarted = false;
         this.firstSave = true;
-        this.loggedIn = true;
+        this.loggedIn = true; 
+        this.firstSwitch = true;
     }
 
     /**
@@ -94,6 +86,7 @@ export class GameScene extends Phaser.Scene {
         this.ui = this.scene.get('UI');
         this.cellWidth = 32;
         this.cellHeight = 32;
+        this.speed = 1;
         this.halfCell = 16; // Used to move objects to center of cells
         const colCount = this.width / this.cellWidth; // 25 columns; use this.cellWidth * 24 for last column
         const rowCount = this.height / this.cellWidth; // 19 rows; use this.cellWidth * 18 for last row
@@ -106,9 +99,7 @@ export class GameScene extends Phaser.Scene {
         grid.setOrigin(0, 0);
 
         //Create background image.
-        let bg = this.add.tileSprite(this.width / 2, this.height / 2, this.width, this.height, 'bg');
-        //let bg = this.add.image(this.width/2, this.height/2, 'bg');
-        //bg.setDisplaySize(this.width, this.height);
+        let bg = this.add.tileSprite(this.width/2, this.height/2, this.width, this.height, 'bg');
 
         //Create path tiles.
         let tileX, tileY;
@@ -186,6 +177,8 @@ export class GameScene extends Phaser.Scene {
             frameRate: 20
         });
 
+        this.add.image((this.cellWidth * 16)+20, this.cellWidth * rowCount - 1, 'city').setScale(0.9);
+        
         // Create and draw path
         let graphics = this.add.graphics();
         graphics.lineStyle(1, 0xFFFFFF);
@@ -435,12 +428,17 @@ export class GameScene extends Phaser.Scene {
         //     this.sound.play('buttonClick');
         // }.bind(this));
 
+        this.input.keyboard.on('keydown-M', function() {
+            this.money += 100;
+            this.moneyText.setText("Money: " + this.money);
+        }.bind(this));  
 
         // Pause the game when clicking escape.
         this.input.keyboard.on('keydown-ESC', function () {
             bgm.pause();
             this.sound.play('buttonClick');
             this.scene.launch('Pause');
+            this.scene.pause('UI');
             this.scene.pause('Game');
         }.bind(this));
 
@@ -453,6 +451,7 @@ export class GameScene extends Phaser.Scene {
         // Creates and displays current round
         // this.ui.currentRoundText = this.add.text(180, 40, "Current round: " + this.currentRound);
 
+        
         // Creates and displays the display name / guest and best round
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
@@ -497,8 +496,11 @@ export class GameScene extends Phaser.Scene {
             resetOnMatch: true
         });
         this.input.keyboard.on('keycombomatch', function () {
-            this.scene.stop('UI');
-            this.scene.start('Challenge');
+            if (this.firstSwitch) {
+                this.firstSwitch = false;
+                this.scene.stop('UI');
+                this.scene.start('Challenge');
+            }
         }.bind(this));
 
         //Creating background music
@@ -596,18 +598,19 @@ export class GameScene extends Phaser.Scene {
         console.log("Starting round " + this.currentRound);
         console.log("Config for this round: " + JSON.stringify(config));
         this.disableStartRoundButton();
+
         // Start directly for first time in order to give carrier group an active number immediately.
         let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
         this.carriers.add(carrier);
-        let intervaler = setInterval(function () {
-            let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
-            this.carriers.add(carrier);
-            this.carriersMade++;
-        }.bind(this), config.carrierSpace);
+        
+        for (let i = 0; i < config.carrierCount - 1; i++) {
+            setTimeout(function() {
+                let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
+                this.carriers.add(carrier);
+                this.carriersMade++;
 
-        setTimeout(function () {
-            clearInterval(intervaler);
-        }.bind(this), (config.carrierCount - 1) * config.carrierSpace);
+            }.bind(this), config.carrierSpace * (i + 1));
+        }
 
         // Setting the correct round config for next round 
         this.ui.startRoundButton.once('pointerdown', function () {
@@ -801,8 +804,7 @@ export class GameScene extends Phaser.Scene {
     //         this.toggleSidebar();
     //         this.cancelSelection();
     //     }
-    // }
-
+    // }  
 
     /**
      * Place the numbers on the sidebar.
@@ -835,18 +837,6 @@ export class GameScene extends Phaser.Scene {
             }
         }
     }
-
-    // /**
-    //  * Cancel current tower selection.
-    //  */
-    // cancelSelection() {
-    //     this.tower1IsSelected = false;
-    //     this.tower2IsSelected = false;
-    //     this.tower3IsSelected = false;
-    //     this.descText.setText("");
-    //     this.costText.setText("");
-    //     this.cancelButton.alpha = 0;
-    // }
 
     /**
      * Check if it's a path tile or not.
@@ -900,8 +890,6 @@ export class GameScene extends Phaser.Scene {
     placeTower(turret, i, j) {
         this.turrets.add(turret);
         this.gridCells[i][j] = 1;
-        console.log(turret);
-        console.log(this.turrets);
     }
 
     fire(carrier, turret) {

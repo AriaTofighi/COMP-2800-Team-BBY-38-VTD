@@ -143,18 +143,6 @@ export class ChallengeScene extends Phaser.Scene {
         //Place city.
         this.add.image((this.cellWidth * 16)+20, this.cellWidth * rowCount - 1, 'city').setScale(0.9);
 
-        //Create frames from spritesheets
-
-        // let walkCycle = this.anims.create({
-        //     key: 'walk',
-        //     frames: this.anims.generateFrameNumbers('carrier', {
-        //         start: 0,
-        //         end: 7
-        //     }),
-        //     frameRate: 12,
-        //     repeat: -1
-        // });
-
         // Create and draw a path.
         this.anims.create({
             key: 'waterstart',
@@ -187,92 +175,12 @@ export class ChallengeScene extends Phaser.Scene {
         this.path.lineTo(this.cellWidth * 16 + this.halfCell, this.cellWidth * 11 + this.halfCell);
         this.path.lineTo(this.cellWidth * 16 + this.halfCell, this.cellWidth * 19 + this.halfCell); // 19 to end off screen.
 
-        // this.path.draw(graphics);
-
-        // //Create sidebar.
-        // this.sidebar = this.add.container(this.width, this.height / 2 - 200);
-        // let sidebox = this.add.graphics();
-        // this.sidebar.depth = 1;
-        // this.sidebar.add(sidebox);
-        // sidebox.fillStyle(0xff0000);
-        // sidebox.fillRect(4, -9, 96, 384);
-
-        // //Create first tower in menu.
-        // let menuTower1 = this.add.image(50, 72, 'tower1');
-        // menuTower1.setInteractive({
-        //     cursor: 'pointer'
-        // });
-        // // On pressed down for tower 1 button.
-        // menuTower1.setInteractive().on('pointerdown', () => {
-        //     // Tower1 has been selected.
-        //     // this.toggleSidebar();
-        //     this.tower1IsSelected = true;
-        //     this.tower2IsSelected = false;
-        //     this.tower3IsSelected = false;
-        //     this.descText.setText("Description: Water Tower");
-        //     this.costText.setText("Cost: 100");
-        //     this.cancelButton.alpha = 1;
-
-        //     // Once a turret is selected, close the sidebar.
-        //     this.toggleSidebar();
-
-        //     // Create cursor grid cell hover image.
-        //     this.showTurretExample();
-        // });
-
-        // // Create second tower in menu.
-        // let menuTower2 = this.add.image(50, 176, 'tower2');
-        // menuTower2.setInteractive({
-        //     cursor: 'pointer'
-        // });
-        // // On pressed down for tower 2 button.
-        // menuTower2.setInteractive().on('pointerdown', () => {
-        //     // Tower2 has been selected
-        //     this.tower1IsSelected = false;
-        //     this.tower2IsSelected = true;
-        //     this.tower3IsSelected = false;
-        //     this.descText.setText("Description: Soap Tower");
-        //     this.costText.setText("Cost: 200");
-        //     this.cancelButton.alpha = 1;
-
-        //     // Once a turret is selected, close the sidebar.
-        //     this.toggleSidebar();
-
-        //     // Create cursor grid cell hover image.
-        //     this.showTurretExample();
-        // });
-
-        // // Create third tower in menu.
-        // let menuTower3 = this.add.image(50, 280, 'tower3');
-        // menuTower3.setInteractive({
-        //     cursor: 'pointer'
-        // });
-        // // On pressed down for tower 3 button.
-        // menuTower3.setInteractive().on("pointerdown", () => {
-        //     // Tower3 has been selected
-        //     this.tower1IsSelected = false;
-        //     this.tower2IsSelected = false;
-        //     this.tower3IsSelected = true;
-        //     this.descText.setText("Description: Sanitizer");
-        //     this.costText.setText("Cost: 300");
-        //     this.cancelButton.alpha = 1;
-
-        //     // Once a turret is selected, close the sidebar.
-        //     this.toggleSidebar();
-
         // Create description area.
         let infoContainer = this.add.container(this.width - 250, 10);
         this.descText = this.add.text(0, 0, '');
         this.costText = this.add.text(0, this.descText.getBottomCenter().y + 10, '');
         infoContainer.add(this.descText);
         infoContainer.add(this.costText);
-
-        // Create and draw bullet
-        // this.bullet = this.physics.add.image(this.cellWidth * 15 + this.halfCell, this.cellWidth * 18 + this.halfCell, 'bullet');
-        // this.bullet.setDisplaySize(32, 32);
-        // this.bullet.body.debugShowVelocity = false;
-        // this.bullet.body.debugShowBody = false;
-        // this.bullet.setInteractive();
 
         // Create resource information text
         this.health = 1;
@@ -285,69 +193,13 @@ export class ChallengeScene extends Phaser.Scene {
         this.moneyText.depth = 1;
         this.moneyText.setFill("brown");
 
-        // // Creating the cancel button.
-        // this.cancelButton = this.add.image(this.width - 32, this.height - 96, 'cancelButton');
-        // this.cancelButton.setDisplaySize(64, 64);
-        // this.cancelButton.alpha = 0;
-        // this.cancelButton.setInteractive({
-        //     cursor: 'pointer'
-        // });
-        // // On hover of cancel tower button.
-        // this.cancelButton.setInteractive().on('pointerover', () => {
-        //     this.sound.play('buttonHover');
-        // });
-        // // On pressed down of cancel tower button.
-        // this.cancelButton.setInteractive().on('pointerdown', () => {
-        //     this.sound.play('buttonClick');
-        // });
-        // // Cancel selection of tower on pressed down of cancel tower button.
-        // this.cancelButton.setInteractive().on('pointerdown', this.cancelSelection.bind(this));
-
-        // // Add all the buttons to the sidebar.
-        // this.sidebar.add(menuTower1);
-        // this.sidebar.add(menuTower2);
-        // this.sidebar.add(menuTower3);
-
-        // // Create menu toggle button.
-        // // let menuButton = this.add.rectangle(this.width - 20, height - 20, 40, 40, 0x00ff00);
-        // // menuButton.depth = 1;
-        // // On pressed down of menu toggle button.
-        // // menuButton.on('pointerdown', () => {
-        // //     this.toggleSidebar();
-        // // });
-
-        // // Create menu toggle button.
-        // this.menuShowing = false;
-        // this.menuButton = this.add.image(this.width - 32, this.height - 32, 'menuButton');
-        // this.menuButton.setDisplaySize(64, 64);
-        // this.menuButton.setInteractive({
-        //     cursor: 'pointer'
-        // });
-        // // On hover of menu toggle button.
-        // this.menuButton.setInteractive().on('pointerover', () => {
-        //     this.sound.play('buttonHover');
-        // });
-        // // On pressed down of menu toggle button.
-        // this.menuButton.setInteractive().on('pointerdown', () => {
-        //     this.sound.play('buttonClick');
-        //     this.toggleSidebar();
-        // });
-
-        // // Create description area.
-        // let infoContainer = this.add.container(this.width - 250, 10);
-        // this.descText = this.add.text(0, 0, '');
-        // this.costText = this.add.text(0, this.descText.getBottomCenter().y + 10, '');
-        // infoContainer.add(this.descText);
-        // infoContainer.add(this.costText);
+        
             
         // Creating the game objects groups.
         this.createGroups();
 
         // Placing ones in the grid cell array in place of the buttons.
         this.placeButtonNumbers();
-
-        // Creates and displays current round
-        // this.ui.currentRoundText = this.add.text(180, 40, "Current round: " + this.currentRound);
         
         // Creates and displays the display name / guest and best round
         firebase.auth().onAuthStateChanged(function (user) {
@@ -395,20 +247,6 @@ export class ChallengeScene extends Phaser.Scene {
         this.resourceBorder = this.add.image(630, 55, 'resourceBorder');
         // this.resourceBorder.setOrigin(0, 0);
         this.resourceBorder.setDisplaySize(320, 135);
-
-        // // Switching the game mode when dragging the current round text
-        // this.currentRoundText.setInteractive();
-        // this.input.setDraggable(this.currentRoundText);
-        // this.currentRoundText.on('drag', function () {
-        //     this.endChallengeAnimation()
-        // }.bind(this));
-
-        // // Switching the game mode when type 'test'
-        // this.combo = this.input.keyboard.createCombo('test', { resetOnMatch: true});
-        // this.input.keyboard.on('keycombomatch', function () {
-        //     this.endChallengeAnimation();
-        // }.bind(this));
-
     }
 
     lostGame() {
@@ -469,188 +307,6 @@ export class ChallengeScene extends Phaser.Scene {
             clearInterval(intervaler);
         }.bind(this), (config.carrierCount - 1) * config.carrierSpace); 
 }
-
-
-    // /**
-    //  * Retracts or expands sidebar.
-    //  */
-    // toggleSidebar() {
-    //     if (!this.menuShowing) {
-    //         this.tweens.add({
-    //             targets: this.sidebar,
-    //             x: this.width - 100,
-    //             duration: 200
-    //         });
-    //         // Placing 1s in the place of sidebar on the grid array.
-    //         setTimeout(this.placeSidebarNumbers(1), 10);
-
-    //         this.menuShowing = true;
-    //     } else {
-    //         this.tweens.add({
-    //             targets: this.sidebar,
-    //             x: this.width + 100,
-    //             duration: 200
-    //         });
-    //         // Placing 0s in the place of sidebar on the grid array.
-    //         setTimeout(this.placeSidebarNumbers(0), 10);
-
-    //         this.menuShowing = false;
-    //     }
-    // }
-
-    // /**
-    //  * Show an example turret.
-    //  */
-    // showTurretExample() {
-    //     if (this.tower1IsSelected) {
-    //         this.sound.play('towerButtonClick');
-    //         // showing the turret example with its radius.
-    //         this.turretExampleRadius = this.add.circle(-1000, -1000, 60, 0xECDBDB);
-    //         this.turretExampleRadius.alpha = 0.8;
-    //         this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0.8);
-
-    //         this.turretExample = this.add.image(0, 0, 'tower1');
-    //         this.turretExample.setOrigin(0, 0);
-    //         this.turretExample.setDisplaySize(32, 32);
-    //         this.turretExample.alpha = 0;
-
-    //         // showing no turret is allowed here.
-    //         this.noTurretHere = this.add.image(0, 0, 'noTurret1');
-    //         this.noTurretHere.setDisplaySize(32, 32);
-    //         this.noTurretHere.setOrigin(0, 0);
-    //         this.noTurretHere.alpha = 0;
-    //     } else if (this.tower2IsSelected) {
-    //         this.sound.play('towerButtonClick');
-    //         // showing the turret example with its radius.
-    //         this.turretExampleRadius = this.add.circle(-1000, -1000, 85, 0xECDBDB);
-    //         this.turretExampleRadius.alpha = 0.8;
-    //         this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0.8);
-
-    //         this.turretExample = this.add.image(0, 0, 'tower2');
-    //         this.turretExample.setOrigin(0, 0);
-    //         this.turretExample.setDisplaySize(32, 32);
-    //         this.turretExample.alpha = 0;
-
-    //         // showing no turret is allowed here.
-    //         this.noTurretHere = this.add.image(0, 0, 'noTurret2');
-    //         this.noTurretHere.setDisplaySize(32, 32);
-    //         this.noTurretHere.setOrigin(0, 0);
-    //         this.noTurretHere.alpha = 0;
-    //     } else if (this.tower3IsSelected) {
-    //         this.sound.play('towerButtonClick');
-    //         // showing the turret example with its radius.
-    //         this.turretExampleRadius = this.add.circle(-1000, -1000, 100, 0xECDBDB);
-    //         this.turretExampleRadius.alpha = 0.8;
-    //         this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0.8);
-
-    //         this.turretExample = this.add.image(0, 0, 'tower3');
-    //         this.turretExample.setOrigin(0, 0);
-    //         this.turretExample.setDisplaySize(32, 32);
-    //         this.turretExample.alpha = 0;
-
-    //         // showing no turret is allowed here.
-    //         this.noTurretHere = this.add.image(0, 0, 'noTurret3');
-    //         this.noTurretHere.setDisplaySize(32, 32);
-    //         this.noTurretHere.setOrigin(0, 0);
-    //         this.noTurretHere.alpha = 0;
-    //     }
-
-    //     // Determines if the cursor is over a valid tile for tower placement.
-    //     this.input.on('pointermove', function (pointer) {
-    //         let i = Math.floor(pointer.y / 32); // Row index.
-    //         let j = Math.floor(pointer.x / 32); // Column index.
-
-    //         this.turretExample.setPosition(j * 32, i * 32);
-    //         this.noTurretHere.setPosition(j * 32, i * 32);
-    //         this.turretExampleRadius.setPosition((j + 0.5) * 32, (i + 0.5) * 32);
-
-    //         if (this.tower1IsSelected) {
-    //             if (this.isPathTile(i, j)) {
-    //                 this.turretExample.alpha = 0;
-    //                 this.turretExampleRadius.alpha = 0;
-    //                 this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0);
-    //                 this.noTurretHere.alpha = 1;
-    //             } else {
-    //                 this.turretExample.alpha = 1;
-    //                 this.turretExampleRadius.alpha = 0.8;
-    //                 this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0.8);
-    //                 this.noTurretHere.alpha = 0;
-    //             }
-    //         } else if (this.tower2IsSelected) {
-    //             if (this.isPathTile(i, j)) {
-    //                 this.turretExample.alpha = 0;
-    //                 this.turretExampleRadius.alpha = 0;
-    //                 this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0);
-    //                 this.noTurretHere.alpha = 1;
-    //             } else {
-    //                 this.turretExample.alpha = 1;
-    //                 this.turretExampleRadius.alpha = 0.8;
-    //                 this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0.8);
-    //                 this.noTurretHere.alpha = 0;
-    //             }
-    //         } else if (this.tower3IsSelected) {
-    //             if (this.isPathTile(i, j)) {
-    //                 this.turretExample.alpha = 0;
-    //                 this.turretExampleRadius.alpha = 0;
-    //                 this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0);
-    //                 this.noTurretHere.alpha = 1;
-    //             } else {
-    //                 this.turretExample.alpha = 1;
-    //                 this.turretExampleRadius.alpha = 0.8;
-    //                 this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0.8);
-    //                 this.noTurretHere.alpha = 0;
-    //             }
-    //         } else {
-    //             this.turretExample.alpha = 0;
-    //             this.turretExampleRadius.alpha = 0;
-    //             this.turretExampleRadius.setStrokeStyle(3, 0x046307, 0);
-    //             this.noTurretHere.alpha = 0;
-    //         }
-
-    //     }.bind(this));
-
-    //     // Place tower.
-    //     this.input.on('pointerdown', this.placeTower.bind(this));
-    // }
-
-    // /**
-    //  * Places the selected tower.
-    //  */
-    // placeTower(pointer) {
-    //     let i = Math.floor(pointer.y / 32); // Row index.
-    //     let j = Math.floor(pointer.x / 32); // Col index.
-
-    //     if (this.tower1IsSelected && !this.isPathTile(i, j) && this.money >= 100) {
-    //         this.sound.play('towerBuild');
-    //         this.turret = new Turret1(this, j, i);
-    //         this.turrets.add(this.turret);
-    //         this.money -= this.turret.price;
-    //         this.moneyText.setText('Money: ' + this.money);
-    //         this.gridCells[i][j] = 1;
-    //         this.toggleSidebar();
-    //         this.cancelSelection();
-    //     } else if (this.tower2IsSelected && !this.isPathTile(i, j) && this.money >= 200) {
-    //         this.sound.play('towerBuild');
-    //         this.turret = new Turret2(this, j, i);
-    //         this.turrets.add(this.turret);
-    //         this.money -= this.turret.price;
-    //         this.moneyText.setText('Money: ' + this.money);
-    //         this.gridCells[i][j] = 1;
-    //         this.toggleSidebar();
-    //         this.cancelSelection();
-    //     } else if (this.tower3IsSelected && !this.isPathTile(i, j) && this.money >= 300) {
-    //         this.sound.play('towerBuild');
-    //         this.turret = new Turret3(this, j, i);
-    //         this.turrets.add(this.turret);
-    //         this.money -= this.turret.price;
-    //         this.moneyText.setText('Money: ' + this.money);
-    //         this.gridCells[i][j] = 1;
-    //         this.toggleSidebar();
-    //         this.cancelSelection();
-    //     }
-    // }
-    
-
     /**
      * Place the numbers on the sidebar.
      */
@@ -683,18 +339,6 @@ export class ChallengeScene extends Phaser.Scene {
         }
     }
 
-    // /**
-    //  * Cancel current tower selection.
-    //  */
-    // cancelSelection() {
-    //     this.tower1IsSelected = false;
-    //     this.tower2IsSelected = false;
-    //     this.tower3IsSelected = false;
-    //     this.descText.setText("");
-    //     this.costText.setText("");
-    //     this.cancelButton.alpha = 0;
-    // }
-
     /**
      * Check if it's a path tile or not.
      * @return True if it is a path tile, false otherwise.
@@ -719,7 +363,6 @@ export class ChallengeScene extends Phaser.Scene {
         setTimeout(function () {
             this.background.alpha = 0;
             this.challenge.alpha = 0;
-            
         }.bind(this), 4000);
 
         // Creating the challenge mode animation

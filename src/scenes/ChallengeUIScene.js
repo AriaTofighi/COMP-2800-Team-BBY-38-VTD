@@ -10,6 +10,16 @@ export class ChallengeUIScene extends Phaser.Scene {
         super('ChallengeUI');
     }
 
+    /**
+     * Initializes the game.
+     */
+    init() {
+        // Showing the button after the animation is gone
+        setTimeout(function () {
+            this.menuButton.alpha = 1;
+        }.bind(this), 3900);
+    }
+
     create(){
         this.width = this.sys.canvas.width;
         this.height = this.sys.canvas.height;
@@ -31,6 +41,7 @@ export class ChallengeUIScene extends Phaser.Scene {
         // Create menu toggle button
         this.menuShowing = false;
         this.menuButton = this.add.image(this.width - 32, this.height - 32, 'menuButton');
+        this.menuButton.alpha = 0;
         this.menuButton.setDisplaySize(64, 64);
         // On-click of menu toggle button
         this.menuButton.setInteractive().on('pointerdown', () => {
@@ -104,6 +115,9 @@ export class ChallengeUIScene extends Phaser.Scene {
         this.cancelButton = this.add.image(this.width - 32, this.height - 96, 'cancelButton');
         this.cancelButton.setDisplaySize(64, 64);
         this.cancelButton.alpha = 0;
+        this.cancelButton.setInteractive({
+            cursor: 'pointer'
+        });
         // On hover of cancel tower button.
         this.cancelButton.setInteractive().on('pointerover', () => {
             this.sound.play('buttonHover');
@@ -112,7 +126,8 @@ export class ChallengeUIScene extends Phaser.Scene {
         this.cancelButton.setInteractive().on('pointerdown', () => {
             this.sound.play('buttonClick');
         });
-        //this.cancelButton.setInteractive().on('pointerdown', this.cancelSelection.bind(this));
+        // Cancel selection of tower on pressed down of cancel tower button.
+        this.cancelButton.setInteractive().on('pointerdown', this.cancelSelection.bind(this));
 
         // Add all the buttons to the sidebar
         this.sidebar.add(menuTower1);
