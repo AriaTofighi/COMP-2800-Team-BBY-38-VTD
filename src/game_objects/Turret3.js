@@ -110,7 +110,11 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
 
     CreateContainer() {
         // The edit container
-        this.editContainer = this.scene.add.container(this.x + 20, this.y - 25);
+        if (this.x < 600) {
+            this.editContainer = this.scene.add.container(this.x + 20, this.y - 25);
+        } else {
+            this.editContainer = this.scene.add.container(this.x - 194, this.y - 25);
+        }
         this.editContainer.alpha = 0;
         this.editBack = this.scene.add.graphics();
 

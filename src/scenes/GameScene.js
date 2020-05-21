@@ -221,6 +221,13 @@ export class GameScene extends Phaser.Scene {
         //City row 3
         for(let x = 17; x <= 21; x++){
             this.gridCells[15][x] = 1;
+
+        // Making towers unplaceable on top side of the game
+        for (let i = 0; i <= 1; i++) {
+            for (let j = 2; j <= 12; j++) {
+                this.gridCells[i][j] = 1;
+            }
+        }
     }
         
         // Create and draw path
