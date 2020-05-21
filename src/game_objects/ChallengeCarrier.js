@@ -74,7 +74,7 @@ export default class ChallengeCarrier extends Phaser.GameObjects.PathFollower {
         this.setDisplaySize(24, 24);
         this.scene.physics.world.enable(this);
         this.body.debugShowBody = false;
-        this.body.setCircle(16, 16, 16);
+        this.body.setCircle(16);
         this.setRotation(1.5708);
         this.startFollow({
             rotateToPath: true,
@@ -101,7 +101,7 @@ export default class ChallengeCarrier extends Phaser.GameObjects.PathFollower {
         // Destroys this carrier and makes the health bar invisible if reaches end of path
         if (this.reachedEndPath()) {
             if (!this.clean & this.scene.firstTime){
-                this.scene.health -= 5;
+                this.scene.ui.health -= 5;
             }
             this.barBack.alpha = 0;
             this.barHealth.alpha = 0;

@@ -9,12 +9,18 @@ export class GameOverScene extends Phaser.Scene {
 
     init(data) {
         this.roundReached = data.roundReached;
+        this.twitterUrl = 'https://twitter.com/intent/tweet?text=I reached round '
+            + this.roundReached + ' in Virus Tower Defense! Can you do better? '
+            + 'Come and play! https://virustd-8fdd6.web.app/';
+        this.facebookUrl = 'https://facebook.com/share.php?u=http://virustd-8fdd6.web.app';
     }
 
     /**
      * Create the scene for Game Over.
      */
     create() {
+        this.scene.bringToTop('GameOver');
+
         // Get canvas width and height
         this.width = this.sys.canvas.width;
         this.height = this.sys.canvas.height;
@@ -72,5 +78,25 @@ export class GameOverScene extends Phaser.Scene {
         this.roundReachedText = this.add.text(this.width / 2, this.height / 2 - 150, "YOU REACHED ROUND " + this.roundReached, {fontFamily: 'Odibee Sans', fontSize: 50});
         this.roundReachedText.setOrigin();
         this.roundReachedText.setStroke('black', 3);
+        
+        // Creating the twitter button
+        this.twitter = this.add.image(350, 570, 'twitter');
+        this.twitter.setDisplaySize(87, 32);
+        this.twitter.setInteractive({
+            cursor: 'pointer'
+        });
+        this.twitter.on('pointerdown', function () {
+            window.open(this.twitterUrl, '_blank');
+        }.bind(this));
+
+        // Creating the facebook button
+        this.facebook = this.add.image(450, 570, 'facebook');
+        this.facebook.setDisplaySize(87, 32);
+        this.facebook.setInteractive({
+            cursor: 'pointer'
+        });
+        this.facebook.on('pointerdown', function () {
+            window.open(this.facebookUrl, '_blank');
+        }.bind(this));
     }
 }
