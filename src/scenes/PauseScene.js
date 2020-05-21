@@ -1,3 +1,5 @@
+import {bgm} from './GameScene.js';
+
 export class PauseScene extends Phaser.Scene {
 
     /**
@@ -10,6 +12,8 @@ export class PauseScene extends Phaser.Scene {
      * Create the pause scene.
      */
     create() {
+        bgm.pause();
+
         this.background = this.add.image(0, 0, 'pauseBackground');
         this.background.setOrigin(0, 0);
         this.background.alpha = 0.4;
@@ -30,6 +34,7 @@ export class PauseScene extends Phaser.Scene {
         }.bind(this));
         // On release of resume button
         this.resumeButton.on('pointerup', function () {
+            bgm.play();
             this.sound.play('buttonClick');
             this.resumeButton.setTexture('resumePressButton');
             this.scene.resume('Game');
@@ -71,13 +76,14 @@ export class PauseScene extends Phaser.Scene {
         // On release of end button
         this.endButton.on('pointerup', function () {
             this.sound.play('buttonClick');
+            this.sound.removeAll();
             this.endButton.setTexture('endPressButton');
             this.scene.stop('Game');
             this.scene.stop('UI');
             this.scene.start('Menu1');
             // TODO: what the end button does
         }.bind(this));
-        
+
         this.input.on('pointerup', function () {
             this.resumeButton.setTexture('resumeButton');
             this.saveButton.setTexture('saveButton');
@@ -86,6 +92,7 @@ export class PauseScene extends Phaser.Scene {
 
         // Resume the game when clicking escape
         this.input.keyboard.on('keydown-ESC', function () {
+            bgm.play();
             this.scene.resume('Game');
             this.scene.stop();
         }.bind(this));

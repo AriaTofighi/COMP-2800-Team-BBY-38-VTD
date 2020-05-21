@@ -19,9 +19,8 @@ import {
     default as rDefaultConfig
 } from "../round_configs/rDefaultConfig.json";
 
-
-
-
+let bgm;
+export {bgm};
 export class GameScene extends Phaser.Scene {
 
     /**
@@ -49,7 +48,7 @@ export class GameScene extends Phaser.Scene {
         this.currentConfig = {};
         this.firstRoundStarted = false;
         this.firstSave = true;
-        this.loggedIn = true; 
+        this.loggedIn = true;
     }
 
     /**
@@ -100,7 +99,7 @@ export class GameScene extends Phaser.Scene {
         const rowCount = this.height / this.cellWidth; // 19 rows; use this.cellWidth * 18 for last row
 
         this.scene.launch('UI');
-        
+
         // Create and draw grid
         let grid = this.add.grid(0, 0, this.cellWidth * colCount, this.cellWidth * rowCount, this.cellWidth, this.cellWidth, 0x000000, 0, 0x222222, 0); // change last param to 1 to see grid lines
         grid.setDepth(1);
@@ -153,7 +152,7 @@ export class GameScene extends Phaser.Scene {
             }
         }
         //Place city.
-        this.add.image((this.cellWidth * 16)+20, this.cellWidth * rowCount - 1, 'city').setScale(0.9);
+        this.add.image((this.cellWidth * 16) + 20, this.cellWidth * rowCount - 1, 'city').setScale(0.9);
 
         //Create frames from spritesheets
 
@@ -170,17 +169,23 @@ export class GameScene extends Phaser.Scene {
         // Create and draw a path.
         this.anims.create({
             key: 'waterstart',
-            frames: this.anims.generateFrameNumbers('water', {start: 0, end: 2}),
+            frames: this.anims.generateFrameNumbers('water', {
+                start: 0,
+                end: 2
+            }),
             frameRate: 15
         });
 
         this.anims.create({
             key: 'watershoot',
-            frames: this.anims.generateFrameNumbers('water', {start: 3, end: 5}),
+            frames: this.anims.generateFrameNumbers('water', {
+                start: 3,
+                end: 13
+            }),
             repeat: -1,
             frameRate: 20
         });
-        
+
         // Create and draw path
         let graphics = this.add.graphics();
         graphics.lineStyle(1, 0xFFFFFF);
@@ -317,7 +322,7 @@ export class GameScene extends Phaser.Scene {
         // this.bullet.body.debugShowBody = false;
         // this.bullet.setInteractive();
 
-        this.input.keyboard.on('keydown-M', function() {
+        this.input.keyboard.on('keydown-M', function () {
             this.money += 100;
             this.moneyText.setText("Money: " + this.money);
         }.bind(this));
@@ -429,10 +434,11 @@ export class GameScene extends Phaser.Scene {
         // this.startRoundButton.setInteractive().on('pointerdown', function () {
         //     this.sound.play('buttonClick');
         // }.bind(this));
-        
+
 
         // Pause the game when clicking escape.
         this.input.keyboard.on('keydown-ESC', function () {
+            bgm.pause();
             this.sound.play('buttonClick');
             this.scene.launch('Pause');
             this.scene.pause('Game');
@@ -446,12 +452,12 @@ export class GameScene extends Phaser.Scene {
 
         // Creates and displays current round
         // this.ui.currentRoundText = this.add.text(180, 40, "Current round: " + this.currentRound);
-        
+
         // Creates and displays the display name / guest and best round
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
                 // User is signed in.
-                this.loggedIn = true; 
+                this.loggedIn = true;
                 this.status = this.add.text(170, 10, "Playing as ");
                 this.status.setFontFamily('Arial');
                 this.status.setFontSize(15);
@@ -469,13 +475,13 @@ export class GameScene extends Phaser.Scene {
 
                 // Listens for changes in the user's best round and updates screen text
                 this.db.collection("users").doc(user.uid).onSnapshot(function (userDoc) {
-                console.log(userDoc.data());
-                let userBestRound = userDoc.data()["bestRound"];
-                this.bestRound.setText("Best round: " + userBestRound);
-        }.bind(this));
+                    console.log(userDoc.data());
+                    let userBestRound = userDoc.data()["bestRound"];
+                    this.bestRound.setText("Best round: " + userBestRound);
+                }.bind(this));
             } else {
                 // User is not signed in.
-                this.loggedIn = false; 
+                this.loggedIn = false;
                 this.status = this.add.text(170, 10, "Playing as Guest");
                 this.status.setFontFamily('Arial');
                 this.status.setFontSize(15);
@@ -487,12 +493,34 @@ export class GameScene extends Phaser.Scene {
         });
 
         // Switching the game mode typing 'test'
-        this.combo = this.input.keyboard.createCombo('test', { resetOnMatch: true});
+        this.combo = this.input.keyboard.createCombo('test', {
+            resetOnMatch: true
+        });
         this.input.keyboard.on('keycombomatch', function () {
             this.scene.stop('UI');
             this.scene.start('Challenge');
         }.bind(this));
+
+        //Creating background music
+        bgm = this.sound.add('gameMusic', {
+            volume: 0.3,
+            loop: true
+        });
+        bgm.play();
+
+        // this.sound.add('soap');
+        // this.shootSoap = this.time.addEvent({
+        //   duration: 2,
+        //   repeat: -1,
+        //   callbackScope: this,
+        //   callback: function () {
+        //     if(this.turret.isShooting) {
+        //       this.sound.play('soap');
+        //     }
+        //   }
+        // });
     }
+
 
     /**
      * Create the carriers, civilians, turrets, and bullets.
@@ -774,7 +802,7 @@ export class GameScene extends Phaser.Scene {
     //         this.cancelSelection();
     //     }
     // }
-    
+
 
     /**
      * Place the numbers on the sidebar.
@@ -852,7 +880,7 @@ export class GameScene extends Phaser.Scene {
                 if (this.loggedIn && this.firstSave) {
                     this.updateBestRound();
                     this.firstSave = false;
-                }      
+                }
             } else {
                 this.disableStartRoundButton();
             }
@@ -869,18 +897,36 @@ export class GameScene extends Phaser.Scene {
         return true;
     }
 
-    placeTower(turret, i, j){
+    placeTower(turret, i, j) {
         this.turrets.add(turret);
         this.gridCells[i][j] = 1;
         console.log(turret);
         console.log(this.turrets);
     }
 
-    fire(carrier, turret){
+    fire(carrier, turret) {
         turret.fire(carrier);
+        // this.sound.play('soap');
+        // setTimeout(this.sound.play('soap'), 450);
+        // setTimeout(this.sound.stopByKey('soap'), 4500);
+
+        // this.turret.isShooting = true;
+
+        // turret.anims.play('watershoot', true);
+        // turret.on('animationrepeat', function () {
+        //     if (turret.anims.currentAnim.key === 'watershoot') {
+        //         this.sound.play('soap');
+        //     }
+        // }.bind(this));
+
+        // var turretSoap = this.sound.add('soap');
+        // turretSoap.on('complete', function () {
+        //     turretSoap.play();
+        // });
+        // turretSoap.play();
     }
 
-    carrierHit(carrier, bullet){
+    carrierHit(carrier, bullet) {
         carrier.getHit(bullet);
     }
 }

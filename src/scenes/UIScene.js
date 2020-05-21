@@ -2,6 +2,7 @@ import Turret1 from "../game_objects/Turret1";
 import Turret2 from "../game_objects/Turret2";
 import Turret3 from "../game_objects/Turret3";
 
+import {bgm} from './GameScene.js';
 export class UIScene extends Phaser.Scene {
     /**
      * Constructor for UIScene object.

@@ -28,6 +28,9 @@ let config = {
     physics: {
         default: 'arcade',
         arcade: {debug: true}
+    },
+    audio: {
+        disableWebAudio: true
     }
 };
 

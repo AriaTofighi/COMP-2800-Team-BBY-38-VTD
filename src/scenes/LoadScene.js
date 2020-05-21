@@ -36,6 +36,7 @@ import loadGame from "../../assets/menu2/load_game.png";
 import loadGamePress from "../../assets/menu2/load_game_press.png";
 import about from "../../assets/menu/about_button.png";
 import aboutPress from "../../assets/menu/about_button_press.png";
+import gameMusic from "../../assets/audio/game_music.mp3";
 import buttonHover from "../../assets/audio/button_hover.mp3";
 import buttonClick from "../../assets/audio/button_click.mp3";
 import towerButtonClick from "../../assets/audio/tower_button_click.mp3";
@@ -52,7 +53,7 @@ import leaderboardPress from "../../assets/menu/leaderboard_press.png";
 import city from "../../assets/ingame/city.png";
 import water from "../../assets/ingame/waterstream.png";
 import challenge from "../../assets/ingame/challenge.png";
-import resourceBorder from "../../assets/ingame/resource-border.png"
+import resourceBorder from "../../assets/ingame/resource-border.png";
 import { BlendModes } from "phaser";
 import 'phaser';
 
@@ -205,6 +206,7 @@ export class LoadScene extends Phaser.Scene {
         this.load.image('leaderboardPress', leaderboardPress);
 
         // Load audio
+        this.load.audio('gameMusic', gameMusic);
         this.load.audio('buttonHover', buttonHover);
         this.load.audio('buttonClick', buttonClick);
         this.load.audio('towerButtonClick', towerButtonClick);
