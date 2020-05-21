@@ -1,6 +1,9 @@
 import Bullet1 from "./Bullet1";
 
+// Global variable for turret one's bullet
+let turretOneBullet;
 export default class Turret1 extends Phaser.GameObjects.Image {
+
     /**
      * Constructor for turret 1 object.
      */
@@ -15,7 +18,6 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         this.showingContainer = false;
         this.tier = 1;
         this.upgradePrice = 30;
-        
 
         this.setDisplaySize(32, 32);
         this.setPosition(this.x, this.y);
@@ -59,6 +61,11 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         this.CreateContainer();
 
         this.scene.add.existing(this);
+
+        // Creates sound effect for turret one's bullets
+        turretOneBullet = this.scene.sound.add('soap', {
+            volume: 0.6
+        });
     }
 
     static getPrice() {
@@ -88,6 +95,11 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         this.scene.physics.moveToObject(this.bullet, carrier, this.bulletSpeed * 100);
 
         this.delta = 0;
+
+        // Plays sound effect for turret one's bullets
+        if (!(turretOneBullet.isPlaying)) {
+            turretOneBullet.play();
+        }
 
     }
 
