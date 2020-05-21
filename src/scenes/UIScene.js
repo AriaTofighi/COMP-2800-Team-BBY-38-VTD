@@ -50,16 +50,17 @@ export class UIScene extends Phaser.Scene {
         });
         // On hover of menu toggle button.
         this.menuButton.setInteractive().on('pointerover', () => {
-            this.sound.play('buttonHover');
+                this.sound.play('buttonHover');
         });
         // On pressed down of menu toggle button.
         this.menuButton.setInteractive().on('pointerdown', () => {
-            this.sound.play('buttonClick');
-            this.toggleSidebar();
+                this.sound.play('buttonClick');
+                this.toggleSidebar();
         });
 
         let menuTower1 = this.add.image(50, 72, 'tower1');
         let tower1Desc = "Description: Soap Shooter";
+        menuTower1.setDisplaySize(80, 80);
         menuTower1.setInteractive({
             cursor: 'pointer'
         });
@@ -158,11 +159,11 @@ export class UIScene extends Phaser.Scene {
         });
         // On hover of cancel tower button.
         this.cancelButton.setInteractive().on('pointerover', () => {
-            this.sound.play('buttonHover');
+                this.sound.play('buttonHover');
         });
         // On pressed down of cancel tower button.
         this.cancelButton.setInteractive().on('pointerdown', () => {
-            this.sound.play('buttonClick');
+                this.sound.play('buttonClick');
         });
         // Cancel selection of tower on pressed down of cancel tower button.
         this.cancelButton.setInteractive().on('pointerdown', this.cancelSelection.bind(this));
@@ -210,7 +211,7 @@ export class UIScene extends Phaser.Scene {
         });
         // On hover of pause button.
         this.pauseButton.setInteractive().on('pointerover', function () {
-            this.sound.play('buttonHover');
+                this.sound.play('buttonHover');
         }.bind(this));
         // On pressed down of pause button.
         this.pauseButton.setInteractive().on('pointerdown', function () {

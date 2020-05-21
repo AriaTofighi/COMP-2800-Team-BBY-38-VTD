@@ -140,6 +140,6 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
             this.barHealth.alpha = 0;
         }
         this.barHealth.fillRectShape(this.healthRect);
-        bullet.destroy();
+        bullet.kill();
     }
 }

@@ -15,7 +15,6 @@ export default class Bullet1 extends Bullet {
         this.setPosition(x + this.scene.halfCell / 2, y + this.scene.halfCell / 2);
 
         this.scene.physics.world.enable(this);
-        this.body.debugShowBody = false;
 
         this.scene.add.existing(this);
     }
@@ -24,5 +23,9 @@ export default class Bullet1 extends Bullet {
         if (this.x < -20 || this.x > this.scene.sys.canvas.width + 20 || this.y > this.scene.sys.canvas.height + 20 || this.y < -20) {
             this.destroy();
         }
+    }
+
+    kill(){
+        this.destroy();
     }
 }

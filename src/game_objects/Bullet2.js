@@ -23,8 +23,7 @@ export default class Bullet2 extends Bullet {
 
         this.hitbox.iterate((box) => {
             this.scene.physics.world.enable(box);
-            box.body.debugShowBody = false;
-            box.destroy = function(){};
+            box.kill = function(){};
             box.damage = 0.1 * this.scene.speed;
         });
 

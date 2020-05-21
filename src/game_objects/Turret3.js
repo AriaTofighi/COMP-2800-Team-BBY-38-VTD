@@ -10,7 +10,7 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         this.scene = scene;
         this.delta = 0;
         this.fireRate = 2;
-        this.bulletSpeed = 6;
+        this.bulletSpeed = 230;
         this.showingContainer = false;
         this.tier = 1;
         this.upgradePrice = 120;
@@ -25,7 +25,7 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
             frames: [{key: 'tower3', frame: 1}]
         });
 
-        this.setDisplaySize(20, 20);
+        this.setDisplaySize(25, 25);
         this.setPosition(this.x, this.y);
 
         // Creating the radius of the turret
@@ -37,7 +37,6 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         this.scene.physics.world.enable(this);
         let offset = -Turret3.getHitRadius() * 2.2;
         this.body.setCircle(Turret3.getHitRadius() * 2.45, offset, offset);
-        this.body.debugShowBody = false;
 
         // Showing the radius of the turret when hovering
         this.setInteractive().on('pointerover', function () {
@@ -85,28 +84,26 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         }
         
         this.play('empty');
+
+        let rotationFix = Math.PI/2
         // Rotating the turret towards the carrier when firing
-        var angle = Phaser.Math.Angle.Between(this.x, this.y, carrier.x, carrier.y) + Math.PI/2;
+        var angle = Phaser.Math.Angle.Between(this.x, this.y, carrier.x, carrier.y) + rotationFix;
         this.setRotation(angle);
 
         // Creating a bullet
-        this.bullet = new Bullet3(this.scene, this.x + this.scene.halfCell * Math.cos(angle), this.y + this.scene.halfCell * Math.sin(angle));
+        this.bullet = new Bullet3(this.scene, this.x, this.y);
         this.bullet.target = carrier;
         this.scene.bullets.add(this.bullet);
         this.bullet.body.debugShowVelocity = false;
 
         // Shoots at the carrier
-        this.scene.physics.moveToObject(this.bullet, carrier, this.bulletSpeed * 100);
+        this.scene.physics.moveToObject(this.bullet, carrier, this.bulletSpeed);
 
         //Follows the carrier all the time
-        let intervaler = setInterval(function() {
-            console.log("bullet status: " + this.bullet.active);
-            if (this.bullet.active == false) {
-                clearInterval(intervaler);
-            } else {
-                this.scene.physics.moveToObject(this.bullet, this.bullet.target, 230);
-            }
-        }.bind(this), 100);
+        setInterval(function() {
+            this.scene.physics.moveToObject(this.bullet, this.bullet.target, this.bulletSpeed);
+            this.bullet.setRotation(Phaser.Math.Angle.Between(this.bullet.x, this.bullet.y, this.bullet.target.x, this.bullet.target.y) + rotationFix);
+        }.bind(this), 300);
 
         this.delta = 0;
     }

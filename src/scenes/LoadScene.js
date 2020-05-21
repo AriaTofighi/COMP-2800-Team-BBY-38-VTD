@@ -60,10 +60,10 @@ import infoBox from "../../assets/ingame/infoBox.png";
 import infoBox_2 from "../../assets/ingame/infoBox_2.png";
 import arrow from "../../assets/ingame/arrow.png";
 import infoButton from "../../assets/buttons/info.png";
-// import { BlendModes } from "phaser";
-// import 'phaser';
 import twitter from "../../assets/buttons/twitter.png";
 import facebook from "../../assets/buttons/facebook.png";
+import building from "../../assets/ingame/building.png";
+import 'phaser';
 
 export class LoadScene extends Phaser.Scene {
 
@@ -173,7 +173,7 @@ export class LoadScene extends Phaser.Scene {
         this.load.spritesheet('carrier', carrier, {frameWidth: 37, frameHeight: 37});
         this.load.image('tower1', tower1);
         this.load.image('tower2', tower2);
-        this.load.spritesheet('tower3', tower3, {frameWidth: 50});
+        this.load.spritesheet('tower3', tower3, {frameWidth: 64});
         this.load.image('bg', grass);
         this.load.image('corner', corner);
         this.load.image('road', road);
@@ -182,6 +182,7 @@ export class LoadScene extends Phaser.Scene {
         this.load.spritesheet('water', water, {frameWidth: 196, frameHeight: 336});
         this.load.image('mask', mask);
         this.load.image('box', box);
+        this.load.image('building', building);
 
         // Load misc button images.
         this.load.image("cancelButton", cancelButton);

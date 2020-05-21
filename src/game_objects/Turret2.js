@@ -35,7 +35,6 @@ export default class Turret2 extends Phaser.GameObjects.Image {
 
         this.scene.physics.world.enable(this);
         this.body.setCircle(Turret2.getHitRadius() * 2, -139, -139);
-        this.body.debugShowBody = false;
 
         // Showing the radius of the turret when hovering
         this.setInteractive().on('pointerover', function () {
@@ -75,34 +74,6 @@ export default class Turret2 extends Phaser.GameObjects.Image {
     static getHitRadius() {
         return this.hitRadius;
     }
-
-    // // Fires a turret shot at a carrier (must be here, NOT Turret.js for access to groups)
-    // fire(carrier) {
-    //     if (!(this.delta >= 1000 / this.fireRate)) {
-    //         return;
-    //     }
-    //     // console.log("fire");
-
-    //     // Rotating the turret towards the carrier when firing
-    //     var angle = Phaser.Math.Angle.Between(this.x, this.y, carrier.x, carrier.y);
-    //     this.setRotation(angle);
-
-    //     // Creating a bullet
-    //     this.bullet = new Bullet1(this.scene, this.x + this.scene.halfCell * Math.cos(angle), this.y + this.scene.halfCell * Math.sin(angle));
-    //     this.scene.bullets.add(this.bullet);
-    //     this.bullet.body.debugShowVelocity = false;
-
-    //     // Shoots at the carrier
-    //     this.scene.physics.moveToObject(this.bullet, carrier, this.bulletSpeed * 100);
-
-    //     // Follows the carrier all the time
-    //     // setInterval(function() {
-    //     //     this.physics.moveToObject(this.bullet, carrier, 230);
-    //     // }.bind(this), 100);
-
-    //     this.delta = 0;
-
-    // }
 
     // Fires a turret shot at a carrier
     fire(carrier) {
@@ -187,6 +158,8 @@ export default class Turret2 extends Phaser.GameObjects.Image {
             this.scene.gridCells[this.i][this.j] = 0;
             this.editContainer.destroy();
             this.tierContainer.destroy();
+            this.bullet.hitbox.destroy();
+            this.bullet.destroy();
             this.destroy();
         }.bind(this));
         this.editContainer.add(this.leftClickBack);
