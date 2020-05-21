@@ -27,8 +27,8 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         this.radius.setStrokeStyle(3, 0x046307, 0);
 
         this.scene.physics.world.enable(this);
-        this.body.setCircle(Turret1.getHitRadius() * 2, -88.5, -88.5);
-        this.body.debugShowBody = false;
+        let offset = -Turret1.getHitRadius()*6 + 200; 
+        this.body.setCircle(Turret1.getHitRadius() * 6, offset, offset);
 
         // Showing the radius of the turret when hovering
         this.setInteractive().on('pointerover', function () {
@@ -82,7 +82,6 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         // Creating a bullet
         this.bullet = new Bullet1(this.scene, this.x + this.scene.halfCell * Math.cos(angle), this.y + this.scene.halfCell * Math.sin(angle));
         this.scene.bullets.add(this.bullet);
-        this.bullet.body.debugShowVelocity = false;
 
         // Shoots at the carrier
         this.scene.physics.moveToObject(this.bullet, carrier, this.bulletSpeed * 100);
