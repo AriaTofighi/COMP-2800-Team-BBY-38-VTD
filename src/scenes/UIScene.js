@@ -4,17 +4,15 @@ import Turret3 from "../game_objects/Turret3";
 
 /**
  * UIScene manages the UI elements of the game.
- *  
- * @author Aria Tofighi
- * @author Risham Johar
- * @author Ben Halim
- * @author Arash Saadati
  */
 export class UIScene extends Phaser.Scene {
     /**
      *  Constructs the UIScene object.
      */
     constructor() {
+        /**
+         * Constructor for Phaser.Scene object.
+         */
         super('UI');
     }
 
@@ -24,8 +22,11 @@ export class UIScene extends Phaser.Scene {
     create() {
         this.width = this.sys.canvas.width;
         this.height = this.sys.canvas.height;
-        this.halfCell = 16; // Used to move objects to center of cells
+        this.halfCell = 16;
+
+        // Storing all the challenge ui scene variables in a variable
         this.game = this.scene.get('Game');
+
         this.fullScreen = false;
         this.textStrokeThickness = 3;
         this.midMoneyTextTween = false;
@@ -70,7 +71,6 @@ export class UIScene extends Phaser.Scene {
         });
         menuTower1.setInteractive().on('pointerdown', () => {
             // Tower1 has been selected
-            // this.toggleSidebar();
             this.tower1IsSelected = true;
             this.tower2IsSelected = false;
             this.tower3IsSelected = false;
@@ -262,9 +262,11 @@ export class UIScene extends Phaser.Scene {
                 this.scene.start('Challenge');
             }
         }.bind(this));
-
     }
 
+    /**
+     * Opens and closes the sidebar based on its current condition.
+     */
     toggleSidebar() {
         if (!this.menuShowing) {
             this.tweens.add({
@@ -289,6 +291,10 @@ export class UIScene extends Phaser.Scene {
         }
     }
 
+    /**
+     * Shows and moves turret examples if of
+     * any turrets have been selected. 
+     */
     showTurretExample() {
         // showing no turret is allowed
         this.noTurret = this.add.image(0, 0, 'noTurret');
@@ -386,6 +392,11 @@ export class UIScene extends Phaser.Scene {
         this.input.on('pointerdown', this.placeTower.bind(this));
     }
 
+    /**
+     * Places a tower on the game.
+     * 
+     * @param pointer the pointer to get the location of the click 
+     */
     placeTower(pointer) {
         let i = Math.floor(pointer.y / 32); // row index
         let j = Math.floor(pointer.x / 32); // col index
@@ -418,6 +429,10 @@ export class UIScene extends Phaser.Scene {
         }
     }
 
+    /**
+     * Shows that the user does not have enough money
+     * to do a purchase.
+     */
     showNoMoney() {
         let noMoneySound = this.sound.play('noMoney', {
             volume: 0.8
@@ -434,6 +449,9 @@ export class UIScene extends Phaser.Scene {
         noMoneySound.remove(noMoneySound);
     }
 
+    /**
+     * Cancels the selection.
+     */
     cancelSelection() {
         this.tower1IsSelected = false;
         this.tower2IsSelected = false;

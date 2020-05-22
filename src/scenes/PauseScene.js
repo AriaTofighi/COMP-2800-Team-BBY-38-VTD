@@ -1,11 +1,17 @@
 import {bgm} from './GameScene.js';
 
+/**
+ * PauseScene is the scene that pauses the game.
+ */
 export class PauseScene extends Phaser.Scene {
 
     /**
      * Constructor for PauseScene object.
      */
     constructor() {
+        /**
+         * Constructor for Phaser.Scene object.
+         */
         super('Pause');
     }
     /**
@@ -100,6 +106,9 @@ export class PauseScene extends Phaser.Scene {
         }.bind(this));
     }
 
+    /**
+     * Checks if the game is fullscreen or not.
+     */
     toggleFullscreen() {
         if (!this.fullScreen) {
             this.openFullscreen();
@@ -111,6 +120,8 @@ export class PauseScene extends Phaser.Scene {
     }
 
     /**
+     * Makes the game fullscreen.
+     * 
      * @src https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_fullscreen2
      */
     openFullscreen() {
@@ -127,6 +138,8 @@ export class PauseScene extends Phaser.Scene {
     }
 
     /**
+     * Exits the fullscreen.
+     * 
      * @src https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_fullscreen2
      */
     closeFullscreen() {

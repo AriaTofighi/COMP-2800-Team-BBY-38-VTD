@@ -1,12 +1,24 @@
+/**
+ * GameOverScene is the scene with the game over animation
+ * and multiple buttons.
+ */
 export class GameOverScene extends Phaser.Scene {
 
     /**
      * Constructor for GameOverScene object.
      */
     constructor() {
+        /**
+         * Constructor for Phaser.Scene object.
+         */
         super('GameOver');
     }
 
+    /**
+     * Initializes the game over.
+     * 
+     * @param data the data that is coming from the game scene
+     */
     init(data) {
         this.roundReached = data.roundReached;
         this.twitterUrl = 'https://twitter.com/intent/tweet?text=I reached round '

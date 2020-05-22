@@ -1,9 +1,16 @@
+/**
+ * InfoScene includes all the information about how to
+ * play and how to stay safe against viruses.
+ */
 export class InfoScene extends Phaser.Scene {
 
     /**
      * Constructor for InfoScene object.
      */
     constructor() {
+        /**
+         * Constructor for Phaser.Scene object.
+         */
         super('Info');
     }
 
@@ -16,7 +23,7 @@ export class InfoScene extends Phaser.Scene {
     }
 
     /**
-     * Start the    x    scene.
+     * Start the InfoScene scene.
      */
     create() {
         this.scene.bringToTop('Info');
@@ -25,8 +32,7 @@ export class InfoScene extends Phaser.Scene {
         this.background.setOrigin(0, 0);
         this.background.alpha = 0.7;
         this.background.setDisplaySize(800, 608);
-
-        // TODO: create and add image describing how each tower helps fight a pandemic
+        
         this.infoBox = this.add.image(this.width / 2, this.height / 2, 'infoBox');
         this.infoBox.setDisplaySize(300, 400);
 
