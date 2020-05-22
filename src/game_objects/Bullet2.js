@@ -47,7 +47,6 @@ export default class Bullet2 extends Bullet {
 
         //Enable physics
         this.scene.physics.world.enable(this);
-
         this.scene.add.existing(this);
     }
 }

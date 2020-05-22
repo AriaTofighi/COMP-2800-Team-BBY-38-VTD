@@ -140,17 +140,6 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         // // Shoots at the carrier
         this.scene.physics.moveToObject(this.bullet, carrier, this.bulletSpeed);
 
-        //  //Follows the carrier all the time
-        //  let intervaler = setInterval(function() {
-        //     // console.log("bullet status: " + this.bullet.active);
-        //     if (this.bullet.active == false) {
-        //         clearInterval(intervaler);
-        //     } else {
-        //         this.scene.physics.moveToObject(this.bullet, carrier, this.bulletSpeed);
-        //         this.bullet.setRotation(Phaser.Math.Angle.Between(this.bullet.x, this.bullet.y, this.bullet.target.x, this.bullet.target.y) + rotationFix);
-        //     }
-        // }.bind(this), 100);
-
         this.delta = 0;
 
         // Plays sound effect for turret three's bullets
@@ -334,6 +323,9 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         noMoneySound.remove(noMoneySound);
     }
 
+    /**
+     * Upgrades the turret.
+     */
     upgradeTurret() {
         if (this.scene.ui.money >= this.upgradePrice) {
             this.scene.sound.play('towerUpgrade');

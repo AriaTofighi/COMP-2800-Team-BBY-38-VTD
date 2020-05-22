@@ -16,6 +16,7 @@ export default class Bullet2 extends Bullet {
         // Setting the damage of the bullet
         this.damage = 10;
 
+        //Set the size of this bullet.
         this.setSize(8, 8);
         this.setDisplaySize(8, 8);
 
