@@ -146,15 +146,15 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         this.sellText = this.scene.add.text(25, 7, "Sell");
         this.sellText.setFontFamily('Arial');
         this.sellText.setFontSize(23);
-        this.sellText.setFill("#66c746");
-        this.sellText.setStroke('black', 1);
+        this.sellText.setFill('white');
+        this.sellText.setStroke('black', 2);
         this.editContainer.add(this.sellText);
 
         // The text to show how much money the user will get back
-        this.sellPrice = this.scene.add.text(40, 33, "$" + Turret1.getPrice() / 2);
-        this.sellPrice.setFontSize(10);
-        this.sellPrice.setFill("#66c746");
-        this.sellPrice.setStroke('black', 0.35);
+        this.sellPrice = this.scene.add.text(34, 30, "$" + Turret1.getPrice() / 2);
+        this.sellPrice.setFontSize(12);
+        this.sellPrice.setFill('white');
+        this.sellPrice.setStroke('black', 3);
         this.editContainer.add(this.sellPrice);
 
         // Creating the clickable sell section
@@ -187,14 +187,14 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         this.upgradeText = this.scene.add.text(95, 9, "Upgrade");
         this.upgradeText.setFontFamily('Arial');
         this.upgradeText.setFontSize(18);
-        this.upgradeText.setFill("#66c746");
-        this.upgradeText.setStroke('black', 1);
+        this.upgradeText.setFill('white');
+        this.upgradeText.setStroke('black', 2);
         this.editContainer.add(this.upgradeText);
 
-        this.upgradePriceText = this.scene.add.text(121, 33, "$" + this.upgradePrice);
-        this.upgradePriceText.setFontSize(10);
-        this.upgradePriceText.setFill("#66c746");
-        this.upgradePriceText.setStroke('black', 0.35);
+        this.upgradePriceText = this.scene.add.text(115, 30, "$" + this.upgradePrice);
+        this.upgradePriceText.setFontSize(12);
+        this.upgradePriceText.setFill('white');
+        this.upgradePriceText.setStroke('black', 3);
         this.editContainer.add(this.upgradePriceText);
 
         // Creating the clickable upgrade section

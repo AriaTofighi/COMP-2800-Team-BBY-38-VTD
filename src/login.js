@@ -23,6 +23,7 @@ console.log(db);
 var uiConfig = {
     callbacks: {
         signInSuccessWithAuthResult: function (authResult) {
+            displaySignOut();
             let user = authResult.user;
             let uniqueUser = authResult.additionalUserInfo.isNewUser;
             let dbRef = db.collection("users").doc(user.uid);
@@ -79,7 +80,7 @@ function signUserOut() {
 }
 
 // Alters sign in status visually when window is loaded.
-initApp = function () {
+initApp = function (ui) {
     let time = new Date().getTime();
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
@@ -91,7 +92,7 @@ initApp = function () {
             //     // If need to use ID token
             // });
         } else {
-            displaySignIn();
+            setTimeout(displaySignIn, 4000);
         }
         console.log("Time elapsed: " + (new Date().getTime() - time) / 1000.0 + " seconds");
     }, function (error) {
@@ -105,26 +106,30 @@ initApp = function () {
  * @param displayName the user's display name 
  */
 function displaySignOut(displayName) {
-    document.getElementById('loader-container').style.display = "none";
     document.getElementById('sign-in-status').textContent = 'Signed in as ' + displayName;
     document.getElementById('sign-out-container').style.display = "flex";
     document.getElementById('sign-in-container').style.display = "none";
     document.getElementById('log-out-btn').style.display = "initial";
     document.getElementById('firebaseui-auth-container').style.display = "none";
+    document.getElementById('loader-container').style.display = "none";
     document.getElementById('back-to-vtd').disabled = false;
+    document.getElementById('back-to-vtd').style.display = "initial";
+    // alert("DISPLAY SIGN OUT");
 }
 
 /**
  * Displays sign in UI.
  */
 function displaySignIn() {
-    document.getElementById('loader-container').style.display = 'none';
     document.getElementById('sign-in-status').textContent = '';
     document.getElementById('sign-out-container').style.display = "none";
     document.getElementById('sign-in-container').style.display = "flex";
     document.getElementById('log-out-btn').style.display = "none";
     document.getElementById('firebaseui-auth-container').style.display = "block";
+    document.getElementById('loader-container').style.display = 'none';
     document.getElementById('back-to-vtd').disabled = false;
+    document.getElementById('back-to-vtd').style.display = "initial";
+    // alert("DISPLAY SIGN IN");
 }
 
 /**
@@ -137,6 +142,6 @@ window.addEventListener('load', function () {
     // The start method will wait until the DOM is loaded.
     ui.start('#firebaseui-auth-container', uiConfig);
     document.getElementById('log-out-btn').onclick = signUserOut;
-    initApp();
+    initApp(ui);
 });
 
