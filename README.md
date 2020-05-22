@@ -1,5 +1,5 @@
-# VTD
-This repo contains the code for the web game, Virus Tower Defense (VTD).
+# Virus Tower Defense (VTD)
+This repo contains the code for the web game, **Virus Tower Defense (VTD)**.
 
 Try out the game [here](https://virustd-8fdd6.web.app/).
 
