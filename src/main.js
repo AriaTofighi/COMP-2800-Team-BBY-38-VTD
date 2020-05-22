@@ -23,7 +23,7 @@ let config = {
     roundPixels: true,
     physics: {
         default: 'arcade',
-        arcade: {debug: true}
+        arcade: {debug: false}
     },
     audio: {
         disableWebAudio: true
