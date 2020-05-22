@@ -148,28 +148,6 @@ export class GameScene extends Phaser.Scene {
         //Place city.
         this.add.image((this.cellWidth * 16) + 20, this.cellWidth * rowCount - 1, 'city').setScale(0.9);
 
-        // Create and draw a path.
-        this.anims.create({
-            key: 'waterstart',
-            frames: this.anims.generateFrameNumbers('water', {
-                start: 0,
-                end: 2
-            }),
-            frameRate: 15
-        });
-
-        this.anims.create({
-            key: 'watershoot',
-            frames: this.anims.generateFrameNumbers('water', {
-                start: 3,
-                end: 13
-            }),
-            repeat: -1,
-            frameRate: 20
-        });
-
-        this.add.image((this.cellWidth * 16)+20, this.cellWidth * rowCount - 1, 'city').setScale(0.9);
-
         //Place decorative elements. This gives a subtle indication of where to not place towers.
         this.add.image(this.width - 100, 100, 'building').setScale(0.6);
         this.add.image(this.width - 240, 100, 'building').setScale(0.6, 0.8);
@@ -313,27 +291,6 @@ export class GameScene extends Phaser.Scene {
         });
         bgm.play();
 
-        // Toggles fast-forward
-        this.input.keyboard.on('keydown-F', function () {
-            if (!this.fastForwarding) {
-                this.tweens.timeScale = 2; // tweens
-                this.physics.world.timeScale = 2; // physics
-                this.time.timeScale = 2; // time events
-                this.turrets.tweens.timeScale = 2; // tweens
-                this.turrets.physics.world.timeScale = 2; // physics
-                this.turrets.time.timeScale = 2; // time events   
-                this.fastForwarding = true;
-            } else {
-                this.tweens.timeScale = 1; // tweens
-                this.physics.world.timeScale = 1; // physics
-                this.time.timeScale = 1; // time events
-                this.turrets.tweens.timeScale = 2; // tweens
-                this.turrets.physics.world.timeScale = 2; // physics
-                this.turrets.time.timeScale = 2; // time events   
-                this.fastForwarding = false;
-            }
-        }.bind(this));
-
         // Display info box that explains the game 
         this.scene.pause('UI');
         this.scene.pause();
@@ -420,16 +377,6 @@ export class GameScene extends Phaser.Scene {
         // Start directly for first time in order to give carrier group an active number immediately.
         let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
         this.carriers.add(carrier);
-        
-        // Spawns the specified number of carriers in config object
-        // for (let i = 0; i < config.carrierCount - 1; i++) {
-        //     setTimeout(function() {
-        //         let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
-        //         this.carriers.add(carrier);
-        //         this.carriersMade++;
-
-        //     }.bind(this), config.carrierSpace * (i + 1));
-        // }
 
         // Setting the correct round config for next round 
         this.ui.startRoundButton.once('pointerdown', function () {
@@ -549,6 +496,7 @@ export class GameScene extends Phaser.Scene {
         }
     }
 
+    //Check if all carriers are gone.
     carriersAllGone() {
         let carrierArray = this.carriers.getChildren();
         for (let i = 0; i < this.carriers.getLength(); i++) {
@@ -559,15 +507,18 @@ export class GameScene extends Phaser.Scene {
         return true;
     }
 
+    //Place a tower on the grid and add it to the group of turrets.
     placeTower(turret, i, j) {
         this.turrets.add(turret);
         this.gridCells[i][j] = 1;
     }
 
+    //Call the given turret's fire function.
     fire(carrier, turret) {
         turret.fire(carrier);
     }
 
+    //Call the given carrier's hit function
     carrierHit(carrier, bullet) {
         carrier.getHit(bullet);
     }

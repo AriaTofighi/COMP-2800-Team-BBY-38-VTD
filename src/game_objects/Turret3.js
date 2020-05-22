@@ -6,7 +6,10 @@ let turretThreeBullet;
 export default class Turret3 extends Phaser.GameObjects.Sprite {
     
     /**
-     * Constructor for turret 3 object.
+     * Constructor for Turret3
+     * @param {Phaser.Scene} scene The scene this object is in.
+     * @param {number} j The x coordinate of the turret.
+     * @param {number} i The y coordinate of the turret.
      */
     constructor(scene, j, i) {
         super(scene, j, i, 'tower3');
@@ -25,6 +28,7 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         this.sizeX = 25;
         this.sizeY = 25;
 
+        //Create frames for this turret's state.
         this.scene.anims.create({
             key: 'loaded',
             frames: [{
@@ -41,6 +45,7 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
             }]
         });
 
+        //Set the size and position.
         this.setDisplaySize(this.sizeX, this.sizeY);
         this.setPosition(this.x, this.y);
 
@@ -50,6 +55,7 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         this.radius.setPosition((j + 0.5) * 32, (i + 0.5) * 32);
         this.radius.setStrokeStyle(3, 0x046307, 0);
 
+        //Enable physics and set hitbox
         this.scene.physics.world.enable(this);
         let offset = -Turret3.getHitRadius() * 2.2;
         this.body.setCircle(Turret3.getHitRadius() * 2.55, offset, offset);
@@ -102,10 +108,12 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         });
     }
 
+    //Return the turret price.
     static getPrice() {
         return this.price;
     }
 
+    //Return the turret range.
     static getHitRadius() {
         return this.hitRadius;
     }
@@ -303,6 +311,9 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
 
     }
 
+    /**
+     * Function for when there is no money to buy this turret.
+     */
     showNoMoney() {
         let noMoneySound = this.scene.sound.play('noMoney', {
             volume: 0.8
