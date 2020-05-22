@@ -4,6 +4,7 @@ import Bullet from "./Bullet";
 // Global variable for turret two's bullet
 let turretTwoBullet;
 export default class Turret2 extends Phaser.GameObjects.Image {
+    
     /**
      * Constructor for turret 2 object.
      */

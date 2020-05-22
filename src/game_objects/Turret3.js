@@ -4,6 +4,10 @@ import Bullet3 from "./Bullet3";
 let turretThreeBullet;
 
 export default class Turret3 extends Phaser.GameObjects.Sprite {
+    
+    /**
+     * Constructor for turret 3 object.
+     */
     constructor(scene, j, i) {
         super(scene, j, i, 'tower3');
         this.i = i;
@@ -114,7 +118,7 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
 
         this.play('empty');
 
-        let rotationFix = Math.PI/2
+        let rotationFix = Math.PI / 2
         // Rotating the turret towards the carrier when firing
         var angle = Phaser.Math.Angle.Between(this.x, this.y, carrier.x, carrier.y) + rotationFix;
         this.setRotation(angle);
@@ -309,8 +313,12 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
             scale: 1.1,
             ease: 'Linear',
             duration: 200,
-            onStart: () => {this.midMoneyTextTween = true},
-            onComplete: () => {this.midMoneyTextTween = false}
+            onStart: () => {
+                this.midMoneyTextTween = true
+            },
+            onComplete: () => {
+                this.midMoneyTextTween = false
+            }
         });
         noMoneySound.remove(noMoneySound);
     }
