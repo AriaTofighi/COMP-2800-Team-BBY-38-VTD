@@ -89,9 +89,8 @@ export class PauseScene extends Phaser.Scene {
             this.scene.stop('Game');
             this.scene.stop('UI');
             this.scene.start('Menu1');
-            // TODO: what the end button does
         }.bind(this));
-
+        // Resets button textures on pointer up
         this.input.on('pointerup', function () {
             this.resumeButton.setTexture('resumeButton');
             this.fullScreenButton.setTexture('fullscreen');

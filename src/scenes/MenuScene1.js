@@ -204,6 +204,9 @@ export class MenuScene1 extends Phaser.Scene {
         }.bind(this));
     }
 
+    /**
+     * Signs the user out.
+     */
     signUserOut() {
         firebase.auth().signOut().then(function () {
             // Sign-out successful. 
