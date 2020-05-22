@@ -43,7 +43,7 @@ This game makes heavy use of the Phaser 3 framework for developing games with Ja
 
 [Phaser 3 Examples](https://phaser.io/examples)
 
-<b>Note:</b> Instructions for installing and setting up Phaser 3 will be shown later in this ReadMe.
+<b>Note:</b> Instructions for installing and setting up Phaser 3 will be shown in the [Developer Set Up](#developer-set-up) section in this ReadMe.
 
 ## Testing
 You can find our link to testing our user stories and unit tests [here](https://docs.google.com/spreadsheets/d/1NfdKi5wn2WfzfoM7Qvr7vsorEk-WN5nNjkvlAoS7Lok/edit#gid=394496370).
