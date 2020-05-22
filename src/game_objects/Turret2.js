@@ -3,6 +3,10 @@ import Bullet from "./Bullet";
 
 // Global variable for turret two's bullet
 let turretTwoBullet;
+
+/**
+ * Turret2 is the Sanitizer turret.
+ */
 export default class Turret2 extends Phaser.GameObjects.Image {
     
     /**

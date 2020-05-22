@@ -1,5 +1,7 @@
 import Bullet from "./Bullet"
-
+/**
+ * Bullet2 is the Sanitizer bullet.
+ */
 export default class Bullet2 extends Bullet {
     /**
      * Constructor for Bullet 2

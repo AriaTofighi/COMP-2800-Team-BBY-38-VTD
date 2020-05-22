@@ -1,5 +1,7 @@
 import Bullet from "./Bullet"
-
+/**
+ * Bullet1 is the Soap Shooter bullet.
+ */
 export default class Bullet1 extends Bullet {
 
     /**

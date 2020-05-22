@@ -3,6 +3,9 @@ import Bullet3 from "./Bullet3";
 // Global variable for turret two's bullet
 let turretThreeBullet;
 
+/**
+ * Turret3 is the Mask Shooter turret.
+ */
 export default class Turret3 extends Phaser.GameObjects.Sprite {
     
     /**

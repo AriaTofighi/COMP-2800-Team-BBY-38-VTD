@@ -2,6 +2,12 @@ import Bullet1 from "./Bullet1";
 
 // Global variable for turret one's bullet
 let turretOneBullet;
+const offset = -100; 
+const radius = 165;
+
+/**
+ * Turret1 is the Soap Shooter turret.
+ */
 export default class Turret1 extends Phaser.GameObjects.Image {
 
     /**
@@ -39,8 +45,7 @@ export default class Turret1 extends Phaser.GameObjects.Image {
 
         //Activate and set up hitbox
         this.scene.physics.world.enable(this);
-        let offset = -Turret1.getHitRadius()*6 + 45; 
-        this.body.setCircle(Turret1.getHitRadius() * 8.6, offset, offset);
+        this.body.setCircle(radius, offset, offset);
 
         // Showing the radius of the turret when hovering
         this.setInteractive().on('pointerover', function () {

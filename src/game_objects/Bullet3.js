@@ -1,5 +1,7 @@
 import Bullet from "./Bullet"
-
+/**
+ * Bullet3 is Mask Shooter bullet.
+ */
 export default class Bullet2 extends Bullet {
     /**
      * Constructor for Bullet 3

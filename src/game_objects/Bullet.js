@@ -1,3 +1,6 @@
+/**
+ * Bullet lays the foundation for all bullet types.
+ */
 export default class Bullet extends Phaser.GameObjects.Sprite {
     /**
      * Bullet constructor called by child bullets.

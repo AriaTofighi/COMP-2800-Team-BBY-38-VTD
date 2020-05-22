@@ -1,5 +1,7 @@
 import 'phaser';
-
+/**
+ * Carrier represents a person carrying a virus.
+ */
 export default class Carrier extends Phaser.GameObjects.PathFollower {
     /**
      * Constructor for Carrier
