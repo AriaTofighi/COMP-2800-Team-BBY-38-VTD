@@ -3,7 +3,7 @@ This repo contains the code for the web game, **Virus Tower Defense (VTD)**.
 
 Try out the game [here](https://virustd-8fdd6.web.app/).
 
-The game was created by: Aria Tofighi, Arash Saadati, Risham Johar, and Benedict Halim
+The game was created by: Aria Tofighi, Arash Saadati, Risham Johar, and Benedict Halim.
 
 ## Table of Contents
 [App Organization](#app-organization)
