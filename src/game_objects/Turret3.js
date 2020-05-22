@@ -1,6 +1,8 @@
 import Bullet3 from "./Bullet3";
 
+// Global variable for turret two's bullet
 let turretThreeBullet;
+
 export default class Turret3 extends Phaser.GameObjects.Sprite {
     constructor(scene, j, i) {
         super(scene, j, i, 'tower3');
