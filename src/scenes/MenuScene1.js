@@ -1,9 +1,15 @@
-// This menu is for logging in or playing as a guest
+/**
+ * MenuScene1 is the main menu of the game where user
+ * can access all the sections of the game.
+ */
 export class MenuScene1 extends Phaser.Scene {
     /**
      * Constructor for GameScene object.
      */
     constructor() {
+        /**
+         * Constructor for Phaser.Scene object.
+         */
         super('Menu1');
     }
 

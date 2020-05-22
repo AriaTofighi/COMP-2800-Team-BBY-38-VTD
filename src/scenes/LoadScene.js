@@ -62,12 +62,20 @@ import facebook from "../../assets/buttons/facebook.png";
 import building from "../../assets/ingame/building.png";
 import 'phaser';
 
+
+/**
+ * LoadScene is the scene where all the assets of game
+ * get loaded.
+ */
 export class LoadScene extends Phaser.Scene {
 
     /**
      * Constructs the LoadScene object.
      */
     constructor() {
+        /**
+         * Constructor for Phaser.Scene object.
+         */
         super('Load');
     }
 
@@ -262,5 +270,4 @@ export class LoadScene extends Phaser.Scene {
         
         this.scene.start('Menu1');
     }
-    
 }

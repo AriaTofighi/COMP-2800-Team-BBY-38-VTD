@@ -2,4 +2,4 @@
 .cache/
 dist/
 node_modules/
-.firebase
+.firebase/

@@ -2,18 +2,29 @@ import Turret1 from "../game_objects/Turret1";
 import Turret2 from "../game_objects/Turret2";
 import Turret3 from "../game_objects/Turret3";
 
+const SIDEBAR_DURATION = 200;
+
+/**
+ * ChallengeUIScene includes the ui of the challenge scene.
+ */
 export class ChallengeUIScene extends Phaser.Scene {
     /**
      * Constructor for Challenge UIScene object.
      */
     constructor() {
+        /**
+         * Constructor for Phaser.Scene object.
+         */
         super('ChallengeUI');
     }
 
+    /**
+     * Creates all the challenge ui entities.
+     */
     create(){
         this.width = this.sys.canvas.width;
         this.height = this.sys.canvas.height;
-        this.halfCell = 16; // Used to move objects to center of cells
+        this.halfCell = 16;
         this.game = this.scene.get('Challenge');
         this.textStrokeThickness = 3;
 
@@ -62,7 +73,6 @@ export class ChallengeUIScene extends Phaser.Scene {
         });
         menuTower1.setInteractive().on('pointerdown', () => {
             // Tower1 has been selected
-            // this.toggleSidebar();
             this.tower1IsSelected = true;
             this.tower2IsSelected = false;
             this.tower3IsSelected = false;
@@ -188,12 +198,15 @@ export class ChallengeUIScene extends Phaser.Scene {
         infoContainer.add(this.moneyText);
     }
 
+    /**
+     * Opens and closes the sidebar based on its current condition.
+     */
     toggleSidebar() {
         if (!this.menuShowing) {
             this.tweens.add({
                 targets: this.sidebar,
                 x: this.width - 100,
-                duration: 200
+                duration: SIDEBAR_DURATION
             });
             // Placing ones in the place of sidebar on the grid array
             setTimeout(this.game.placeSidebarNumbers(1), 10);
@@ -203,7 +216,7 @@ export class ChallengeUIScene extends Phaser.Scene {
             this.tweens.add({
                 targets: this.sidebar,
                 x: this.width + 100,
-                duration: 200
+                duration: SIDEBAR_DURATION
             });
             // Placing zeros in the place of sidebar on the grid array
             setTimeout(this.game.placeSidebarNumbers(0), 10);
@@ -212,6 +225,10 @@ export class ChallengeUIScene extends Phaser.Scene {
         }
     }
 
+    /**
+     * Shows and moves turret examples if of
+     * any turrets have been selected. 
+     */
     showTurretExample() {
         // showing no turret is allowed
         this.noTurret = this.add.image(0, 0, 'noTurret');
@@ -309,6 +326,11 @@ export class ChallengeUIScene extends Phaser.Scene {
         this.input.on('pointerdown', this.placeTower.bind(this));
     }
 
+    /**
+     * Places a tower on the game.
+     * 
+     * @param pointer the pointer to get the location of the click 
+     */
     placeTower(pointer) {
         let i = Math.floor(pointer.y / 32); // row index
         let j = Math.floor(pointer.x / 32); // col index
@@ -333,6 +355,9 @@ export class ChallengeUIScene extends Phaser.Scene {
         }
     }
 
+    /**
+     * Cancels the selection.
+     */
     cancelSelection() {
         this.tower1IsSelected = false;
         this.tower2IsSelected = false;

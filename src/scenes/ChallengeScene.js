@@ -1,25 +1,47 @@
-import {
-    Grid
-} from "matter";
 import Carrier from "../game_objects/ChallengeCarrier";
 import Bullet from "../game_objects/Bullet";
 import {default as ChallengeConfig} from "../round_configs/ChallegeConfig.json";
 import ChallengeCarrier from "../game_objects/ChallengeCarrier";
 
+const START_CHALLNGE_TIME = 8000;
+const PLAYING_AS_X = 170;
+const PLAYING_AS_Y = 10;
+const BEST_ROUND_X = 170;
+const BEST_ROUND_Y = 30;
+const NAME_X = 245;
+const NAME_Y = 10;
+const TEXT_SIZE = 15;
+const TEXT_STROKE = 3;
+const MS_TO_S = 1000;
+const GAME_WIDTH = 800;
+const GAME_HEIGHT = 608;
+const SURVIVE_X = 120;
+const SURVIVE_Y = 270;
+const SURVIVE_SIZE = 35;
+const RESTART_TIME = 4000;
+const CHALLENGE_ANIMATION_DURATION = 4000;
 
-
-
+/**
+ * ChallengeScene is the easter egg of the game and it is basically
+ * a special survivial version of the game with special amount of resources
+ * and round configurations. The player has unlimited amount of money
+ * with a health of 1. The player can enter this mode with either typing 'death'
+ * on the game scene to dragging the current round text.
+ */
 export class ChallengeScene extends Phaser.Scene {
 
     /**
-     * Constructor for GameScene object.
+     * Constructor for ChallengeScene object.
      */
     constructor() {
+        /**
+         * Constructor for Phaser.Scene object.
+         */
         super('Challenge');
     }
 
     /**
-     * Initializes the game.
+     * Initializes the Challenge.
      */
     init() {
         this.startChallengeAnimation();
@@ -29,18 +51,18 @@ export class ChallengeScene extends Phaser.Scene {
         this.challengeEnded = false;
         this.firstSpawn = true;
 
-        // Starting the challenge after the five seconds
+        // Starting the challenge round after the eight seconds
         setTimeout(function () {
             if (this.firstSpawn) {
                 this.firstSpawn = false;
                 this.timeStarted = new Date();
                 this.startRound(this.ChallengeConfig);
             }
-        }.bind(this), 8000);
+        }.bind(this), START_CHALLNGE_TIME);
     }
 
     /**
-     * Set up the game scene entities.
+     * Set up the challenge scene entities.
      */
     preload() {
         // Ones represent grid cells that are path tiles.
@@ -71,28 +93,30 @@ export class ChallengeScene extends Phaser.Scene {
     }
 
     /**
-     * Creates the grid, background images, path tiles, carriers, menu, and sidebar.
+     * Creates all the challenge entities.
      */
     create() {
         // Create grid variables.
         this.width = this.sys.canvas.width;
         this.height = this.sys.canvas.height;
+
+        // Storing all the challenge ui scene variables in a variable
         this.ui = this.scene.get('ChallengeUI');
+
         this.cellWidth = 32;
         this.cellHeight = 32;
-        this.halfCell = 16; // Used to move objects to center of cells
-        const colCount = this.width / this.cellWidth; // 25 columns; use this.cellWidth * 24 for last column
-        const rowCount = this.height / this.cellWidth; // 19 rows; use this.cellWidth * 18 for last row
+        this.halfCell = 16;
+        const colCount = this.width / this.cellWidth;
+        const rowCount = this.height / this.cellWidth;
         
         // Create and draw grid
-        let grid = this.add.grid(0, 0, this.cellWidth * colCount, this.cellWidth * rowCount, this.cellWidth, this.cellWidth, 0x000000, 0, 0x222222, 0); // change last param to 1 to see grid lines
+        let grid = this.add.grid(0, 0, this.cellWidth * colCount, 
+            this.cellWidth * rowCount, this.cellWidth, this.cellWidth, 0x000000, 0, 0x222222, 0);
         grid.setDepth(1);
         grid.setOrigin(0, 0);
 
         //Create background image.
         let bg = this.add.tileSprite(this.width / 2, this.height / 2, this.width, this.height, 'bg');
-        //let bg = this.add.image(this.width/2, this.height/2, 'bg');
-        //bg.setDisplaySize(this.width, this.height);
 
         //Create path tiles.
         let tileX, tileY;
@@ -145,6 +169,7 @@ export class ChallengeScene extends Phaser.Scene {
             frameRate: 15
         });
 
+        // Create the watershoot animation
         this.anims.create({
             key: 'watershoot',
             frames: this.anims.generateFrameNumbers('water', {start: 3, end: 5}),
@@ -155,7 +180,7 @@ export class ChallengeScene extends Phaser.Scene {
         // Create and draw path
         let graphics = this.add.graphics();
         graphics.lineStyle(1, 0xFFFFFF);
-        this.path = this.add.path(this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell); // -1 to start off screen.
+        this.path = this.add.path(this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell);
         this.path.lineTo(this.cellWidth * 3 + this.halfCell, this.cellWidth * 10 + this.halfCell);
         this.path.lineTo(this.cellWidth * 6 + this.halfCell, this.cellWidth * 10 + this.halfCell);
         this.path.lineTo(this.cellWidth * 6 + this.halfCell, this.cellWidth * 5 + this.halfCell);
@@ -168,7 +193,7 @@ export class ChallengeScene extends Phaser.Scene {
         this.path.lineTo(this.cellWidth * 21 + this.halfCell, this.cellWidth * 7 + this.halfCell);
         this.path.lineTo(this.cellWidth * 21 + this.halfCell, this.cellWidth * 11 + this.halfCell);
         this.path.lineTo(this.cellWidth * 16 + this.halfCell, this.cellWidth * 11 + this.halfCell);
-        this.path.lineTo(this.cellWidth * 16 + this.halfCell, this.cellWidth * 19 + this.halfCell); // 19 to end off screen.
+        this.path.lineTo(this.cellWidth * 16 + this.halfCell, this.cellWidth * 19 + this.halfCell);
 
         // Create description area.
         let infoContainer = this.add.container(this.width - 250, 10);
@@ -188,66 +213,65 @@ export class ChallengeScene extends Phaser.Scene {
             if (user) {
                 // User is signed in.
                 this.loggedIn = true; 
-                this.status = this.add.text(170, 10, "Playing as ");
+                this.status = this.add.text(PLAYING_AS_X, PLAYING_AS_Y, "Playing as ");
                 this.status.setFontFamily('Arial');
-                this.status.setFontSize(15);
-                this.status.setStroke('black', 3);
-                this.displayName = this.add.text(245, 10, user.displayName);
+                this.status.setFontSize(TEXT_SIZE);
+                this.status.setStroke('black', TEXT_STROKE);
+                this.displayName = this.add.text(NAME_X, NAME_Y, user.displayName);
                 this.displayName.setFontFamily('Arial');
-                this.displayName.setFontSize(15);
+                this.displayName.setFontSize(TEXT_SIZE);
                 this.displayName.setFill('red');
-                this.displayName.setStroke('black', 3);
+                this.displayName.setStroke('black', TEXT_STROKE);
 
-                this.bestRound = this.add.text(170, 30, "Best: " + user.bestRound);
+                this.bestRound = this.add.text(BEST_ROUND_X, BEST_ROUND_Y, "Best: " + user.bestRound);
                 this.bestRound.setFontFamily('Arial');
-                this.bestRound.setFontSize(15);
-                this.bestRound.setStroke('black', 3);
+                this.bestRound.setFontSize(TEXT_SIZE);
+                this.bestRound.setStroke('black', TEXT_STROKE);
 
                 // Listens for changes in the user's best round and updates screen text
                 this.db.collection("users").doc(user.uid).onSnapshot(function (userDoc) {
-                console.log(userDoc.data());
                 let userBestRound = userDoc.data()["bestRound"];
                 this.bestRound.setText("Best round: " + userBestRound);
         }.bind(this));
             } else {
                 // User is not signed in.
                 this.loggedIn = false; 
-                this.status = this.add.text(170, 10, "Playing as Guest");
+                this.status = this.add.text(PLAYING_AS_X, PLAYING_AS_Y, "Playing as Guest");
                 this.status.setFontFamily('Arial');
-                this.status.setFontSize(15);
-                this.status.setStroke('black', 3);
+                this.status.setFontSize(TEXT_SIZE);
+                this.status.setStroke('black', TEXT_STROKE);
 
             }
         }.bind(this), function (error) {
             console.log(error);
-        });        
-
-        // this.currentRoundText = this.add.text(570, this.moneyText.getBottomCenter().y + 6, "Challenge mode");
-        // this.currentRoundText.depth = 1;
-        // this.currentRoundText.setFill("brown");
+        });
     }
 
+    /**
+     * All the events that happen once the challenge is finished.
+     */
     lostGame() {
         this.scene.remove('ChallengeUI');
         this.firstTime = false;
         this.challengeEnded = true;
         this.timeEnded = new Date();
         this.timeSurvived = this.timeEnded - this.timeStarted;
-        this.timeSurvived /= 1000;
+        this.timeSurvived /= MS_TO_S;
         this.timeSurvived = Math.round(this.timeSurvived);
-        this.newBackground = this.add.rectangle(0, 0, 800, 608, 0x000000);
+        this.newBackground = this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000);
         this.newBackground.setOrigin(0, 0);
         this.newBackground.depth = 2;
-        this.newText = this.add.text(120, 270, "You survived for " + this.timeSurvived + " seconds");
+        this.newText = this.add.text(SURVIVE_X, SURVIVE_Y, "You survived for " + this.timeSurvived + " seconds");
         var msg = new SpeechSynthesisUtterance("You survived for " + this.timeSurvived + " seconds");
         window.speechSynthesis.speak(msg);
         this.newText.setFill('red');
-        this.newText.setFontSize(35);
+        this.newText.setFontSize(SURVIVE_SIZE);
         this.newText.depth = 3;
 
+        // Redirect back to the game after 4 seconds.
         setTimeout(function () {
             location.reload();
-        }, 4000);
+        }, RESTART_TIME);
     }
 
     /**
@@ -288,7 +312,10 @@ export class ChallengeScene extends Phaser.Scene {
 }
 
     /**
-     * Place the numbers on the sidebar.
+     * Change the numbers on the grid to disallow
+     * placing towers on specific places.
+     * 
+     * @param num either one or zero based on if the sidebar is open or close
      */
     placeSidebarNumbers(num) {
         return function () {
@@ -301,7 +328,8 @@ export class ChallengeScene extends Phaser.Scene {
     }
 
     /**
-     * Place the numbers on the buttons.
+     * Change the numbers on the grid to disallow
+     * placing towers on specific places.
      */
     placeButtonNumbers() {
         // Placing 1s in the place of the cancel button and the menu button.
@@ -328,23 +356,25 @@ export class ChallengeScene extends Phaser.Scene {
             return undefined;
         }
         //Check if given values are inbounds first.
-        // if(i >= 0 && j >= 0 && i < this.gridCells.length && j < this.gridCells[i].length)
         return this.gridCells[i][j] === 1;
-        // return null;
     }
 
+    /**
+     * Starts the challenge animation.
+     */
     startChallengeAnimation() {
+
         // Creating the background for the challenge animation
         this.background = this.add.rectangle(0, 0, 800, 608, 0x8DFF7D);
         this.background.setOrigin(0, 0);
         this.background.depth = 3;
 
-        // Removing the background after 4 seconds
+        // Removing the challenge animation after 4 seconds
         setTimeout(function () {
             this.background.alpha = 0;
             this.challenge.alpha = 0;
             this.scene.launch('ChallengeUI');
-        }.bind(this), 4000);
+        }.bind(this), CHALLENGE_ANIMATION_DURATION);
 
         // Creating the challenge mode animation
         this.challenge = this.add.sprite(-45, 0, 'challengeMode');
@@ -366,23 +396,42 @@ export class ChallengeScene extends Phaser.Scene {
     update() {
         this.physics.overlap(this.carriers, this.turrets, this.fire.bind(this));
         this.physics.overlap(this.carriers, this.bullets, this.carrierHit.bind(this));
+        
+        // Checking if the player has lost
         if (this.ui.health <= 0 && this.firstTime) {
             // Starting the lost game animation
             this.lostGame();
         }
     }
 
+    /**
+     * Placing towers on the game.
+     * 
+     * @param turret the turret that will be placed
+     * @param i the i location of the tower
+     * @param j the j location of the tower
+     */
     placeTower(turret, i, j){
         this.turrets.add(turret);
         this.gridCells[i][j] = 1;
-        console.log(turret);
-        console.log(this.turrets);
     }
 
+    /**
+     * Fires bullets to the carriers.
+     * 
+     * @param carrier the carrier that is getting hit 
+     * @param turret the turret that is firing bullets
+     */
     fire(carrier, turret){
         turret.fire(carrier);
     }
 
+    /**
+     * Detecting the overlap between the bullet and the carrier.
+     * 
+     * @param carrier the carrier that has got hit
+     * @param bullet the bullet that hit the carrier
+     */
     carrierHit(carrier, bullet){
         carrier.getHit(bullet);
     }

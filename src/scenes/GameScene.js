@@ -16,12 +16,19 @@ import {
 let bgm;
 export {bgm};
 
+/**
+ * GameScene is the main scene of the game that includes
+ * all the game objects.
+ */
 export class GameScene extends Phaser.Scene {
 
     /**
      * Constructor for GameScene object.
      */
     constructor() {
+        /**
+         * Constructor for Phaser.Scene object.
+         */
         super('Game');
     }
 
@@ -36,6 +43,7 @@ export class GameScene extends Phaser.Scene {
         this.rDefaultConfig = rDefaultConfig;
         this.roundConfigs = [this.r1Config, this.r2Config, this.r3Config];
         this.currentRound = 0;
+
         this.carriersMade = 0;
         this.currentConfig = {};
         this.firstRoundStarted = false;
@@ -74,29 +82,29 @@ export class GameScene extends Phaser.Scene {
         ];
 
         this.db = firebase.firestore();
-        console.log("DB LOADED IN GAMESCENE: ");
-        console.log(this.db);
     }
 
     /**
-     * Creates the grid, background images, path tiles, carriers, menu, and sidebar.
+     * Creates all the challenge entities.
      */
     create() {
         // Create grid variables.
         this.width = this.sys.canvas.width;
         this.height = this.sys.canvas.height;
+
+        // Storing all the challenge ui scene variables in a variable
         this.ui = this.scene.get('UI');
+
         this.cellWidth = 32;
         this.cellHeight = 32;
         this.speed = 1;
-        this.halfCell = 16; // Used to move objects to center of cells
-        const colCount = this.width / this.cellWidth; // 25 columns; use this.cellWidth * 24 for last column
-        const rowCount = this.height / this.cellWidth; // 19 rows; use this.cellWidth * 18 for last row
+        this.halfCell = 16;
+        const colCount = this.width / this.cellWidth;
+        const rowCount = this.height / this.cellWidth;
 
         this.scene.launch('UI');
 
         // Create and draw grid
-        // Change last param to 1 to see grid lines
         let grid = this.add.grid(0, 0, this.cellWidth * colCount, this.cellWidth * rowCount, this.cellWidth, this.cellWidth, 0x000000, 0, 0x222222, 0);
         grid.setDepth(1);
         grid.setOrigin(0, 0);
@@ -147,28 +155,6 @@ export class GameScene extends Phaser.Scene {
         }
         //Place city.
         this.add.image((this.cellWidth * 16) + 20, this.cellWidth * rowCount - 1, 'city').setScale(0.9);
-
-        // Create and draw a path.
-        this.anims.create({
-            key: 'waterstart',
-            frames: this.anims.generateFrameNumbers('water', {
-                start: 0,
-                end: 2
-            }),
-            frameRate: 15
-        });
-
-        this.anims.create({
-            key: 'watershoot',
-            frames: this.anims.generateFrameNumbers('water', {
-                start: 3,
-                end: 13
-            }),
-            repeat: -1,
-            frameRate: 20
-        });
-
-        this.add.image((this.cellWidth * 16)+20, this.cellWidth * rowCount - 1, 'city').setScale(0.9);
 
         //Place decorative elements. This gives a subtle indication of where to not place towers.
         this.add.image(this.width - 100, 100, 'building').setScale(0.6);
@@ -250,10 +236,6 @@ export class GameScene extends Phaser.Scene {
 
         // Placing ones in the grid cell array in place of the buttons.
         this.placeButtonNumbers();
-
-        // Creates and displays current round
-        // this.ui.currentRoundText = this.add.text(180, 40, "Current round: " + this.currentRound);
-
         
         // Creates and displays the display name / guest and best round
         firebase.auth().onAuthStateChanged(function (user) {
@@ -294,8 +276,8 @@ export class GameScene extends Phaser.Scene {
             console.log(error);
         });
 
-        // Switching the game mode typing 'test'
-        this.combo = this.input.keyboard.createCombo('test', {
+        // Switching the game mode typing 'death'
+        this.combo = this.input.keyboard.createCombo('death', {
             resetOnMatch: true
         });
         this.input.keyboard.on('keycombomatch', function () {
@@ -312,27 +294,6 @@ export class GameScene extends Phaser.Scene {
             loop: true
         });
         bgm.play();
-
-        // Toggles fast-forward
-        this.input.keyboard.on('keydown-F', function () {
-            if (!this.fastForwarding) {
-                this.tweens.timeScale = 2; // tweens
-                this.physics.world.timeScale = 2; // physics
-                this.time.timeScale = 2; // time events
-                this.turrets.tweens.timeScale = 2; // tweens
-                this.turrets.physics.world.timeScale = 2; // physics
-                this.turrets.time.timeScale = 2; // time events   
-                this.fastForwarding = true;
-            } else {
-                this.tweens.timeScale = 1; // tweens
-                this.physics.world.timeScale = 1; // physics
-                this.time.timeScale = 1; // time events
-                this.turrets.tweens.timeScale = 2; // tweens
-                this.turrets.physics.world.timeScale = 2; // physics
-                this.turrets.time.timeScale = 2; // time events   
-                this.fastForwarding = false;
-            }
-        }.bind(this));
 
         // Display info box that explains the game 
         this.scene.pause('UI');
@@ -370,7 +331,6 @@ export class GameScene extends Phaser.Scene {
         this.rDefaultConfig.carrierHP += 5;
         this.rDefaultConfig.carrierCount += 5;
         this.rDefaultConfig.carrierSpace *= 0.9;
-        console.log("default config adjusted");
     }
 
     /**
@@ -391,20 +351,25 @@ export class GameScene extends Phaser.Scene {
         this.ui.startRoundButton.alpha = 0;
     }
 
+    /**
+     * Updates the best round that the user has reached on the database.
+     */
     updateBestRound() {
         let user = firebase.auth().currentUser;
         this.db.collection("users").doc(user.uid).get().then(function (userDoc) {
             let savedBest = userDoc.data()["bestRound"];
-            console.log("saved best: " + savedBest);
-            console.log("current round: " + this.currentRound);
             this.betterRound = Math.max(savedBest, this.currentRound);
-            console.log("better round: " + this.betterRound);
             this.db.collection("users").doc(user.uid).update({
                 "bestRound": this.betterRound
             });
         }.bind(this));
     }
 
+    /**
+     * Starts the round based on the round configurations.
+     * 
+     * @param config the configurations of the curret round
+     */
     startRound(config) {
         this.firstRoundStarted = true;
         this.firstSave = true;
@@ -413,30 +378,18 @@ export class GameScene extends Phaser.Scene {
         this.currentRound += 1;
         this.delta = 0;
         this.ui.currentRoundText.setText("Current round: " + this.currentRound);
-        console.log("Starting round " + this.currentRound);
-        console.log("Config for this round: " + JSON.stringify(config));
         this.disableStartRoundButton();
 
         // Start directly for first time in order to give carrier group an active number immediately.
-        let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
+        let carrier = new Carrier(this, this.path, this.cellWidth * 3 +
+            this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
         this.carriers.add(carrier);
-        
-        // Spawns the specified number of carriers in config object
-        // for (let i = 0; i < config.carrierCount - 1; i++) {
-        //     setTimeout(function() {
-        //         let carrier = new Carrier(this, this.path, this.cellWidth * 3 + this.halfCell, this.cellWidth * -1 + this.halfCell, 'carrier', config.duration, config.carrierHP);
-        //         this.carriers.add(carrier);
-        //         this.carriersMade++;
-
-        //     }.bind(this), config.carrierSpace * (i + 1));
-        // }
 
         // Setting the correct round config for next round 
         this.ui.startRoundButton.once('pointerdown', function () {
             if (this.currentRound <= this.roundConfigs.length - 1) { // -1 because first round is started manually
                 this.startRound(this.roundConfigs[this.currentRound]);
             } else {
-                console.log("else block hit");
                 if (this.currentRound >= 4) { // if on round 4 when clicking start round 5+
                     // First default config round has passed, begin incrementing
                     this.incrementDefaultConfig();
@@ -447,7 +400,10 @@ export class GameScene extends Phaser.Scene {
     }
 
     /**
-     * Place the numbers on the sidebar.
+     * Change the numbers on the grid to disallow
+     * placing towers on specific places.
+     * 
+     * @param num either one or zero based on if the sidebar is open or close
      */
     placeSidebarNumbers(num) {
         return function () {
@@ -460,7 +416,8 @@ export class GameScene extends Phaser.Scene {
     }
 
     /**
-     * Place the numbers on the buttons.
+     * Change the numbers on the grid to disallow
+     * placing towers on specific places.
      */
     placeButtonNumbers() {
         // Placing 1s in the place of the pause button and i button.
@@ -494,20 +451,23 @@ export class GameScene extends Phaser.Scene {
 
     /**
      * Check if it's a path tile or not.
+     * 
      * @return True if it is a path tile, false otherwise.
      */
     isPathTile(i, j) {
         if (this.gridCells[i] == undefined || this.gridCells[i][j] == undefined) {
             return undefined;
         }
-        //Check if given values are inbounds first.
-        // if(i >= 0 && j >= 0 && i < this.gridCells.length && j < this.gridCells[i].length)
+        // Check if given values are inbounds first
         return this.gridCells[i][j] === 1;
-        // return null;
     }
 
 
-    // Spawns a carrier if enough time has elapsed since the last spawn and the number of carriers made for the round isn't reached yet
+    /**
+     * Spawns a carrier if enough time has elapsed since the last
+     * spawn and the number of carriers made for the round isn't
+     * reached yet.
+     */
     spawnCarrier() {
         if (this.carriersMade < this.currentConfig.carrierCount - 1 && this.delta >= this.currentConfig.carrierSpace) {
             this.spawnStarted = true;
@@ -549,6 +509,9 @@ export class GameScene extends Phaser.Scene {
         }
     }
 
+    /**
+     * Checks if all carriers are gone.
+     */
     carriersAllGone() {
         let carrierArray = this.carriers.getChildren();
         for (let i = 0; i < this.carriers.getLength(); i++) {
@@ -559,15 +522,34 @@ export class GameScene extends Phaser.Scene {
         return true;
     }
 
+    /**
+     * Placing towers on the game.
+     * 
+     * @param turret the turret that will be placed
+     * @param i the i location of the tower
+     * @param j the j location of the tower
+     */
     placeTower(turret, i, j) {
         this.turrets.add(turret);
         this.gridCells[i][j] = 1;
     }
 
+    /**
+     * Fires bullets to the carriers.
+     * 
+     * @param carrier the carrier that is getting hit 
+     * @param turret the turret that is firing bullets
+     */
     fire(carrier, turret) {
         turret.fire(carrier);
     }
 
+    /**
+     * Detecting the overlap between the bullet and the carrier.
+     * 
+     * @param carrier the carrier that has got hit
+     * @param bullet the bullet that hit the carrier
+     */
     carrierHit(carrier, bullet) {
         carrier.getHit(bullet);
     }
