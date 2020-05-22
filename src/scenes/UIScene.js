@@ -68,10 +68,6 @@ export class UIScene extends Phaser.Scene {
             this.descText.setText(tower1Desc);
             this.costText.setText("Cost: " + Turret1.getPrice());
         });
-        menuTower1.setInteractive().on("pointerout", () => {
-            this.descText.setText();
-            this.costText.setText();
-        });
         menuTower1.setInteractive().on('pointerdown', () => {
             // Tower1 has been selected
             // this.toggleSidebar();
@@ -99,10 +95,6 @@ export class UIScene extends Phaser.Scene {
             this.descText.setText(tower2Desc);
             this.costText.setText("Cost: " + Turret2.getPrice());
         });
-        menuTower2.setInteractive().on("pointerout", () => {
-            this.descText.setText();
-            this.costText.setText();
-        });
         menuTower2.setInteractive().on('pointerdown', () => {
             // Tower2 has been selected
             this.tower1IsSelected = false;
@@ -129,10 +121,6 @@ export class UIScene extends Phaser.Scene {
         menuTower3.setInteractive().on("pointerover", () => {
             this.descText.setText(tower3Desc);
             this.costText.setText("Cost: " + Turret3.getPrice());
-        });
-        menuTower3.setInteractive().on("pointerout", () => {
-            this.descText.setText();
-            this.costText.setText();
         });
         menuTower3.setInteractive().on("pointerdown", () => {
             // Tower3 has been selected
@@ -427,20 +415,24 @@ export class UIScene extends Phaser.Scene {
             this.toggleSidebar();
             this.cancelSelection();
         } else if ((this.tower1IsSelected || this.tower2IsSelected || this.tower3IsSelected) && !this.game.isPathTile(i, j) && !this.midMoneyTextTween) {
-            let noMoneySound = this.sound.play('noMoney', {
-                volume: 0.8
-            });
-            this.tweens.add({
-                targets: this.moneyText,
-                yoyo: true,
-                scale: 1.1,
-                ease: 'Linear',
-                duration: 200,
-                onStart: () => {this.midMoneyTextTween = true},
-                onComplete: () => {this.midMoneyTextTween = false}
-            });
-            noMoneySound.remove(noMoneySound);
+            this.showNoMoney();
         }
+    }
+
+    showNoMoney() {
+        let noMoneySound = this.sound.play('noMoney', {
+            volume: 0.8
+        });
+        this.tweens.add({
+            targets: this.moneyText,
+            yoyo: true,
+            scale: 1.1,
+            ease: 'Linear',
+            duration: 200,
+            onStart: () => {this.midMoneyTextTween = true},
+            onComplete: () => {this.midMoneyTextTween = false}
+        });
+        noMoneySound.remove(noMoneySound);
     }
 
     cancelSelection() {
