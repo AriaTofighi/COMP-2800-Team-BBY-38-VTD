@@ -83,6 +83,6 @@ You can find our link to testing our user stories and unit tests [here](https://
 
 ### Step 2: Access Firebase Console
 1. Contact us at aria.tofighi1@gmail.com so we can add your account to the Firebase project.
-2. Go to [FireBase](https://console.firebase.google.com/).
-3. Click on virustd.
-4. You now have access to all authentication and database data (no passwords) and can alter records.
+2. Log in to [FireBase](https://console.firebase.google.com/).
+3. On the main menu, a new project called 'virustd' should pop up. Click on it.
+4. You now have access to all authentication, database data (no passwords), and can alter records.
