@@ -44,7 +44,7 @@ Game scripts are in the src folder, where most of the game is running. All game 
   - leaderboard.css
   - login.css
 
-*Note: When adding new assets make sure you load them in LoadScene.js.*
+*Note: When adding new assets make sure you load them in LoadScene.js located in /src/scenes/LoadScene.js.*
 
 ## Languages
 - HTML
