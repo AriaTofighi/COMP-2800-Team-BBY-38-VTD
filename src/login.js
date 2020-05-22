@@ -92,7 +92,7 @@ initApp = function (ui) {
             //     // If need to use ID token
             // });
         } else {
-            setTimeout(displaySignIn, 4000);
+            setTimeout(displaySignIn, 3000);
         }
         console.log("Time elapsed: " + (new Date().getTime() - time) / 1000.0 + " seconds");
     }, function (error) {
