@@ -21,9 +21,30 @@ The game was created by: Aria Tofighi, Arash Saadati, Risham Johar, and Benedict
 [Developer Set Up](#developer-set-up)
 
 ## App Organization
-All game assets, such as graphics, sprites, and audio are placed in the assets folder. Game scripts are in the src folder, where most of the game is running. The styling is in the style folder.
+Game scripts are in the src folder, where most of the game is running. All game assets, such as graphics, sprites, and audio are placed in the assets folder. The styling is in the style folder. 
+- /src
+  - /game_objects
+  - /round_configs
+  - /scenes
+  - leaderboard.js
+  - login.js
+  - main.js
+- /assets
+  - /about
+  - /audio
+  - /buttons
+  - /ingame
+  - /logo
+  - /menu
+  - /menu2
+  - /pauseMenu
+- /style
+  - about.css
+  - index.css
+  - leaderboard.css
+  - login.css
 
-<b>Note</b>: When adding new assets make sure you load them in LoadScene.js.
+*Note: When adding new assets make sure you load them in LoadScene.js.*
 
 ## Languages
 - HTML
@@ -43,7 +64,7 @@ This game makes heavy use of the Phaser 3 framework for developing games with Ja
 
 [Phaser 3 Examples](https://phaser.io/examples)
 
-<b>Note:</b> Instructions for installing and setting up Phaser 3 will be shown in the [Developer Set Up](#developer-set-up) section in this ReadMe.
+*Note: Instructions for installing and setting up Phaser 3 will be shown in the [Developer Set Up](#developer-set-up) section of this ReadMe.*
 
 ## Testing
 You can find our link to testing our user stories and unit tests [here](https://docs.google.com/spreadsheets/d/1NfdKi5wn2WfzfoM7Qvr7vsorEk-WN5nNjkvlAoS7Lok/edit#gid=394496370).
