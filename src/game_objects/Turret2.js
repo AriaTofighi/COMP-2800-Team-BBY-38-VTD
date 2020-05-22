@@ -1,11 +1,15 @@
 import Bullet2 from "../game_objects/Bullet2";
 import Bullet from "./Bullet";
 
-// Global variable for turret one's bullet
+// Global variable for turret two's bullet
 let turretTwoBullet;
 export default class Turret2 extends Phaser.GameObjects.Image {
+    
     /**
-     * Constructor for turret 2 object.
+     * The constructor for Turret2
+     * @param {Phaser.Scene} scene The scene this object is in.
+     * @param {number} j The x coordinate of this turret in the game.
+     * @param {number} i The y coordinate of this turret in the game.
      */
     constructor(scene, j, i) {
         super(scene, j, i, 'tower2');
@@ -14,12 +18,7 @@ export default class Turret2 extends Phaser.GameObjects.Image {
         this.x = j * 32 + this.scene.halfCell;
         this.y = i * 32 + this.scene.halfCell;
         this.scene = scene;
-        this.firstFireTimeSet = false;
-        this.firstFireTime;
-        this.secondFireTime;
         this.delta = 0;
-        this.fireRate = 20;
-        this.bulletSpeed = 4;
         this.shooting = false;
         this.bullet = new Bullet2(this.scene, this.x, this.y, 1);
         this.showingContainer = false;
@@ -29,6 +28,7 @@ export default class Turret2 extends Phaser.GameObjects.Image {
         this.sizeX = 32;
         this.sizeY = 32;
 
+        //Set display sizes
         this.setDisplaySize(this.sizeX, this.sizeY);
         this.setPosition(this.x, this.y);
 
@@ -38,6 +38,7 @@ export default class Turret2 extends Phaser.GameObjects.Image {
         this.radius.setPosition((j + 0.5) * 32, (i + 0.5) * 32);
         this.radius.setStrokeStyle(3, 0x046307, 0);
 
+        //Enable turret physics and hitboxes
         this.scene.physics.world.enable(this);
         this.body.setCircle(Turret2.getHitRadius() * 2, -139, -139);
 
@@ -89,10 +90,12 @@ export default class Turret2 extends Phaser.GameObjects.Image {
         });
     }
 
+    //Return the price of the turret.
     static getPrice() {
         return this.price;
     }
 
+    //Return the range of the turret.
     static getHitRadius() {
         return this.hitRadius;
     }
@@ -284,6 +287,7 @@ export default class Turret2 extends Phaser.GameObjects.Image {
 
     }
 
+    //Function to indicate not enough money.
     showNoMoney() {
         let noMoneySound = this.scene.sound.play('noMoney', {
             volume: 0.8
@@ -300,14 +304,15 @@ export default class Turret2 extends Phaser.GameObjects.Image {
         noMoneySound.remove(noMoneySound);
     }
 
+    /**
+     * Upgrade the turret.
+     */
     upgradeTurret() {
         if (this.scene.ui.money >= this.upgradePrice) {
             this.scene.sound.play('towerUpgrade');
             this.scene.ui.money -= this.upgradePrice;
             this.scene.ui.moneyText.setText('Money: ' + this.scene.ui.money);
             this.tier++;
-            this.fireRate++;
-            this.bulletSpeed++;
             this.upgradePrice += 100;
             this.upgradePriceText.setText("$" + this.upgradePrice);
         }

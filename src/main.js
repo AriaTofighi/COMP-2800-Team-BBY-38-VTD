@@ -7,7 +7,6 @@ import { GameOverScene } from "./scenes/GameOverScene";
 import {MenuScene1} from "./scenes/MenuScene1";
 import {MenuScene2} from "./scenes/MenuScene2";
 import { ChallengeScene } from "./scenes/ChallengeScene";
-import phaser from '../node_modules/phaser';
 import { UIScene } from "./scenes/UIScene";
 import { ChallengeUIScene} from "./scenes/ChallengeUIScene";
 import { InfoScene } from "./scenes/InfoScene";

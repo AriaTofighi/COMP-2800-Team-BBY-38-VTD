@@ -80,7 +80,9 @@ export class MenuScene1 extends Phaser.Scene {
                     cursor: 'pointer'
                 });
                 this.status.setText("Playing as Guest");
-                // this.status = this.add.text(10, 40, "Playing as Guest");
+                if (this.displayName != undefined) {
+                    this.displayName.setText("");
+                }
                 this.status.setFontFamily('Arial');
                 this.status.setFontSize(25);
                 this.status.setOrigin(0, 1);

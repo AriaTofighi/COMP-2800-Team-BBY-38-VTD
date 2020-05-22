@@ -2,7 +2,14 @@ import 'phaser';
 
 export default class Carrier extends Phaser.GameObjects.PathFollower {
     /**
-     * Constructor for the carrier object.
+     * Constructor for Carrier
+     * @param {Phaser.Scene} scene 
+     * @param {Phaser.Curves.Path} path 
+     * @param {number} x 
+     * @param {number} y 
+     * @param {Phaser.GameObjects.Image} texture 
+     * @param {number} duration 
+     * @param {number} hp 
      */
     constructor(scene, path, x, y, texture, duration, hp) {
         super(scene, path, x, y, texture);
@@ -71,11 +78,17 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
             repeat: 0, // infinite
         });
 
+        //Set size of carrier
         this.setDisplaySize(24, 24);
+
+        //Enable physics.
         this.scene.physics.world.enable(this);
-        this.body.debugShowBody = false;
+
+        //Set the hitbox of the carrier.
         this.body.setCircle(16);
         this.setRotation(1.5708);
+
+        //Set the carrier to follow the path.
         this.startFollow({
             rotateToPath: true,
             duration: this.duration,
@@ -84,14 +97,6 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
         });
 
         this.scene.add.existing(this);
-
-        // Automatically destroys the carrier after path duration complete
-        // setTimeout(() => {
-        //     this.destroy();
-        //     this.barBack.alpha = 0;
-        //     this.barHealth.alpha = 0;
-        // }, this.duration);
-
     }
 
     /**
@@ -114,11 +119,15 @@ export default class Carrier extends Phaser.GameObjects.PathFollower {
      * Carrier reaches end of path
      */
     reachedEndPath() {
-        
         return this.x == this.scene.cellWidth * 16 + this.scene.halfCell && this.y == this.scene.cellWidth * 19 + this.scene.halfCell;
     }
 
+    /**
+     * The bullet the carrier got hit by.
+     * @param {Bullet} bullet 
+     */
     getHit(bullet){
+        //Decrement HP.
         this.hp -= bullet.damage;
 
         // Updating the health bar

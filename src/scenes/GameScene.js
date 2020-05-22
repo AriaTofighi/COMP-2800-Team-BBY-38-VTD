@@ -156,28 +156,6 @@ export class GameScene extends Phaser.Scene {
         //Place city.
         this.add.image((this.cellWidth * 16) + 20, this.cellWidth * rowCount - 1, 'city').setScale(0.9);
 
-        // Create and draw a path.
-        this.anims.create({
-            key: 'waterstart',
-            frames: this.anims.generateFrameNumbers('water', {
-                start: 0,
-                end: 2
-            }),
-            frameRate: 15
-        });
-
-        this.anims.create({
-            key: 'watershoot',
-            frames: this.anims.generateFrameNumbers('water', {
-                start: 3,
-                end: 13
-            }),
-            repeat: -1,
-            frameRate: 20
-        });
-
-        this.add.image((this.cellWidth * 16)+20, this.cellWidth * rowCount - 1, 'city').setScale(0.9);
-
         //Place decorative elements. This gives a subtle indication of where to not place towers.
         this.add.image(this.width - 100, 100, 'building').setScale(0.6);
         this.add.image(this.width - 240, 100, 'building').setScale(0.6, 0.8);
@@ -312,31 +290,10 @@ export class GameScene extends Phaser.Scene {
 
         //Creating background music
         bgm = this.sound.add('gameMusic', {
-            volume: 0.2,
+            volume: 0.1,
             loop: true
         });
         bgm.play();
-
-        // Toggles fast-forward
-        this.input.keyboard.on('keydown-F', function () {
-            if (!this.fastForwarding) {
-                this.tweens.timeScale = 2; // tweens
-                this.physics.world.timeScale = 2; // physics
-                this.time.timeScale = 2; // time events
-                this.turrets.tweens.timeScale = 2; // tweens
-                this.turrets.physics.world.timeScale = 2; // physics
-                this.turrets.time.timeScale = 2; // time events   
-                this.fastForwarding = true;
-            } else {
-                this.tweens.timeScale = 1; // tweens
-                this.physics.world.timeScale = 1; // physics
-                this.time.timeScale = 1; // time events
-                this.turrets.tweens.timeScale = 2; // tweens
-                this.turrets.physics.world.timeScale = 2; // physics
-                this.turrets.time.timeScale = 2; // time events   
-                this.fastForwarding = false;
-            }
-        }.bind(this));
 
         // Display info box that explains the game 
         this.scene.pause('UI');
@@ -553,7 +510,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     /**
-     * Checks if all the carriers are gone.
+     * Checks if all carriers are gone.
      */
     carriersAllGone() {
         let carrierArray = this.carriers.getChildren();

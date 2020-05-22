@@ -1,7 +1,16 @@
 import Bullet3 from "./Bullet3";
 
+// Global variable for turret two's bullet
 let turretThreeBullet;
+
 export default class Turret3 extends Phaser.GameObjects.Sprite {
+    
+    /**
+     * Constructor for Turret3
+     * @param {Phaser.Scene} scene The scene this object is in.
+     * @param {number} j The x coordinate of the turret.
+     * @param {number} i The y coordinate of the turret.
+     */
     constructor(scene, j, i) {
         super(scene, j, i, 'tower3');
         this.i = i;
@@ -19,6 +28,7 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         this.sizeX = 25;
         this.sizeY = 25;
 
+        //Create frames for this turret's state.
         this.scene.anims.create({
             key: 'loaded',
             frames: [{
@@ -35,6 +45,7 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
             }]
         });
 
+        //Set the size and position.
         this.setDisplaySize(this.sizeX, this.sizeY);
         this.setPosition(this.x, this.y);
 
@@ -44,6 +55,7 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         this.radius.setPosition((j + 0.5) * 32, (i + 0.5) * 32);
         this.radius.setStrokeStyle(3, 0x046307, 0);
 
+        //Enable physics and set hitbox
         this.scene.physics.world.enable(this);
         let offset = -Turret3.getHitRadius() * 2.2;
         this.body.setCircle(Turret3.getHitRadius() * 2.55, offset, offset);
@@ -96,10 +108,12 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         });
     }
 
+    //Return the turret price.
     static getPrice() {
         return this.price;
     }
 
+    //Return the turret range.
     static getHitRadius() {
         return this.hitRadius;
     }
@@ -112,7 +126,7 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
 
         this.play('empty');
 
-        let rotationFix = Math.PI/2
+        let rotationFix = Math.PI / 2
         // Rotating the turret towards the carrier when firing
         var angle = Phaser.Math.Angle.Between(this.x, this.y, carrier.x, carrier.y) + rotationFix;
         this.setRotation(angle);
@@ -125,17 +139,6 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
 
         // // Shoots at the carrier
         this.scene.physics.moveToObject(this.bullet, carrier, this.bulletSpeed);
-
-        //  //Follows the carrier all the time
-        //  let intervaler = setInterval(function() {
-        //     // console.log("bullet status: " + this.bullet.active);
-        //     if (this.bullet.active == false) {
-        //         clearInterval(intervaler);
-        //     } else {
-        //         this.scene.physics.moveToObject(this.bullet, carrier, this.bulletSpeed);
-        //         this.bullet.setRotation(Phaser.Math.Angle.Between(this.bullet.x, this.bullet.y, this.bullet.target.x, this.bullet.target.y) + rotationFix);
-        //     }
-        // }.bind(this), 100);
 
         this.delta = 0;
 
@@ -297,6 +300,9 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
 
     }
 
+    /**
+     * Function for when there is no money to buy this turret.
+     */
     showNoMoney() {
         let noMoneySound = this.scene.sound.play('noMoney', {
             volume: 0.8
@@ -307,12 +313,19 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
             scale: 1.1,
             ease: 'Linear',
             duration: 200,
-            onStart: () => {this.midMoneyTextTween = true},
-            onComplete: () => {this.midMoneyTextTween = false}
+            onStart: () => {
+                this.midMoneyTextTween = true
+            },
+            onComplete: () => {
+                this.midMoneyTextTween = false
+            }
         });
         noMoneySound.remove(noMoneySound);
     }
 
+    /**
+     * Upgrades the turret.
+     */
     upgradeTurret() {
         if (this.scene.ui.money >= this.upgradePrice) {
             this.scene.sound.play('towerUpgrade');

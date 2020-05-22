@@ -5,7 +5,10 @@ let turretOneBullet;
 export default class Turret1 extends Phaser.GameObjects.Image {
 
     /**
-     * Constructor for turret 1 object.
+     * 
+     * @param {Phaser.Scene} scene The scene this object is in.
+     * @param {number} j The x coordinate of the turret.
+     * @param {number} i The y coordinate of the turret.
      */
     constructor(scene, j, i) {
         super(scene, j, i, 'tower1');
@@ -24,6 +27,7 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         this.sizeX = 45;
         this.sizeY = 45;
         
+        //Set display and position.
         this.setDisplaySize(this.sizeX, this.sizeY);
         this.setPosition(this.x, this.y);
 
@@ -33,6 +37,7 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         this.radius.setPosition((j + 0.5) * 32, (i + 0.5) * 32);
         this.radius.setStrokeStyle(3, 0x046307, 0);
 
+        //Activate and set up hitbox
         this.scene.physics.world.enable(this);
         let offset = -Turret1.getHitRadius()*6 + 45; 
         this.body.setCircle(Turret1.getHitRadius() * 8.6, offset, offset);
@@ -85,10 +90,16 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         });
     }
 
+    /**
+     * Return the price of this turret.
+     */
     static getPrice() {
         return this.price;
     }
 
+    /**
+     * Return the range of this turret.
+     */
     static getHitRadius() {
         return this.hitRadius;
     }
@@ -261,6 +272,9 @@ export default class Turret1 extends Phaser.GameObjects.Image {
 
     }
 
+    /**
+     * Function for when user doesnt have enough money.
+     */
     showNoMoney() {
         let noMoneySound = this.scene.sound.play('noMoney', {
             volume: 0.8
@@ -277,6 +291,9 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         noMoneySound.remove(noMoneySound);
     }
 
+    /**
+     * Upgrades the turret.
+     */
     upgradeTurret() {
         this.scene.sound.play('towerUpgrade');
         this.scene.ui.money -= this.upgradePrice;
@@ -290,7 +307,6 @@ export default class Turret1 extends Phaser.GameObjects.Image {
 
     update(time, delta) {
         this.delta += delta;
-        // console.log('Delta: ' + this.delta);
     }
 }
 
