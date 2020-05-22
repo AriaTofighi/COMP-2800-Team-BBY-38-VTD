@@ -23,8 +23,10 @@ export default class Turret2 extends Phaser.GameObjects.Image {
         this.showingContainer = false;
         this.tier = 1;
         this.upgradePrice = 80;
+        this.sizeX = 32;
+        this.sizeY = 32;
 
-        this.setDisplaySize(32, 32);
+        this.setDisplaySize(this.sizeX, this.sizeY);
         this.setPosition(this.x, this.y);
 
         // Creating the radius of the turret
@@ -48,7 +50,19 @@ export default class Turret2 extends Phaser.GameObjects.Image {
             this.radius.setStrokeStyle(3, 0x046307, 0);
         }.bind(this));
 
-        // Toggling the edit container
+        // Toggling off the containers when clicking anywhere
+        this.scene.input.on('pointerdown', function (pointer) {
+            let xBoolean = this.x - (this.sizeX / 2.0) <= pointer.x && pointer.x <= this.x + (this.sizeX / 2.0);
+            let yBoolean = this.y - (this.sizeY / 2.0) <= pointer.y && pointer.y <= this.y + (this.sizeY / 2.0);
+            let isTowerPos = xBoolean && yBoolean;
+            if (this.showingContainer && !isTowerPos) {
+                this.showingContainer = false;
+                this.editContainer.alpha = 0;
+                this.tierContainer.alpha = 0;
+            }
+        }.bind(this));
+
+        // Toggling the containers
         this.setInteractive().on('pointerdown', function () {
             if (this.showingContainer) {
                 this.showingContainer = false;

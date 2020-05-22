@@ -549,6 +549,7 @@ export class GameScene extends Phaser.Scene {
             this.scene.launch('GameOver', {
                 roundReached: this.currentRound
             });
+            this.scene.pause('UI');
             this.scene.pause('Game');
         }
 

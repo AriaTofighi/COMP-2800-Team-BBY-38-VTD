@@ -50,12 +50,12 @@ export class UIScene extends Phaser.Scene {
         });
         // On hover of menu toggle button.
         this.menuButton.setInteractive().on('pointerover', () => {
-                this.sound.play('buttonHover');
+            this.sound.play('buttonHover');
         });
         // On pressed down of menu toggle button.
         this.menuButton.setInteractive().on('pointerdown', () => {
-                this.sound.play('buttonClick');
-                this.toggleSidebar();
+            this.sound.play('buttonClick');
+            this.toggleSidebar();
         });
 
         let menuTower1 = this.add.image(50, 72, 'tower1');
@@ -159,11 +159,11 @@ export class UIScene extends Phaser.Scene {
         });
         // On hover of cancel tower button.
         this.cancelButton.setInteractive().on('pointerover', () => {
-                this.sound.play('buttonHover');
+            this.sound.play('buttonHover');
         });
         // On pressed down of cancel tower button.
         this.cancelButton.setInteractive().on('pointerdown', () => {
-                this.sound.play('buttonClick');
+            this.sound.play('buttonClick');
         });
         // Cancel selection of tower on pressed down of cancel tower button.
         this.cancelButton.setInteractive().on('pointerdown', this.cancelSelection.bind(this));
@@ -401,7 +401,6 @@ export class UIScene extends Phaser.Scene {
     placeTower(pointer) {
         let i = Math.floor(pointer.y / 32); // row index
         let j = Math.floor(pointer.x / 32); // col index
-        console.log();
         if (this.tower1IsSelected && !this.game.isPathTile(i, j) && this.money >= Turret1.getPrice()) {
             this.sound.play('towerBuild');
             let turret = new Turret1(this.game, j, i);
