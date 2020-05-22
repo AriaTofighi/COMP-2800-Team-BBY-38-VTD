@@ -1,6 +1,8 @@
 import Bullet2 from "../game_objects/Bullet2";
 import Bullet from "./Bullet";
 
+// Global variable for turret one's bullet
+let turretTwoBullet;
 export default class Turret2 extends Phaser.GameObjects.Image {
     /**
      * Constructor for turret 2 object.
@@ -24,8 +26,10 @@ export default class Turret2 extends Phaser.GameObjects.Image {
         this.tier = 1;
         this.upgradePrice = 120;
         this.midMoneyTextTween = false;
+        this.sizeX = 32;
+        this.sizeY = 32;
 
-        this.setDisplaySize(32, 32);
+        this.setDisplaySize(this.sizeX, this.sizeY);
         this.setPosition(this.x, this.y);
 
         // Creating the radius of the turret
@@ -49,7 +53,19 @@ export default class Turret2 extends Phaser.GameObjects.Image {
             this.radius.setStrokeStyle(3, 0x046307, 0);
         }.bind(this));
 
-        // Toggling the edit container
+        // Toggling off the containers when clicking anywhere
+        this.scene.input.on('pointerdown', function (pointer) {
+            let xBoolean = this.x - (this.sizeX / 2.0) <= pointer.x && pointer.x <= this.x + (this.sizeX / 2.0);
+            let yBoolean = this.y - (this.sizeY / 2.0) <= pointer.y && pointer.y <= this.y + (this.sizeY / 2.0);
+            let isTowerPos = xBoolean && yBoolean;
+            if (this.showingContainer && !isTowerPos) {
+                this.showingContainer = false;
+                this.editContainer.alpha = 0;
+                this.tierContainer.alpha = 0;
+            }
+        }.bind(this));
+
+        // Toggling the containers
         this.setInteractive().on('pointerdown', function () {
             if (this.showingContainer) {
                 this.showingContainer = false;
@@ -66,6 +82,11 @@ export default class Turret2 extends Phaser.GameObjects.Image {
         this.CreateContainer();
 
         this.scene.add.existing(this);
+
+        // Creates sound effect for turret two's bullets
+        turretTwoBullet = this.scene.sound.add('waterStream', {
+            volume: 0.8
+        });
     }
 
     static getPrice() {
@@ -85,7 +106,7 @@ export default class Turret2 extends Phaser.GameObjects.Image {
         // Creating a bullet
         if (!this.shooting) {
             this.bullet.setVisible(true);
-            this.bullet.hitbox.iterate((hBox) =>{
+            this.bullet.hitbox.iterate((hBox) => {
                 this.scene.bullets.add(hBox);
             })
             this.bullet.setOrigin(0.5, 1);
@@ -95,13 +116,18 @@ export default class Turret2 extends Phaser.GameObjects.Image {
         let offset = 20;
         this.bullet.hitbox.iterate((hBox) => {
             hBox.setPosition(this.x + offset * Math.cos(angle), this.y + offset * Math.sin(angle));
-            offset+=20;
+            offset += 20;
         });
 
         this.bullet.setPosition(this.x + this.scene.halfCell * Math.cos(angle), this.y + this.scene.halfCell * Math.sin(angle));
-        this.bullet.setRotation(angle + Math.PI/2);
+        this.bullet.setRotation(angle + Math.PI / 2);
 
         this.delta = 0;
+
+        // Plays sound effect for turret two's bullets
+        if (!(turretTwoBullet.isPlaying)) {
+            turretTwoBullet.play();
+        }
     }
 
     CreateContainer() {
@@ -147,16 +173,21 @@ export default class Turret2 extends Phaser.GameObjects.Image {
         let bound1 = new Phaser.Geom.Rectangle(1, 2, 85, 47);
 
         this.leftClickBack.setInteractive(bound1, Phaser.Geom.Rectangle.Contains)
-        this.leftClickBack.on('pointerover', function() {
+        this.leftClickBack.on('pointerover', function () {
             this.leftClickBack.fillStyle(0xffffff, 0.3);
-            this.leftClickBack.fillRoundedRect(1, 2, 85, 47, { tl: 20, tr: 0, bl: 20, br: 0});
+            this.leftClickBack.fillRoundedRect(1, 2, 85, 47, {
+                tl: 20,
+                tr: 0,
+                bl: 20,
+                br: 0
+            });
         }.bind(this));
-        this.leftClickBack.on('pointerout', function() {
+        this.leftClickBack.on('pointerout', function () {
             this.leftClickBack.clear();
         }.bind(this));
 
         // selling the tower
-        this.leftClickBack.on('pointerdown', function() {
+        this.leftClickBack.on('pointerdown', function () {
             this.scene.sound.play('towerDestroy');
             this.scene.ui.money += Turret2.getPrice() / 2;
             this.scene.ui.moneyText.setText('Money: ' + this.scene.ui.money);
@@ -189,11 +220,16 @@ export default class Turret2 extends Phaser.GameObjects.Image {
         let bound2 = new Phaser.Geom.Rectangle(90, 2, 85, 47);
 
         this.rightClickBack.setInteractive(bound2, Phaser.Geom.Rectangle.Contains)
-        this.rightClickBack.on('pointerover', function() {
+        this.rightClickBack.on('pointerover', function () {
             this.rightClickBack.fillStyle(0xffffff, 0.3);
-            this.rightClickBack.fillRoundedRect(90, 2, 85, 47, { tl: 0, tr: 20, bl: 0, br: 20});
+            this.rightClickBack.fillRoundedRect(90, 2, 85, 47, {
+                tl: 0,
+                tr: 20,
+                bl: 0,
+                br: 20
+            });
         }.bind(this));
-        this.rightClickBack.on('pointerout', function() {
+        this.rightClickBack.on('pointerout', function () {
             this.rightClickBack.clear();
         }.bind(this));
 
@@ -228,7 +264,7 @@ export default class Turret2 extends Phaser.GameObjects.Image {
         this.editContainer.add(this.rightClickBack);
 
         // The tier background
-        this.tierContainer = this.scene.add.container(this.x -18, this.y - 25);
+        this.tierContainer = this.scene.add.container(this.x - 18, this.y - 25);
         this.tierContainer.alpha = 0;
 
         // The tier background
@@ -282,7 +318,7 @@ export default class Turret2 extends Phaser.GameObjects.Image {
      */
     update(time, delta) {
         this.delta += delta;
-        if(this.delta >= 20){
+        if (this.delta >= 20) {
             this.shooting = false;
             this.bullet.setVisible(false);
         }
@@ -292,4 +328,3 @@ export default class Turret2 extends Phaser.GameObjects.Image {
 // Static variable
 Turret2.price = 300;
 Turret2.hitRadius = 85;
-

@@ -1,6 +1,9 @@
 import Bullet1 from "./Bullet1";
 
+// Global variable for turret one's bullet
+let turretOneBullet;
 export default class Turret1 extends Phaser.GameObjects.Image {
+
     /**
      * Constructor for turret 1 object.
      */
@@ -18,8 +21,10 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         this.tier = 1;
         this.upgradePrice = 100;
         this.midMoneyTextTween = false;
+        this.sizeX = 45;
+        this.sizeY = 45;
         
-        this.setDisplaySize(45, 45);
+        this.setDisplaySize(this.sizeX, this.sizeY);
         this.setPosition(this.x, this.y);
 
         // Creating the radius of the turret
@@ -44,7 +49,19 @@ export default class Turret1 extends Phaser.GameObjects.Image {
             this.radius.setStrokeStyle(3, 0x046307, 0);
         }.bind(this));
 
-        // Toggling the edit container
+        // Toggling off the containers when clicking anywhere
+        this.scene.input.on('pointerdown', function (pointer) {
+            let xBoolean = this.x - (this.sizeX / 2.0) <= pointer.x && pointer.x <= this.x + (this.sizeX / 2.0);
+            let yBoolean = this.y - (this.sizeY / 2.0) <= pointer.y && pointer.y <= this.y + (this.sizeY / 2.0);
+            let isTowerPos = xBoolean && yBoolean;
+            if (this.showingContainer && !isTowerPos) {
+                this.showingContainer = false;
+                this.editContainer.alpha = 0;
+                this.tierContainer.alpha = 0;
+            }
+        }.bind(this));
+
+        // Toggling the containers
         this.setInteractive().on('pointerdown', function () {
             if (this.showingContainer) {
                 this.showingContainer = false;
@@ -61,6 +78,11 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         this.CreateContainer();
 
         this.scene.add.existing(this);
+
+        // Creates sound effect for turret one's bullets
+        turretOneBullet = this.scene.sound.add('soap', {
+            volume: 0.6
+        });
     }
 
     static getPrice() {
@@ -89,6 +111,11 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         this.scene.physics.moveToObject(this.bullet, carrier, this.bulletSpeed * 100);
 
         this.delta = 0;
+
+        // Plays sound effect for turret one's bullets
+        if (!(turretOneBullet.isPlaying)) {
+            turretOneBullet.play();
+        }
 
     }
 

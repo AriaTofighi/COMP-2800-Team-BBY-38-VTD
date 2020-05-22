@@ -44,6 +44,7 @@ import towerUpgrade from "../../assets/audio/tower_upgrade.mp3";
 import gameOverAudio from "../../assets/audio/game_over.mp3";
 import soap from "../../assets/audio/soap.mp3";
 import waterStream from "../../assets/audio/water_stream.mp3";
+import maskSnap from "../../assets/audio/mask_snap.mp3";
 import noMoney from "../../assets/audio/no_money.mp3";
 import logout from "../../assets/menu/logout.png";
 import logoutPress from "../../assets/menu/logout_press.png";
@@ -236,6 +237,7 @@ export class LoadScene extends Phaser.Scene {
         this.load.audio('gameOverAudio', gameOverAudio);
         this.load.audio('soap', soap);
         this.load.audio('waterStream', waterStream);
+        this.load.audio('maskSnap', maskSnap);
         this.load.audio('noMoney', noMoney);
 
         // Load info box images.

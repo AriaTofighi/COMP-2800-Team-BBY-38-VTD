@@ -172,6 +172,29 @@ export class MenuScene1 extends Phaser.Scene {
             this.leaderboard.setTexture('leaderboard');
         });
 
+        // Creating the twitter button
+        this.twitterUrl = 'https://twitter.com/intent/tweet?text=Come '
+                    + 'and play VTD! https://virustd-8fdd6.web.app/';
+        this.twitter = this.add.image(350, 570, 'twitter');
+        this.twitter.setDisplaySize(87, 32);
+        this.twitter.setInteractive({
+            cursor: 'pointer'
+        });
+        this.twitter.on('pointerdown', function () {
+            window.open(this.twitterUrl, '_blank');
+        }.bind(this));
+
+        // Creating the facebook button
+        this.facebookUrl = 'https://facebook.com/share.php?u='
+                            + 'http://virustd-8fdd6.web.app';
+        this.facebook = this.add.image(450, 570, 'facebook');
+        this.facebook.setDisplaySize(87, 32);
+        this.facebook.setInteractive({
+            cursor: 'pointer'
+        });
+        this.facebook.on('pointerdown', function () {
+            window.open(this.facebookUrl, '_blank');
+        }.bind(this));
     }
 
     signUserOut() {
