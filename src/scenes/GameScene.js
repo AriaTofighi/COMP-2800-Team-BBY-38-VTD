@@ -16,7 +16,6 @@ import {
 let bgm;
 export {bgm};
 
-let turretSoap;
 export class GameScene extends Phaser.Scene {
 
     /**
@@ -148,18 +147,6 @@ export class GameScene extends Phaser.Scene {
         }
         //Place city.
         this.add.image((this.cellWidth * 16) + 20, this.cellWidth * rowCount - 1, 'city').setScale(0.9);
-
-        //Create frames from spritesheets
-
-        // let walkCycle = this.anims.create({
-        //     key: 'walk',
-        //     frames: this.anims.generateFrameNumbers('carrier', {
-        //         start: 0,
-        //         end: 7
-        //     }),
-        //     frameRate: 12,
-        //     repeat: -1
-        // });
 
         // Create and draw a path.
         this.anims.create({
@@ -325,11 +312,6 @@ export class GameScene extends Phaser.Scene {
             loop: true
         });
         bgm.play();
-
-        // Creating soap sound effect
-        turretSoap = this.sound.add('soap', {
-            volume: 0.3
-        });
 
         // Toggles fast-forward
         this.input.keyboard.on('keydown-F', function () {
@@ -584,10 +566,6 @@ export class GameScene extends Phaser.Scene {
 
     fire(carrier, turret) {
         turret.fire(carrier);
-
-        if (!(turretSoap.isPlaying)) {
-            turretSoap.play();
-        }
     }
 
     carrierHit(carrier, bullet) {
