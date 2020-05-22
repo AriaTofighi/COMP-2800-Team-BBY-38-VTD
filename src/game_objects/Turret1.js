@@ -19,7 +19,8 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         this.bulletSpeed = 6;
         this.showingContainer = false;
         this.tier = 1;
-        this.upgradePrice = 30;
+        this.upgradePrice = 100;
+        this.midMoneyTextTween = false;
         this.sizeX = 45;
         this.sizeY = 45;
         
@@ -210,27 +211,32 @@ export default class Turret1 extends Phaser.GameObjects.Image {
         }.bind(this));
 
         // Upgrading the tower
-        this.rightClickBack.on('pointerdown', function() {
-            switch(this.tier) {
-                case 1:
-                    this.upgradeTurret();
-                    this.tierText.setText("**");
-                    this.tierText.setX(10);
-                    break;
-                case 2:
-                    this.upgradeTurret();
-                    this.tierText.setText("***");
-                    this.tierText.setX(5.3);
-                    break;
-                case 3:
-                    this.upgradeTurret();
-                    this.tierText.setText("****");
-                    this.tierText.setX(0);
-                    this.upgradeText.setText("Max");
-                    this.upgradeText.setX(112);
-                    this.upgradePriceText.setText("");
-                    break;
-              }
+        this.rightClickBack.on('pointerdown', function () {
+            if (this.scene.ui.money >= this.upgradePrice) {
+                switch (this.tier) {
+                    case 1:
+                        this.upgradeTurret();
+                        this.tierText.setText("**");
+                        this.tierText.setX(10);
+                        break;
+                    case 2:
+                        this.upgradeTurret();
+                        this.tierText.setText("***");
+                        this.tierText.setX(5.3);
+                        break;
+                    case 3:
+                        this.upgradeTurret();
+                        this.tierText.setText("****");
+                        this.tierText.setX(0);
+                        this.upgradeText.setText("Max");
+                        this.upgradeText.setX(112);
+                        this.upgradePriceText.setText("");
+                        break;
+                }
+            } else if (!this.midMoneyTextTween) {
+                this.showNoMoney();
+            }
+
         }.bind(this));
         this.editContainer.add(this.rightClickBack);
 
@@ -255,15 +261,31 @@ export default class Turret1 extends Phaser.GameObjects.Image {
 
     }
 
+    showNoMoney() {
+        let noMoneySound = this.scene.sound.play('noMoney', {
+            volume: 0.8
+        });
+        this.scene.tweens.add({
+            targets: this.scene.ui.moneyText,
+            yoyo: true,
+            scale: 1.1,
+            ease: 'Linear',
+            duration: 200,
+            onStart: () => {this.midMoneyTextTween = true},
+            onComplete: () => {this.midMoneyTextTween = false}
+        });
+        noMoneySound.remove(noMoneySound);
+    }
+
     upgradeTurret() {
-        if (this.scene.ui.money >= this.upgradePrice) {
-            this.scene.sound.play('towerUpgrade');
-            this.scene.ui.money -= this.upgradePrice;
-            this.scene.ui.moneyText.setText('Money: ' + this.scene.ui.money);
-            this.tier++;
-            this.fireRate++;
-            this.bulletSpeed++;
-        }
+        this.scene.sound.play('towerUpgrade');
+        this.scene.ui.money -= this.upgradePrice;
+        this.scene.ui.moneyText.setText('Money: ' + this.scene.ui.money);
+        this.tier++;
+        this.fireRate++;
+        this.bulletSpeed++;
+        this.upgradePrice += 60;
+        this.upgradePriceText.setText("$" + this.upgradePrice);
     }
 
     update(time, delta) {

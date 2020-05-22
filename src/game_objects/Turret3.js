@@ -13,10 +13,11 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         this.scene = scene;
         this.delta = 0;
         this.fireRate = 2;
-        this.bulletSpeed = 230;
+        this.bulletSpeed = 300;
         this.showingContainer = false;
         this.tier = 1;
-        this.upgradePrice = 120;
+        this.upgradePrice = 140;
+        this.midMoneyTextTween = false;
         this.sizeX = 25;
         this.sizeY = 25;
 
@@ -124,14 +125,19 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
         this.scene.bullets.add(this.bullet);
         this.bullet.body.debugShowVelocity = false;
 
-        // Shoots at the carrier
+        // // Shoots at the carrier
         this.scene.physics.moveToObject(this.bullet, carrier, this.bulletSpeed);
 
-        //Follows the carrier all the time
-        setInterval(function() {
-            this.scene.physics.moveToObject(this.bullet, this.bullet.target, this.bulletSpeed);
-            this.bullet.setRotation(Phaser.Math.Angle.Between(this.bullet.x, this.bullet.y, this.bullet.target.x, this.bullet.target.y) + rotationFix);
-        }.bind(this), 300);
+        //  //Follows the carrier all the time
+        //  let intervaler = setInterval(function() {
+        //     // console.log("bullet status: " + this.bullet.active);
+        //     if (this.bullet.active == false) {
+        //         clearInterval(intervaler);
+        //     } else {
+        //         this.scene.physics.moveToObject(this.bullet, carrier, this.bulletSpeed);
+        //         this.bullet.setRotation(Phaser.Math.Angle.Between(this.bullet.x, this.bullet.y, this.bullet.target.x, this.bullet.target.y) + rotationFix);
+        //     }
+        // }.bind(this), 100);
 
         this.delta = 0;
 
@@ -244,26 +250,31 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
 
         // Upgrading the tower
         this.rightClickBack.on('pointerdown', function () {
-            switch (this.tier) {
-                case 1:
-                    this.upgradeTurret();
-                    this.tierText.setText("**");
-                    this.tierText.setX(10);
-                    break;
-                case 2:
-                    this.upgradeTurret();
-                    this.tierText.setText("***");
-                    this.tierText.setX(5.3);
-                    break;
-                case 3:
-                    this.upgradeTurret();
-                    this.tierText.setText("****");
-                    this.tierText.setX(0);
-                    this.upgradeText.setText("Max");
-                    this.upgradeText.setX(112);
-                    this.upgradePriceText.setText("");
-                    break;
+            if (this.scene.ui.money >= this.upgradePrice) {
+                switch (this.tier) {
+                    case 1:
+                        this.upgradeTurret();
+                        this.tierText.setText("**");
+                        this.tierText.setX(10);
+                        break;
+                    case 2:
+                        this.upgradeTurret();
+                        this.tierText.setText("***");
+                        this.tierText.setX(5.3);
+                        break;
+                    case 3:
+                        this.upgradeTurret();
+                        this.tierText.setText("****");
+                        this.tierText.setX(0);
+                        this.upgradeText.setText("Max");
+                        this.upgradeText.setX(112);
+                        this.upgradePriceText.setText("");
+                        break;
+                }
+            } else if (!this.midMoneyTextTween) {
+                this.showNoMoney();
             }
+
         }.bind(this));
         this.editContainer.add(this.rightClickBack);
 
@@ -288,6 +299,22 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
 
     }
 
+    showNoMoney() {
+        let noMoneySound = this.scene.sound.play('noMoney', {
+            volume: 0.8
+        });
+        this.scene.tweens.add({
+            targets: this.scene.ui.moneyText,
+            yoyo: true,
+            scale: 1.1,
+            ease: 'Linear',
+            duration: 200,
+            onStart: () => {this.midMoneyTextTween = true},
+            onComplete: () => {this.midMoneyTextTween = false}
+        });
+        noMoneySound.remove(noMoneySound);
+    }
+
     upgradeTurret() {
         if (this.scene.ui.money >= this.upgradePrice) {
             this.scene.sound.play('towerUpgrade');
@@ -296,6 +323,8 @@ export default class Turret3 extends Phaser.GameObjects.Sprite {
             this.tier++;
             this.fireRate++;
             this.bulletSpeed++;
+            this.upgradePrice += 120;
+            this.upgradePriceText.setText("$" + this.upgradePrice);
         }
     }
 

@@ -15,10 +15,15 @@ When adding new assets make sure you load them in LoadScene.js.
 Setting it up for development is simple. 
 
 1. Clone the repo to your computer.
+
 2. Make sure you have Parcel Bundler installed. To install, go to the command line and type 'npm install -g parcel-bundler'
+
 3.In the repo directory, type 'parcel index.html'. If successful, the bundler will tell how long it took to build.
+
 4.The parcel bundler will start a local server at the specified port. Go to 'localhost:port' in your preferred browser.
+
 5. The game will be playable from there.
+
 6. When finished, press CTRL+C to close the local server.
 
 With that you can add new assets and modify the game files to make the game into something that is your own.
