@@ -308,7 +308,7 @@ export class GameScene extends Phaser.Scene {
 
         //Creating background music
         bgm = this.sound.add('gameMusic', {
-            volume: 0.2,
+            volume: 0.1,
             loop: true
         });
         bgm.play();
