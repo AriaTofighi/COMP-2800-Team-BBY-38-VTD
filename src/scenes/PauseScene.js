@@ -1,18 +1,29 @@
+import {bgm} from './GameScene.js';
+
+/**
+ * PauseScene is the scene that pauses the game.
+ */
 export class PauseScene extends Phaser.Scene {
 
     /**
      * Constructor for PauseScene object.
      */
     constructor() {
+        /**
+         * Constructor for Phaser.Scene object.
+         */
         super('Pause');
     }
     /**
      * Create the pause scene.
      */
     create() {
+        bgm.pause();
+
+        this.scene.bringToTop('Pause');
         this.background = this.add.image(0, 0, 'pauseBackground');
         this.background.setOrigin(0, 0);
-        this.background.alpha = 0.4;
+        this.background.alpha = 0.7;
         this.background.setDisplaySize(800, 608);
 
         // Creating the resume button
@@ -30,29 +41,31 @@ export class PauseScene extends Phaser.Scene {
         }.bind(this));
         // On release of resume button
         this.resumeButton.on('pointerup', function () {
+            bgm.play();
             this.sound.play('buttonClick');
             this.resumeButton.setTexture('resumePressButton');
+            this.scene.stop(); 
             this.scene.resume('Game');
-            this.scene.stop();
+            this.scene.resume('UI');
         }.bind(this));
 
-        // Creating the save button
-        this.saveButton = this.add.image(400, 250, "saveButton");
-        this.saveButton.setInteractive({
+        // Creating the fullscreen button
+        this.fullScreenButton = this.add.image(400, 250, "fullscreen");
+        this.fullScreenButton.setInteractive({
             cursor: 'pointer'
         });
-        // On hover of save button
-        this.saveButton.on('pointerover', function () {
+        // On hover of resume button
+        this.fullScreenButton.on('pointerover', function () {
             this.sound.play('buttonHover');
         }.bind(this));
-        // On pressed down of save button
-        this.saveButton.on('pointerdown', function () {
-            this.saveButton.setTexture('savePressButton');
+        // On pressed down of resume button
+        this.fullScreenButton.on('pointerdown', function () {
+            this.fullScreenButton.setTexture('fullscreenPress');
         }.bind(this));
-        // On release of save button
-        this.saveButton.on('pointerup', function () {
+        // On release of resume button
+        this.fullScreenButton.on('pointerup', function () {
             this.sound.play('buttonClick');
-            this.saveButton.setTexture('savePressButton');
+            this.toggleFullscreen();
         }.bind(this));
 
         // Creating the end button
@@ -71,23 +84,72 @@ export class PauseScene extends Phaser.Scene {
         // On release of end button
         this.endButton.on('pointerup', function () {
             this.sound.play('buttonClick');
+            this.sound.removeAll();
             this.endButton.setTexture('endPressButton');
             this.scene.stop('Game');
             this.scene.stop('UI');
             this.scene.start('Menu1');
-            // TODO: what the end button does
         }.bind(this));
-        
+        // Resets button textures on pointer up
         this.input.on('pointerup', function () {
             this.resumeButton.setTexture('resumeButton');
-            this.saveButton.setTexture('saveButton');
+            this.fullScreenButton.setTexture('fullscreen');
             this.endButton.setTexture('endButton');
         }.bind(this));
 
         // Resume the game when clicking escape
         this.input.keyboard.on('keydown-ESC', function () {
+            bgm.play();
             this.scene.resume('Game');
             this.scene.stop();
         }.bind(this));
+    }
+
+    /**
+     * Checks if the game is fullscreen or not.
+     */
+    toggleFullscreen() {
+        if (!this.fullScreen) {
+            this.openFullscreen();
+            this.fullScreen = true;
+        } else {
+            this.closeFullscreen();
+            this.fullScreen = false;
+        }
+    }
+
+    /**
+     * Makes the game fullscreen.
+     * 
+     * @src https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_fullscreen2
+     */
+    openFullscreen() {
+        var elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) { /* Firefox */
+            elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE/Edge */
+            elem.msRequestFullscreen();
+        }
+    }
+
+    /**
+     * Exits the fullscreen.
+     * 
+     * @src https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_fullscreen2
+     */
+    closeFullscreen() {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
     }
 }

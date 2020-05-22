@@ -1,9 +1,15 @@
-// This menu is for logging in or playing as a guest
+/**
+ * MenuScene1 is the main menu of the game where user
+ * can access all the sections of the game.
+ */
 export class MenuScene1 extends Phaser.Scene {
     /**
      * Constructor for GameScene object.
      */
     constructor() {
+        /**
+         * Constructor for Phaser.Scene object.
+         */
         super('Menu1');
     }
 
@@ -29,6 +35,9 @@ export class MenuScene1 extends Phaser.Scene {
         this.logo = this.add.image(width / 2, height / 2 - 170, 'logo');
         this.logo.setDisplaySize(width / 2, height / 3);
 
+        // Create status text
+        this.status = this.add.text(10, 40, "");
+
         // Display Login / Logout button
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
@@ -37,7 +46,7 @@ export class MenuScene1 extends Phaser.Scene {
                 this.logout.setInteractive({
                     cursor: 'pointer'
                 });
-                this.status = this.add.text(10, 40, "Playing as ");
+                this.status.setText("Playing as ");
                 this.status.setFontFamily('Arial');
                 this.status.setFontSize(25);
                 this.status.setOrigin(0, 1);
@@ -70,7 +79,10 @@ export class MenuScene1 extends Phaser.Scene {
                 this.login.setInteractive({
                     cursor: 'pointer'
                 });
-                this.status = this.add.text(10, 40, "Playing as Guest");
+                this.status.setText("Playing as Guest");
+                if (this.displayName != undefined) {
+                    this.displayName.setText("");
+                }
                 this.status.setFontFamily('Arial');
                 this.status.setFontSize(25);
                 this.status.setOrigin(0, 1);
@@ -167,8 +179,34 @@ export class MenuScene1 extends Phaser.Scene {
             this.leaderboard.setTexture('leaderboard');
         });
 
+        // Creating the twitter button
+        this.twitterUrl = 'https://twitter.com/intent/tweet?text=Come '
+                    + 'and play VTD! https://virustd-8fdd6.web.app/';
+        this.twitter = this.add.image(350, 570, 'twitter');
+        this.twitter.setDisplaySize(87, 32);
+        this.twitter.setInteractive({
+            cursor: 'pointer'
+        });
+        this.twitter.on('pointerdown', function () {
+            window.open(this.twitterUrl, '_blank');
+        }.bind(this));
+
+        // Creating the facebook button
+        this.facebookUrl = 'https://facebook.com/share.php?u='
+                            + 'http://virustd-8fdd6.web.app';
+        this.facebook = this.add.image(450, 570, 'facebook');
+        this.facebook.setDisplaySize(87, 32);
+        this.facebook.setInteractive({
+            cursor: 'pointer'
+        });
+        this.facebook.on('pointerdown', function () {
+            window.open(this.facebookUrl, '_blank');
+        }.bind(this));
     }
 
+    /**
+     * Signs the user out.
+     */
     signUserOut() {
         firebase.auth().signOut().then(function () {
             // Sign-out successful. 

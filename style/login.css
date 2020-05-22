@@ -45,6 +45,7 @@ h1{
     font-size: 2.5rem;
     background-color: darkred;
     color: white;
+    display: none;
 }
 
 #log-out-btn {
